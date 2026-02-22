@@ -1,9 +1,11 @@
-package com.estef.antiphishingcoach.presentation.history
+﻿package com.estef.antiphishingcoach.presentation.history
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +24,10 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
     FragmentHistoryBinding::bind
 ) {
     private val viewModel: HistoryViewModel by viewModels {
-        HistoryViewModelFactory(appContainer().observeHistoryUseCase)
+        HistoryViewModelFactory(
+            observeHistoryUseCase = appContainer().observeHistoryUseCase,
+            observeExtremePrivacyUseCase = appContainer().observeExtremePrivacyUseCase
+        )
     }
     private val localAuthManager = LocalAuthManager()
     private lateinit var historyAdapter: HistoryAdapter
@@ -47,6 +52,40 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         rvHistory.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = historyAdapter
+        }
+    }
+
+    private fun setupControls() = with(binding) {
+        etHistorySearch.doAfterTextChanged { editable ->
+            viewModel.onQueryChanged(editable?.toString().orEmpty())
+        }
+
+        chipGroupTrafficFilter.setOnCheckedStateChangeListener { _, checkedIds ->
+            val checked = checkedIds.firstOrNull()
+            val filter = when (checked) {
+                R.id.chipFilterGreen -> HistoryTrafficLightFilter.GREEN
+                R.id.chipFilterYellow -> HistoryTrafficLightFilter.YELLOW
+                R.id.chipFilterRed -> HistoryTrafficLightFilter.RED
+                else -> HistoryTrafficLightFilter.ALL
+            }
+            viewModel.onTrafficLightFilterChanged(filter)
+        }
+
+        val orderOptions = listOf("Mas reciente", "Mayor riesgo")
+        val sortAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, orderOptions)
+        actvHistorySort.setAdapter(sortAdapter)
+        actvHistorySort.setText(orderOptions.first(), false)
+        actvHistorySort.setOnItemClickListener { _, _, position, _ ->
+            val mode = if (position == 1) {
+                HistorySortMode.HIGHEST_RISK
+            } else {
+                HistorySortMode.MOST_RECENT
+            }
+            viewModel.onSortModeChanged(mode)
+        }
+
+        btnGoAnalyzeFromHistory.setOnClickListener {
+            findNavController().navigate(R.id.analyzeFragment)
         }
     }
 
@@ -106,16 +145,13 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         if (contentStarted) return
         contentStarted = true
         setupList()
+        setupControls()
         observeUiState()
     }
 
     private fun setLockedStateVisible(isLocked: Boolean) = with(binding) {
         tvHistoryLocked.isVisible = isLocked
-        rvHistory.isVisible = !isLocked
-        if (isLocked) {
-            progressHistory.isVisible = false
-            tvHistoryEmpty.isVisible = false
-        }
+        contentHistory.isVisible = !isLocked
     }
 
     private fun observeUiState() {
@@ -124,6 +160,8 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
                 viewModel.uiState.collect { state ->
                     binding.progressHistory.isVisible = state.isLoading
                     binding.tvHistoryEmpty.isVisible = !state.isLoading && state.items.isEmpty()
+                    binding.tvHistoryEmpty.text = state.emptyMessage
+                    binding.btnGoAnalyzeFromHistory.isVisible = !state.isLoading && state.items.isEmpty()
                     historyAdapter.submitList(state.items)
                 }
             }

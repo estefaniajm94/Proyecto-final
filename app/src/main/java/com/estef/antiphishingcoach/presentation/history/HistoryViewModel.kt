@@ -1,12 +1,15 @@
-package com.estef.antiphishingcoach.presentation.history
+﻿package com.estef.antiphishingcoach.presentation.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.estef.antiphishingcoach.core.export.ReportExporter
 import com.estef.antiphishingcoach.domain.model.IncidentRecord
+import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveHistoryUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -14,24 +17,102 @@ import java.util.Date
 import java.util.Locale
 
 class HistoryViewModel(
-    observeHistoryUseCase: ObserveHistoryUseCase
+    observeHistoryUseCase: ObserveHistoryUseCase,
+    observeExtremePrivacyUseCase: ObserveExtremePrivacyUseCase,
+    private val reportExporter: ReportExporter = ReportExporter()
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
+    private val queryFlow = MutableStateFlow("")
+    private val filterFlow = MutableStateFlow(HistoryTrafficLightFilter.ALL)
+    private val sortModeFlow = MutableStateFlow(HistorySortMode.MOST_RECENT)
+
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
     init {
         viewModelScope.launch {
-            observeHistoryUseCase().collect { records ->
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        items = records.map { record -> record.toUi() }
+            combine(
+                observeHistoryUseCase(),
+                observeExtremePrivacyUseCase(),
+                queryFlow,
+                filterFlow,
+                sortModeFlow
+            ) { records, extremePrivacyEnabled, query, filter, sortMode ->
+                val filteredRecords = records
+                    .filterByQuery(query)
+                    .filterByTrafficLight(filter)
+                    .sortedByMode(sortMode)
+
+                HistoryUiState(
+                    isLoading = false,
+                    items = filteredRecords.map { it.toUi() },
+                    query = query,
+                    selectedTrafficLight = filter,
+                    sortMode = sortMode,
+                    emptyMessage = buildEmptyMessage(
+                        allRecords = records,
+                        filteredRecords = filteredRecords,
+                        extremePrivacyEnabled = extremePrivacyEnabled
                     )
-                }
+                )
+            }.collect { state ->
+                _uiState.update { state }
             }
+        }
+    }
+
+    fun onQueryChanged(query: String) {
+        queryFlow.value = query.trim()
+    }
+
+    fun onTrafficLightFilterChanged(filter: HistoryTrafficLightFilter) {
+        filterFlow.value = filter
+    }
+
+    fun onSortModeChanged(mode: HistorySortMode) {
+        sortModeFlow.value = mode
+    }
+
+    private fun List<IncidentRecord>.filterByQuery(query: String): List<IncidentRecord> {
+        if (query.isBlank()) return this
+        val normalized = query.lowercase(Locale.getDefault())
+        return filter { record ->
+            val title = record.title.orEmpty().lowercase(Locale.getDefault())
+            val domain = record.sanitizedDomain.orEmpty().lowercase(Locale.getDefault())
+            title.contains(normalized) || domain.contains(normalized)
+        }
+    }
+
+    private fun List<IncidentRecord>.filterByTrafficLight(filter: HistoryTrafficLightFilter): List<IncidentRecord> {
+        val expected = filter.rawValue ?: return this
+        return filter { record -> record.trafficLight == expected }
+    }
+
+    private fun List<IncidentRecord>.sortedByMode(mode: HistorySortMode): List<IncidentRecord> {
+        return when (mode) {
+            HistorySortMode.MOST_RECENT -> sortedByDescending { it.createdAt }
+            HistorySortMode.HIGHEST_RISK -> sortedWith(
+                compareByDescending<IncidentRecord> { it.score }
+                    .thenByDescending { it.createdAt }
+            )
+        }
+    }
+
+    private fun buildEmptyMessage(
+        allRecords: List<IncidentRecord>,
+        filteredRecords: List<IncidentRecord>,
+        extremePrivacyEnabled: Boolean
+    ): String {
+        if (filteredRecords.isNotEmpty()) return ""
+        return when {
+            allRecords.isEmpty() && extremePrivacyEnabled -> {
+                "Privacidad extrema activa: no se estan guardando nuevos analisis."
+            }
+
+            allRecords.isEmpty() -> "Aun no hay analisis guardados."
+            else -> "No hay resultados para los filtros actuales."
         }
     }
 
@@ -40,7 +121,15 @@ class HistoryViewModel(
             incidentId = id,
             title = title ?: "Analisis sin titulo",
             metaLine = "Score $score | $trafficLight | $sourceApp",
-            createdAtLine = "Fecha: ${dateFormat.format(Date(createdAt))}"
+            createdAtLine = "Fecha: ${dateFormat.format(Date(createdAt))}",
+            trafficLight = trafficLight,
+            score = score,
+            sourceApp = sourceApp,
+            sanitizedDomain = sanitizedDomain,
+            createdAtMillis = createdAt,
+            signalTags = reportExporter
+                .buildSignalTags(signals)
+                .ifEmpty { recommendationCodes.take(2) }
         )
     }
 }

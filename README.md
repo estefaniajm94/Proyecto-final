@@ -126,6 +126,7 @@ Tests unitarios activos:
 - `docs/Diagrama_Clases.md`
 - `docs/Planificacion_Gantt.md`
 - `docs/Plan_de_Pruebas.md`
+- `docs/Mockups_Wireframes.md`
 - `docs/Anexo_I_Manual_Instalacion.md`
 - `docs/Anexo_II_Manual_Usuario.md`
 - `docs/Privacidad_y_Seguridad.md`

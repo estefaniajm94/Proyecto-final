@@ -25,7 +25,8 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
     private val viewModel: IncidentDetailViewModel by viewModels {
         IncidentDetailViewModelFactory(
             incidentId = args.incidentId,
-            observeIncidentDetailUseCase = appContainer().observeIncidentDetailUseCase
+            observeIncidentDetailUseCase = appContainer().observeIncidentDetailUseCase,
+            exportReportToFileUseCase = appContainer().exportReportToFileUseCase
         )
     }
 
@@ -86,15 +87,16 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
     }
 
     private fun shareMarkdownReport() {
-        val markdown = viewModel.buildMarkdownReport()
-        if (markdown == null) {
+        val exportFile = viewModel.exportMarkdownReportFile()
+        if (exportFile == null) {
             showShortMessage("No hay datos para exportar.")
             return
         }
         val sendIntent = Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.detail_export_subject))
-            putExtra(Intent.EXTRA_TEXT, markdown)
+            putExtra(Intent.EXTRA_STREAM, exportFile.uri)
             type = "text/markdown"
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         startActivity(Intent.createChooser(sendIntent, null))
     }

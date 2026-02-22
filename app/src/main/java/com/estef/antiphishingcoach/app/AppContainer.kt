@@ -17,12 +17,14 @@ import com.estef.antiphishingcoach.domain.repository.TrainingRepository
 import com.estef.antiphishingcoach.domain.usecase.AnalyzeAndPersistUseCase
 import com.estef.antiphishingcoach.domain.usecase.AnalyzeInputUseCase
 import com.estef.antiphishingcoach.domain.usecase.ClearLocalDataUseCase
+import com.estef.antiphishingcoach.domain.usecase.ExportReportToFileUseCase
 import com.estef.antiphishingcoach.domain.usecase.ExtractTextFromImageUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetCoachScenariosUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetTrainingQuestionsUseCase
 import com.estef.antiphishingcoach.domain.usecase.IsLocalLockEnabledUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveHistoryUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveIncidentDetailUseCase
+import com.estef.antiphishingcoach.domain.usecase.ObserveLatestIncidentSummaryUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
@@ -90,6 +92,10 @@ class AppContainer(context: Context) {
         ObserveHistoryUseCase(incidentRepository)
     }
 
+    val observeLatestIncidentSummaryUseCase: ObserveLatestIncidentSummaryUseCase by lazy {
+        ObserveLatestIncidentSummaryUseCase(incidentRepository)
+    }
+
     val observeIncidentDetailUseCase: ObserveIncidentDetailUseCase by lazy {
         ObserveIncidentDetailUseCase(incidentRepository)
     }
@@ -116,5 +122,9 @@ class AppContainer(context: Context) {
 
     val extractTextFromImageUseCase: ExtractTextFromImageUseCase by lazy {
         ExtractTextFromImageUseCase(ocrRepository)
+    }
+
+    val exportReportToFileUseCase: ExportReportToFileUseCase by lazy {
+        ExportReportToFileUseCase(appContext)
     }
 }

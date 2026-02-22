@@ -3,10 +3,9 @@ package com.estef.antiphishingcoach.presentation.analysisdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.estef.antiphishingcoach.core.export.ReportExporter
-import com.estef.antiphishingcoach.core.model.SourceType
-import com.estef.antiphishingcoach.core.model.TrafficLight
-import com.estef.antiphishingcoach.domain.model.AnalysisOutput
 import com.estef.antiphishingcoach.domain.model.RecommendationCatalog
+import com.estef.antiphishingcoach.domain.usecase.ExportedReportFile
+import com.estef.antiphishingcoach.domain.usecase.ExportReportToFileUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveIncidentDetailUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +18,8 @@ import java.util.Locale
 
 class IncidentDetailViewModel(
     incidentId: Long,
-    observeIncidentDetailUseCase: ObserveIncidentDetailUseCase
+    observeIncidentDetailUseCase: ObserveIncidentDetailUseCase,
+    private val exportReportToFileUseCase: ExportReportToFileUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(IncidentDetailUiState())
@@ -58,14 +58,13 @@ class IncidentDetailViewModel(
 
     fun buildMarkdownReport(): String? {
         val incident = _uiState.value.incident ?: return null
-        val output = AnalysisOutput(
-            score = incident.score,
-            trafficLight = runCatching { TrafficLight.valueOf(incident.trafficLight) }.getOrDefault(TrafficLight.GREEN),
-            sourceType = runCatching { SourceType.valueOf(incident.sourceType) }.getOrDefault(SourceType.TEXT),
-            sanitizedDomain = incident.sanitizedDomain,
-            recommendationCodes = incident.recommendationCodes,
-            signals = incident.signals
-        )
-        return reportExporter.toMarkdown(output)
+        return reportExporter.buildMarkdown(incident)
+    }
+
+    fun exportMarkdownReportFile(): ExportedReportFile? {
+        val incident = _uiState.value.incident ?: return null
+        return runCatching {
+            exportReportToFileUseCase(incident)
+        }.getOrNull()
     }
 }

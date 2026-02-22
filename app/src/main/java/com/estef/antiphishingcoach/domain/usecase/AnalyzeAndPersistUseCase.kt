@@ -1,5 +1,6 @@
 package com.estef.antiphishingcoach.domain.usecase
 
+import android.util.Log
 import com.estef.antiphishingcoach.core.common.DispatcherProvider
 import com.estef.antiphishingcoach.domain.model.AnalyzeExecutionResult
 import com.estef.antiphishingcoach.domain.model.AnalyzeRequest
@@ -18,10 +19,16 @@ class AnalyzeAndPersistUseCase(
     private val dispatchers: DispatcherProvider = DispatcherProvider()
 ) {
     suspend operator fun invoke(request: AnalyzeRequest): AnalyzeExecutionResult {
+        val totalStartMs = System.currentTimeMillis()
+        val analysisStartMs = System.currentTimeMillis()
         val output = withContext(dispatchers.default) {
             analyzeInputUseCase(request.inputText)
         }
+        val analysisElapsedMs = System.currentTimeMillis() - analysisStartMs
+        logDebug("Analisis heuristico completado en ${analysisElapsedMs}ms")
+
         val extremePrivacyEnabled = settingsRepository.isExtremePrivacyEnabled()
+        val persistenceStartMs = System.currentTimeMillis()
         val incidentId = if (extremePrivacyEnabled) {
             null
         } else {
@@ -43,10 +50,24 @@ class AnalyzeAndPersistUseCase(
                 )
             }
         }
+        val persistenceElapsedMs = System.currentTimeMillis() - persistenceStartMs
+        val totalElapsedMs = System.currentTimeMillis() - totalStartMs
+        logDebug(
+            "Pipeline analisis+persistencia en ${totalElapsedMs}ms " +
+                "(persistencia=${persistenceElapsedMs}ms, modoExtremo=$extremePrivacyEnabled)"
+        )
         return AnalyzeExecutionResult(
             output = output,
             persistedIncidentId = incidentId,
             usedExtremePrivacy = extremePrivacyEnabled
         )
+    }
+
+    private fun logDebug(message: String) {
+        runCatching { Log.d(TAG, message) }
+    }
+
+    private companion object {
+        private const val TAG = "AnalyzeAndPersistUC"
     }
 }

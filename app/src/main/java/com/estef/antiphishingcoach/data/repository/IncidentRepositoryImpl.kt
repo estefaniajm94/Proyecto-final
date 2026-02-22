@@ -9,6 +9,7 @@ import com.estef.antiphishingcoach.data.local.entity.AnalysisResultEntity
 import com.estef.antiphishingcoach.data.local.entity.DetectedSignalEntity
 import com.estef.antiphishingcoach.data.local.entity.IncidentEntity
 import com.estef.antiphishingcoach.domain.model.IncidentRecord
+import com.estef.antiphishingcoach.domain.model.IncidentSummary
 import com.estef.antiphishingcoach.domain.repository.IncidentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -59,6 +60,20 @@ class IncidentRepositoryImpl(
 
     override fun observeHistory(): Flow<List<IncidentRecord>> {
         return incidentDao.observeHistory().map { rows -> rows.map { it.toDomain() } }
+    }
+
+    override fun observeLatestIncidentSummary(): Flow<IncidentSummary?> {
+        return incidentDao.observeHistory().map { rows ->
+            val latest = rows.firstOrNull() ?: return@map null
+            IncidentSummary(
+                incidentId = latest.incident.id,
+                createdAt = latest.incident.createdAt,
+                title = latest.incident.title,
+                sourceApp = latest.incident.sourceApp,
+                trafficLight = latest.incident.trafficLight,
+                score = latest.incident.score
+            )
+        }
     }
 
     override fun observeIncidentDetail(incidentId: Long): Flow<IncidentRecord?> {

@@ -2,6 +2,7 @@ package com.estef.antiphishingcoach.presentation.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,14 @@ class HistoryAdapter(
             tvTitle.text = item.title
             tvMeta.text = item.metaLine
             tvCreatedAt.text = item.createdAtLine
+            chipSignal1.isVisible = item.signalTags.size >= 1
+            chipSignal2.isVisible = item.signalTags.size >= 2
+            if (item.signalTags.size >= 1) {
+                chipSignal1.text = item.signalTags[0]
+            }
+            if (item.signalTags.size >= 2) {
+                chipSignal2.text = item.signalTags[1]
+            }
             root.setOnClickListener {
                 onClick(item.incidentId)
             }

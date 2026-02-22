@@ -31,3 +31,13 @@ No se guarda el contenido original del mensaje.
 ## 5. Bloqueo local
 - Bloqueo biometrico/credencial opcional en Historial y Ajustes.
 - Ajustes sensibles almacenados con cifrado local.
+
+## 6. Exportacion de reportes Markdown
+- El reporte se genera como archivo `.md` local en cache (`cache/reports`).
+- El compartido se realiza con `FileProvider` (`content://`) y permiso temporal de lectura.
+- El contenido exportado incluye solo:
+  - metadatos del incidente,
+  - senales detectadas,
+  - recomendaciones por codigo,
+  - disclaimer educativo.
+- El reporte no incluye texto original analizado ni texto OCR.

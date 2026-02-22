@@ -26,7 +26,8 @@ class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
     private val viewModel: IncidentDetailViewModel by viewModels {
         IncidentDetailViewModelFactory(
             incidentId = args.incidentId,
-            observeIncidentDetailUseCase = appContainer().observeIncidentDetailUseCase
+            observeIncidentDetailUseCase = appContainer().observeIncidentDetailUseCase,
+            exportReportToFileUseCase = appContainer().exportReportToFileUseCase
         )
     }
 

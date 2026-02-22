@@ -9,9 +9,11 @@ Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del
 - Bloqueo local enforced en Historial y Ajustes.
 - OCR local desde captura con revision editable previa al analisis.
 - Historial y detalle por `incidentId`.
-- Exportacion Markdown por compartir.
+- Exportacion Markdown a fichero real por compartir (`FileProvider`).
 - Carga local de escenarios Coach desde `assets`.
 - Ejecucion de quiz con feedback desde `assets`.
+- Home tipo dashboard con resumen del ultimo analisis.
+- Historial con busqueda, filtros y orden.
 
 ## 2. Entorno de ejecucion
 - SO: Windows 10/11.
@@ -56,6 +58,11 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-22 | OCR local con captura real | Analizar > Analizar desde captura > elegir imagen legible (SMS/email/web) | Se extrae texto local, se muestra dialogo editable y permite analizar | OK |
 | PF-23 | OCR con imagen borrosa | Repetir PF-22 con captura borrosa | Puede devolver texto incompleto o error claro, sin crash | PENDIENTE |
 | PF-24 | Cancelar OCR o revision | Cancelar picker o pulsar Cancelar en dialogo OCR | Se descarta texto OCR y no se analiza ni se persiste nada | OK |
+| PF-25 | Home dashboard visible | Abrir Home | Se muestran tarjetas y bloques de ultimo analisis/entrenamiento | OK |
+| PF-26 | Ultimo analisis en Home | Tener al menos 1 incidente guardado y abrir Home | Muestra fecha, score, semaforo y boton de detalle | OK |
+| PF-27 | Historial filtros y busqueda | En Historial, usar query + chips + orden | Lista reacciona en vivo sin recargar pantalla | OK |
+| PF-28 | Export a fichero `.md` real | En detalle, pulsar Exportar | Comparte `content://...` con archivo Markdown real | OK |
+| PF-29 | Export sin texto original | Revisar contenido del `.md` generado | Solo metadatos/senales/recomendaciones/disclaimer | OK |
 
 ## 5. Matriz tecnica automatizada
 Cobertura actual:
@@ -63,6 +70,8 @@ Cobertura actual:
 - `SeedJsonParserTest` (4 casos).
 - `QuizEngineTest` (5 casos).
 - `AnalyzeViewModelOcrTest` (2 casos de estado OCR).
+- `HistoryViewModelTest` (4 casos de filtro/orden/estado vacio).
+- `ReportExporterTest` (2 casos de markdown y escritura de fichero).
 
 | ID | Test unitario | Esperado |
 |---|---|---|
@@ -85,6 +94,11 @@ Cobertura actual:
 | PT-17 | quiz avance y completado | Solo avanza tras responder y finaliza al final |
 | PT-18 | VM OCR exito | `OcrReady` -> confirmar -> `ResultReady` |
 | PT-19 | VM OCR error | Error OCR -> `AnalyzeFlowState.Error` |
+| PT-20 | Historial query | Filtra por titulo/dominio en memoria |
+| PT-21 | Historial filtro semaforo | Filtra por chip Verde/Amarillo/Rojo |
+| PT-22 | Historial orden riesgo | Ordena por score descendente |
+| PT-23 | Historial vacio extremo | Muestra mensaje de privacidad extrema |
+| PT-24 | Export markdown fichero | Crea archivo > 0 bytes y sin texto original |
 
 ## 6. Criterios de aceptacion del bloque Analizar
 - `assembleDebug`, `testDebugUnitTest` e `installDebug` finalizan en exito.
