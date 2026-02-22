@@ -1,0 +1,24 @@
+[
+  {
+    "id": "q01",
+    "prompt": "Recibes un SMS urgente con enlace acortado para pagar una multa. Que haces?",
+    "options": [
+      "Pagar rapido para evitar recargos.",
+      "Ignorar el SMS y verificar en canal oficial.",
+      "Reenviar el SMS a tus contactos."
+    ],
+    "correctIndex": 1,
+    "explanation": "La verificacion por canal oficial reduce riesgo de fraude."
+  },
+  {
+    "id": "q02",
+    "prompt": "Un email te pide el PIN de la tarjeta para desbloquear cuenta.",
+    "options": [
+      "Enviar PIN por email.",
+      "Llamar al remitente del email.",
+      "No compartir PIN y contactar soporte oficial."
+    ],
+    "correctIndex": 2,
+    "explanation": "Ninguna entidad legitima pide PIN por email o chat."
+  }
+]

@@ -1,0 +1,52 @@
+package com.estef.antiphishingcoach.domain.usecase
+
+import com.estef.antiphishingcoach.core.common.DispatcherProvider
+import com.estef.antiphishingcoach.domain.model.AnalyzeExecutionResult
+import com.estef.antiphishingcoach.domain.model.AnalyzeRequest
+import com.estef.antiphishingcoach.domain.model.IncidentRecord
+import com.estef.antiphishingcoach.domain.repository.IncidentRepository
+import com.estef.antiphishingcoach.domain.repository.SettingsRepository
+import kotlinx.coroutines.withContext
+
+/**
+ * Ejecuta analisis y guarda metadatos solo si privacidad extrema esta desactivada.
+ */
+class AnalyzeAndPersistUseCase(
+    private val analyzeInputUseCase: AnalyzeInputUseCase,
+    private val incidentRepository: IncidentRepository,
+    private val settingsRepository: SettingsRepository,
+    private val dispatchers: DispatcherProvider = DispatcherProvider()
+) {
+    suspend operator fun invoke(request: AnalyzeRequest): AnalyzeExecutionResult {
+        val output = withContext(dispatchers.default) {
+            analyzeInputUseCase(request.inputText)
+        }
+        val extremePrivacyEnabled = settingsRepository.isExtremePrivacyEnabled()
+        val incidentId = if (extremePrivacyEnabled) {
+            null
+        } else {
+            withContext(dispatchers.io) {
+                incidentRepository.saveIncident(
+                    IncidentRecord(
+                        id = 0L,
+                        createdAt = System.currentTimeMillis(),
+                        title = request.title?.takeIf { it.isNotBlank() },
+                        sourceType = output.sourceType.name,
+                        sourceApp = request.sourceApp.name,
+                        scenarioType = request.scenarioType?.name,
+                        trafficLight = output.trafficLight.name,
+                        score = output.score,
+                        sanitizedDomain = output.sanitizedDomain,
+                        recommendationCodes = output.recommendationCodes,
+                        signals = output.signals
+                    )
+                )
+            }
+        }
+        return AnalyzeExecutionResult(
+            output = output,
+            persistedIncidentId = incidentId,
+            usedExtremePrivacy = extremePrivacyEnabled
+        )
+    }
+}

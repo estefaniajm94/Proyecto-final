@@ -1,0 +1,20 @@
+[
+  {
+    "id": "smishing_correos",
+    "title": "Smishing de paqueteria",
+    "checklist": [
+      "No pulses enlaces del mensaje.",
+      "Verifica el envio en la app oficial.",
+      "No introduzcas datos bancarios desde el SMS."
+    ]
+  },
+  {
+    "id": "bank_impersonation",
+    "title": "Suplantacion bancaria",
+    "checklist": [
+      "No compartas PIN ni codigo OTP.",
+      "Cuelga y llama al telefono oficial del banco.",
+      "Bloquea tarjetas si diste datos."
+    ]
+  }
+]

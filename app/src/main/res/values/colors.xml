@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_primary">#1E5E52</color>
+    <color name="brand_on_primary">#FFFFFF</color>
+    <color name="brand_secondary">#C7A43C</color>
+    <color name="brand_background">#F6F7F2</color>
+    <color name="brand_surface">#FFFFFF</color>
+    <color name="brand_on_surface">#1C1D1A</color>
+    <color name="traffic_green">#2E7D32</color>
+    <color name="traffic_yellow">#A87900</color>
+    <color name="traffic_red">#C62828</color>
+</resources>

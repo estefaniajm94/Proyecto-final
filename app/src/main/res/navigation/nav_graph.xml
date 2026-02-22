@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.estef.antiphishingcoach.presentation.home.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_home_to_analyze"
+            app:destination="@id/analyzeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_home_to_coach"
+            app:destination="@id/coachFragment" />
+        <action
+            android:id="@+id/action_home_to_trainingStart"
+            app:destination="@id/trainingStartFragment" />
+        <action
+            android:id="@+id/action_home_to_history"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_home_to_settings"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_home_to_resources"
+            app:destination="@id/resourcesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/analyzeFragment"
+        android:name="com.estef.antiphishingcoach.presentation.analyze.AnalyzeFragment"
+        android:label="Analizar">
+        <action
+            android:id="@+id/action_analyze_to_analysisDetail"
+            app:destination="@id/analysisDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/analysisDetailFragment"
+        android:name="com.estef.antiphishingcoach.presentation.analysisdetail.AnalysisDetailFragment"
+        android:label="Detalle análisis">
+        <argument
+            android:name="incidentId"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/coachFragment"
+        android:name="com.estef.antiphishingcoach.presentation.coach.CoachFragment"
+        android:label="Coach">
+        <action
+            android:id="@+id/action_coach_to_scenarioChecklist"
+            app:destination="@id/scenarioChecklistFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scenarioChecklistFragment"
+        android:name="com.estef.antiphishingcoach.presentation.coach.ScenarioChecklistFragment"
+        android:label="Checklist">
+        <argument
+            android:name="scenarioId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/trainingStartFragment"
+        android:name="com.estef.antiphishingcoach.presentation.training.TrainingStartFragment"
+        android:label="Training inicio">
+        <action
+            android:id="@+id/action_trainingStart_to_quiz"
+            app:destination="@id/quizFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.estef.antiphishingcoach.presentation.training.QuizFragment"
+        android:label="Quiz">
+        <action
+            android:id="@+id/action_quiz_to_quizResult"
+            app:destination="@id/quizResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizResultFragment"
+        android:name="com.estef.antiphishingcoach.presentation.training.QuizResultFragment"
+        android:label="Resultado quiz" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.estef.antiphishingcoach.presentation.history.HistoryFragment"
+        android:label="Historial">
+        <action
+            android:id="@+id/action_history_to_historyDetail"
+            app:destination="@id/historyDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyDetailFragment"
+        android:name="com.estef.antiphishingcoach.presentation.history.HistoryDetailFragment"
+        android:label="Detalle historial">
+        <argument
+            android:name="incidentId"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.estef.antiphishingcoach.presentation.settings.SettingsFragment"
+        android:label="Ajustes" />
+
+    <fragment
+        android:id="@+id/resourcesFragment"
+        android:name="com.estef.antiphishingcoach.presentation.resources.ResourcesFragment"
+        android:label="Recursos" />
+
+</navigation>
