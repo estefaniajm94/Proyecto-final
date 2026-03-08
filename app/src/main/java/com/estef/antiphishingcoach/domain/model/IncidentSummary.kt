@@ -9,5 +9,6 @@ data class IncidentSummary(
     val title: String?,
     val sourceApp: String,
     val trafficLight: String,
-    val score: Int
+    val score: Int,
+    val sanitizedDomain: String?
 )

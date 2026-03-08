@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.privacy.LocalAuthManager
 import com.estef.antiphishingcoach.databinding.FragmentHistoryBinding
+import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
 import kotlinx.coroutines.launch
@@ -26,7 +27,8 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
     private val viewModel: HistoryViewModel by viewModels {
         HistoryViewModelFactory(
             observeHistoryUseCase = appContainer().observeHistoryUseCase,
-            observeExtremePrivacyUseCase = appContainer().observeExtremePrivacyUseCase
+            observeExtremePrivacyUseCase = appContainer().observeExtremePrivacyUseCase,
+            stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
     }
     private val localAuthManager = LocalAuthManager()
@@ -71,7 +73,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
             viewModel.onTrafficLightFilterChanged(filter)
         }
 
-        val orderOptions = listOf("Mas reciente", "Mayor riesgo")
+        val orderOptions = resources.getStringArray(R.array.history_sort_options).toList()
         val sortAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, orderOptions)
         actvHistorySort.setAdapter(sortAdapter)
         actvHistorySort.setText(orderOptions.first(), false)
@@ -134,8 +136,8 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         )
         prompt.authenticate(
             localAuthManager.buildPromptInfo(
-                title = "Desbloquear historial",
-                subtitle = "Verifica tu identidad para continuar"
+                title = getString(R.string.history_unlock_title),
+                subtitle = getString(R.string.history_unlock_subtitle)
             )
         )
     }

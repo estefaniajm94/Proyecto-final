@@ -1,4 +1,4 @@
-package com.estef.antiphishingcoach.domain.usecase
+package com.estef.antiphishingcoach.data.export
 
 import android.content.Context
 import android.net.Uri
@@ -13,7 +13,9 @@ data class ExportedReportFile(
 )
 
 /**
- * Genera un archivo Markdown real en cache y devuelve Uri content:// para compartir.
+ * Genera un archivo Markdown en cache y devuelve Uri content:// para compartir.
+ *
+ * Vive en la capa data porque depende de Context y FileProvider.
  */
 class ExportReportToFileUseCase(
     private val appContext: Context,

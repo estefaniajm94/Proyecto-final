@@ -2,10 +2,12 @@
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.export.ReportExporter
 import com.estef.antiphishingcoach.domain.model.IncidentRecord
 import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveHistoryUseCase
+import com.estef.antiphishingcoach.presentation.common.StringResolver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +21,7 @@ import java.util.Locale
 class HistoryViewModel(
     observeHistoryUseCase: ObserveHistoryUseCase,
     observeExtremePrivacyUseCase: ObserveExtremePrivacyUseCase,
+    private val stringResolver: StringResolver,
     private val reportExporter: ReportExporter = ReportExporter()
 ) : ViewModel() {
 
@@ -108,20 +111,20 @@ class HistoryViewModel(
         if (filteredRecords.isNotEmpty()) return ""
         return when {
             allRecords.isEmpty() && extremePrivacyEnabled -> {
-                "Privacidad extrema activa: no se estan guardando nuevos analisis."
+                stringResolver.get(R.string.history_empty_extreme_privacy)
             }
 
-            allRecords.isEmpty() -> "Aun no hay analisis guardados."
-            else -> "No hay resultados para los filtros actuales."
+            allRecords.isEmpty() -> stringResolver.get(R.string.history_empty)
+            else -> stringResolver.get(R.string.history_empty_filtered)
         }
     }
 
     private fun IncidentRecord.toUi(): HistoryItemUi {
         return HistoryItemUi(
             incidentId = id,
-            title = title ?: "Analisis sin titulo",
-            metaLine = "Score $score | $trafficLight | $sourceApp",
-            createdAtLine = "Fecha: ${dateFormat.format(Date(createdAt))}",
+            title = title ?: stringResolver.get(R.string.history_item_title_fallback),
+            metaLine = stringResolver.get(R.string.history_item_meta, score, trafficLight, sourceApp),
+            createdAtLine = stringResolver.get(R.string.history_item_created, dateFormat.format(Date(createdAt))),
             trafficLight = trafficLight,
             score = score,
             sourceApp = sourceApp,

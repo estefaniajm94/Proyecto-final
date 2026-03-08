@@ -15,6 +15,7 @@ import com.estef.antiphishingcoach.domain.model.IncidentRecord
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
 import com.estef.antiphishingcoach.presentation.common.showShortMessage
+import com.estef.antiphishingcoach.presentation.common.toTrafficColorRes
 import kotlinx.coroutines.launch
 
 class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
@@ -59,7 +60,10 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
         tvTrafficLight.text = getString(R.string.detail_light, incident.trafficLight)
         tvSourceApp.text = getString(R.string.detail_source, incident.sourceApp)
         tvSourceType.text = getString(R.string.detail_source_type, incident.sourceType)
-        tvDomain.text = getString(R.string.detail_domain, incident.sanitizedDomain ?: "N/A")
+        tvDomain.text = getString(
+            R.string.detail_domain,
+            incident.sanitizedDomain ?: getString(R.string.detail_value_not_available)
+        )
         tvCreatedAt.text = getString(R.string.detail_created, state.createdAtText)
         tvSignals.text = renderSignals(incident)
         tvRecommendations.text = renderRecommendations(state)
@@ -67,29 +71,38 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
         tvTrafficLight.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
-                incident.trafficLight.toColorRes()
+                incident.trafficLight.toTrafficColorRes()
             )
         )
     }
 
     private fun renderSignals(incident: IncidentRecord): String {
-        if (incident.signals.isEmpty()) return "Sin senales registradas."
+        if (incident.signals.isEmpty()) return getString(R.string.detail_no_signals)
         return incident.signals.joinToString("\n") { signal ->
-            "- ${signal.title}: ${signal.explanation} (peso ${signal.weight})"
+            getString(
+                R.string.detail_signal_line,
+                signal.title,
+                signal.explanation,
+                signal.weight
+            )
         }
     }
 
     private fun renderRecommendations(state: IncidentDetailUiState): String {
-        if (state.recommendations.isEmpty()) return "Sin recomendaciones registradas."
+        if (state.recommendations.isEmpty()) return getString(R.string.detail_no_recommendations)
         return state.recommendations.joinToString("\n") { recommendation ->
-            "- ${recommendation.title}: ${recommendation.detail}"
+            getString(
+                R.string.detail_recommendation_line,
+                recommendation.title,
+                recommendation.detail
+            )
         }
     }
 
     private fun shareMarkdownReport() {
         val exportFile = viewModel.exportMarkdownReportFile()
         if (exportFile == null) {
-            showShortMessage("No hay datos para exportar.")
+            showShortMessage(getString(R.string.detail_export_no_data))
             return
         }
         val sendIntent = Intent(Intent.ACTION_SEND).apply {
@@ -101,12 +114,4 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
         startActivity(Intent.createChooser(sendIntent, null))
     }
 
-    private fun String.toColorRes(): Int {
-        return when (this) {
-            "GREEN" -> R.color.traffic_green
-            "YELLOW" -> R.color.traffic_yellow
-            "RED" -> R.color.traffic_red
-            else -> R.color.brand_on_surface
-        }
-    }
 }

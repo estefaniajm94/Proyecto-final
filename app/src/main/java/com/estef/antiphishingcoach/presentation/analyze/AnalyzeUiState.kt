@@ -1,5 +1,6 @@
 package com.estef.antiphishingcoach.presentation.analyze
 
+import com.estef.antiphishingcoach.core.model.TrafficLight
 import com.estef.antiphishingcoach.domain.model.DetectedSignal
 import com.estef.antiphishingcoach.domain.model.RecommendationItem
 
@@ -24,7 +25,7 @@ sealed interface AnalyzeFlowState {
 
 data class AnalysisPresentation(
     val score: Int,
-    val trafficLightLabel: String,
+    val trafficLight: TrafficLight,
     val sourceTypeLabel: String,
     val sanitizedDomain: String?,
     val signals: List<DetectedSignal>,

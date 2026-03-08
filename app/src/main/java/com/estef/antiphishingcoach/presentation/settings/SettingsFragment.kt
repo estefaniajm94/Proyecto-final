@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.privacy.LocalAuthManager
 import com.estef.antiphishingcoach.databinding.FragmentSettingsBinding
+import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
 import kotlinx.coroutines.launch
@@ -26,7 +27,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             observeLocalLockUseCase = container.observeLocalLockUseCase,
             toggleExtremePrivacyUseCase = container.toggleExtremePrivacyUseCase,
             toggleLocalLockUseCase = container.toggleLocalLockUseCase,
-            clearLocalDataUseCase = container.clearLocalDataUseCase
+            clearLocalDataUseCase = container.clearLocalDataUseCase,
+            stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
     }
     private val localAuthManager = LocalAuthManager()
@@ -125,8 +127,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         )
         prompt.authenticate(
             localAuthManager.buildPromptInfo(
-                title = "Desbloquear ajustes",
-                subtitle = "Verifica tu identidad para continuar"
+                title = getString(R.string.settings_unlock_title),
+                subtitle = getString(R.string.settings_unlock_subtitle)
             )
         )
     }

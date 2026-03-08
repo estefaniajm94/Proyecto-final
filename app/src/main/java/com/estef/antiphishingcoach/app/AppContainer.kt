@@ -17,7 +17,7 @@ import com.estef.antiphishingcoach.domain.repository.TrainingRepository
 import com.estef.antiphishingcoach.domain.usecase.AnalyzeAndPersistUseCase
 import com.estef.antiphishingcoach.domain.usecase.AnalyzeInputUseCase
 import com.estef.antiphishingcoach.domain.usecase.ClearLocalDataUseCase
-import com.estef.antiphishingcoach.domain.usecase.ExportReportToFileUseCase
+import com.estef.antiphishingcoach.data.export.ExportReportToFileUseCase
 import com.estef.antiphishingcoach.domain.usecase.ExtractTextFromImageUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetCoachScenariosUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetTrainingQuestionsUseCase

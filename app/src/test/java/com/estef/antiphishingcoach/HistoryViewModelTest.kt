@@ -45,7 +45,8 @@ class HistoryViewModelTest {
                         title = record.title,
                         sourceApp = record.sourceApp,
                         trafficLight = record.trafficLight,
-                        score = record.score
+                        score = record.score,
+                        sanitizedDomain = record.sanitizedDomain
                     )
                 }
             }
@@ -139,7 +140,8 @@ class HistoryViewModelTest {
     private fun buildViewModel(): HistoryViewModel {
         return HistoryViewModel(
             observeHistoryUseCase = ObserveHistoryUseCase(incidentRepository),
-            observeExtremePrivacyUseCase = ObserveExtremePrivacyUseCase(settingsRepository)
+            observeExtremePrivacyUseCase = ObserveExtremePrivacyUseCase(settingsRepository),
+            stringResolver = TestStringResolver()
         )
     }
 

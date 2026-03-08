@@ -1,0 +1,31 @@
+package com.estef.antiphishingcoach
+
+import com.estef.antiphishingcoach.R
+import com.estef.antiphishingcoach.presentation.common.StringResolver
+import java.util.Locale
+
+class TestStringResolver : StringResolver {
+    override fun get(resId: Int, vararg formatArgs: Any): String {
+        val template = when (resId) {
+            R.string.history_empty -> "Aun no hay analisis guardados."
+            R.string.history_empty_extreme_privacy -> "Privacidad extrema activa: no se estan guardando nuevos analisis."
+            R.string.history_empty_filtered -> "No hay resultados para los filtros actuales."
+            R.string.history_item_title_fallback -> "Analisis sin titulo"
+            R.string.history_item_meta -> "Score %1\$d | %2\$s | %3\$s"
+            R.string.history_item_created -> "Fecha: %1\$s"
+            R.string.analyze_error_input_required -> "Introduce texto o enlace para analizar."
+            R.string.analyze_status_analyzing -> "Analizando entrada..."
+            R.string.analyze_error_analysis_failed -> "No se pudo completar el analisis. Intentalo de nuevo."
+            R.string.analyze_status_image_selection_cancelled -> "Seleccion de imagen cancelada."
+            R.string.analyze_status_ocr_processing -> "Procesando OCR local en el dispositivo..."
+            R.string.analyze_error_no_text_detected -> "No se detecto texto en la imagen seleccionada."
+            R.string.analyze_status_ocr_ready -> "Texto detectado listo para revision."
+            R.string.analyze_error_ocr_failed -> "No se pudo extraer texto de la imagen."
+            R.string.analyze_status_ocr_review_cancelled -> "Revision OCR cancelada."
+            R.string.analyze_status_result_privacy_on -> "Privacidad extrema activa: analisis mostrado sin guardar historial."
+            R.string.analyze_status_result_saved -> "Analisis guardado en historial privado."
+            else -> "res-$resId"
+        }
+        return String.format(Locale.ROOT, template, *formatArgs)
+    }
+}

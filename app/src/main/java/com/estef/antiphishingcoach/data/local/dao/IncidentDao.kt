@@ -20,6 +20,10 @@ interface IncidentDao {
     fun observeHistory(): Flow<List<IncidentWithAnalysisAndSignals>>
 
     @Transaction
+    @Query("SELECT * FROM incidents ORDER BY createdAt DESC LIMIT 1")
+    fun observeLatestIncident(): Flow<IncidentWithAnalysisAndSignals?>
+
+    @Transaction
     @Query("SELECT * FROM incidents WHERE id = :incidentId LIMIT 1")
     fun observeIncidentDetail(incidentId: Long): Flow<IncidentWithAnalysisAndSignals?>
 

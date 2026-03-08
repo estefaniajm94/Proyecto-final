@@ -19,6 +19,20 @@
     <string name="settings_clear_data">Borrar datos locales</string>
     <string name="history_empty">Aun no hay analisis guardados.</string>
     <string name="history_locked_message">Se requiere autenticacion local para ver el historial.</string>
+    <string name="history_title">Historial privado</string>
+    <string name="history_search_hint">Buscar por titulo o dominio</string>
+    <string name="history_filter_all">Todos</string>
+    <string name="history_filter_green">Verde</string>
+    <string name="history_filter_yellow">Amarillo</string>
+    <string name="history_filter_red">Rojo</string>
+    <string name="history_sort_hint">Orden</string>
+    <string name="history_sort_most_recent">Mas reciente</string>
+    <string name="history_sort_highest_risk">Mayor riesgo</string>
+    <string name="history_go_analyze">Ir a Analizar</string>
+    <string name="history_unlock_title">Desbloquear historial</string>
+    <string name="history_unlock_subtitle">Verifica tu identidad para continuar</string>
+    <string name="history_empty_extreme_privacy">Privacidad extrema activa: no se estan guardando nuevos analisis.</string>
+    <string name="history_empty_filtered">No hay resultados para los filtros actuales.</string>
     <string name="history_item_title_fallback">Analisis sin titulo</string>
     <string name="history_item_meta">Score %1$d | %2$s | %3$s</string>
     <string name="history_item_created">Fecha: %1$s</string>
@@ -45,11 +59,40 @@
     <string name="analyze_signals_title">Senales detectadas</string>
     <string name="analyze_recommendations_title">Recomendaciones</string>
     <string name="analyze_open_detail">Abrir detalle guardado</string>
+    <string name="analyze_privacy_active">Privacidad extrema: ACTIVA (no se guarda historial).</string>
+    <string name="analyze_privacy_inactive">Privacidad extrema: INACTIVA (se guardan metadatos).</string>
+    <string name="analyze_no_risk_signals">No se detectaron senales de riesgo en esta entrada.</string>
+    <string name="analyze_no_extra_recommendations">Sin recomendaciones adicionales.</string>
+    <string name="analyze_not_saved_by_privacy">No guardado por privacidad extrema.</string>
+    <string name="analyze_saved_with_incident_id">Guardado en historial con incidentId=%1$d</string>
+    <string name="analyze_signal_line">- %1$s: %2$s (peso %3$d)</string>
+    <string name="analyze_recommendation_line">- %1$s: %2$s</string>
+    <string name="analyze_error_input_required">Introduce texto o enlace para analizar.</string>
+    <string name="analyze_status_analyzing">Analizando entrada...</string>
+    <string name="analyze_error_analysis_failed">No se pudo completar el analisis. Intentalo de nuevo.</string>
+    <string name="analyze_status_image_selection_cancelled">Seleccion de imagen cancelada.</string>
+    <string name="analyze_status_ocr_processing">Procesando OCR local en el dispositivo...</string>
+    <string name="analyze_error_no_text_detected">No se detecto texto en la imagen seleccionada.</string>
+    <string name="analyze_status_ocr_ready">Texto detectado listo para revision.</string>
+    <string name="analyze_error_ocr_failed">No se pudo extraer texto de la imagen.</string>
+    <string name="analyze_status_ocr_review_cancelled">Revision OCR cancelada.</string>
+    <string name="analyze_status_result_privacy_on">Privacidad extrema activa: analisis mostrado sin guardar historial.</string>
+    <string name="analyze_status_result_saved">Analisis guardado en historial privado.</string>
+    <string name="source_app_sms">SMS</string>
+    <string name="source_app_whatsapp">WhatsApp</string>
+    <string name="source_app_email">Email</string>
+    <string name="source_app_other">Otro</string>
     <string name="ocr_review_title">Texto detectado</string>
     <string name="ocr_review_privacy_message">La imagen se procesa en el dispositivo. Revisa y elimina datos sensibles. No guardamos el texto original.</string>
     <string name="ocr_review_text_hint">Texto OCR editable</string>
     <string name="ocr_review_confirm">Analizar texto</string>
     <string name="ocr_review_cancel">Cancelar</string>
+    <string name="detail_value_not_available">N/A</string>
+    <string name="detail_no_signals">Sin senales registradas.</string>
+    <string name="detail_no_recommendations">Sin recomendaciones registradas.</string>
+    <string name="detail_export_no_data">No hay datos para exportar.</string>
+    <string name="detail_signal_line">- %1$s: %2$s (peso %3$d)</string>
+    <string name="detail_recommendation_line">- %1$s: %2$s</string>
     <string name="coach_empty">No hay escenarios disponibles.</string>
     <string name="coach_loading">Cargando escenarios...</string>
     <string name="coach_open_checklist">Abrir checklist</string>
@@ -72,4 +115,35 @@
     <string name="training_result_ratio">Precision: %1$d%%</string>
     <string name="training_restart">Reiniciar quiz</string>
     <string name="resources_info_disclaimer">Informacion orientativa. Verifica siempre en canales oficiales actualizados antes de actuar.</string>
+
+    <!-- Settings -->
+    <string name="settings_extreme_privacy_on">Privacidad extrema activada.</string>
+    <string name="settings_extreme_privacy_off">Privacidad extrema desactivada.</string>
+    <string name="settings_local_lock_on">Bloqueo local activado para Historial y Ajustes.</string>
+    <string name="settings_local_lock_off">Bloqueo local desactivado.</string>
+    <string name="settings_data_cleared">Datos locales eliminados.</string>
+    <string name="settings_biometric_not_available">No hay biometria o credencial del dispositivo disponible para activar el bloqueo local.</string>
+    <string name="settings_auth_error">No se pudo autenticar para abrir Ajustes protegidos.</string>
+    <string name="settings_unlock_title">Desbloquear ajustes</string>
+    <string name="settings_unlock_subtitle">Verifica tu identidad para continuar</string>
+
+    <!-- Home: tarjetas rapidas -->
+    <string name="home_quick_coach_title">Coach</string>
+    <string name="home_quick_coach_desc">Checklist por escenarios</string>
+    <string name="home_quick_training_title">Entrenamiento</string>
+    <string name="home_quick_training_desc">Mini quiz con feedback</string>
+    <string name="home_quick_history_title">Historial</string>
+    <string name="home_quick_history_desc">Analisis privados guardados</string>
+    <string name="home_quick_resources_title">Recursos</string>
+    <string name="home_quick_resources_desc">Fuentes y contactos oficiales</string>
+
+    <!-- Home: estado -->
+    <string name="home_latest_date">Fecha: %1$s</string>
+    <string name="home_latest_domain">Dominio: %1$s</string>
+    <string name="home_training_no_progress">Sin progreso de entrenamiento registrado.</string>
+
+    <string-array name="history_sort_options">
+        <item>@string/history_sort_most_recent</item>
+        <item>@string/history_sort_highest_risk</item>
+    </string-array>
 </resources>

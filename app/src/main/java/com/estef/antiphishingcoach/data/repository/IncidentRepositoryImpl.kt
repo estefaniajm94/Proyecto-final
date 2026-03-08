@@ -63,16 +63,8 @@ class IncidentRepositoryImpl(
     }
 
     override fun observeLatestIncidentSummary(): Flow<IncidentSummary?> {
-        return incidentDao.observeHistory().map { rows ->
-            val latest = rows.firstOrNull() ?: return@map null
-            IncidentSummary(
-                incidentId = latest.incident.id,
-                createdAt = latest.incident.createdAt,
-                title = latest.incident.title,
-                sourceApp = latest.incident.sourceApp,
-                trafficLight = latest.incident.trafficLight,
-                score = latest.incident.score
-            )
+        return incidentDao.observeLatestIncident().map { row ->
+            row?.toSummary()
         }
     }
 

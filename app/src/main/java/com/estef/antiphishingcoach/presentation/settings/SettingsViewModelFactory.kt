@@ -7,13 +7,15 @@ import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
+import com.estef.antiphishingcoach.presentation.common.StringResolver
 
 class SettingsViewModelFactory(
     private val observeExtremePrivacyUseCase: ObserveExtremePrivacyUseCase,
     private val observeLocalLockUseCase: ObserveLocalLockUseCase,
     private val toggleExtremePrivacyUseCase: ToggleExtremePrivacyUseCase,
     private val toggleLocalLockUseCase: ToggleLocalLockUseCase,
-    private val clearLocalDataUseCase: ClearLocalDataUseCase
+    private val clearLocalDataUseCase: ClearLocalDataUseCase,
+    private val stringResolver: StringResolver
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -24,7 +26,8 @@ class SettingsViewModelFactory(
                 observeLocalLockUseCase = observeLocalLockUseCase,
                 toggleExtremePrivacyUseCase = toggleExtremePrivacyUseCase,
                 toggleLocalLockUseCase = toggleLocalLockUseCase,
-                clearLocalDataUseCase = clearLocalDataUseCase
+                clearLocalDataUseCase = clearLocalDataUseCase,
+                stringResolver = stringResolver
             ) as T
         }
         throw IllegalArgumentException("ViewModel no soportado: ${modelClass.name}")

@@ -50,7 +50,8 @@ class AnalyzeViewModelOcrTest {
                 )
             },
             extractTextFromImageAction = { "Texto OCR detectado" },
-            observeExtremePrivacyFlow = flowOf(false)
+            observeExtremePrivacyFlow = flowOf(false),
+            stringResolver = TestStringResolver()
         )
 
         viewModel.onImageSelected(mockk(relaxed = true))
@@ -82,7 +83,8 @@ class AnalyzeViewModelOcrTest {
                 )
             },
             extractTextFromImageAction = { throw IllegalStateException("OCR fail") },
-            observeExtremePrivacyFlow = flowOf(false)
+            observeExtremePrivacyFlow = flowOf(false),
+            stringResolver = TestStringResolver()
         )
 
         viewModel.onImageSelected(mockk(relaxed = true))

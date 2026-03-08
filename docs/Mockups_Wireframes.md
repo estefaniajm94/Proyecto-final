@@ -50,3 +50,6 @@ Incluir una subseccion corta por pantalla con:
 1. objetivo UX,
 2. decisiones de diseno,
 3. relacion con privacidad/seguridad.
+
+## 7. Nota de implementacion actual
+El Home del proyecto se ha redisenado como dashboard (CTA principal Analizar, grid 2x2 de accesos y tarjetas de actividad) para mejorar jerarquia visual y defendibilidad UX en memoria.

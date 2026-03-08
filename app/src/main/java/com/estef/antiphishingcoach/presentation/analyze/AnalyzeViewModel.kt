@@ -4,14 +4,15 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.model.SourceApp
-import com.estef.antiphishingcoach.core.model.TrafficLight
 import com.estef.antiphishingcoach.domain.model.AnalyzeExecutionResult
 import com.estef.antiphishingcoach.domain.model.AnalyzeRequest
 import com.estef.antiphishingcoach.domain.model.RecommendationCatalog
 import com.estef.antiphishingcoach.domain.usecase.AnalyzeAndPersistUseCase
 import com.estef.antiphishingcoach.domain.usecase.ExtractTextFromImageUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
+import com.estef.antiphishingcoach.presentation.common.StringResolver
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,17 +28,20 @@ import kotlinx.coroutines.launch
 class AnalyzeViewModel(
     private val analyzeAndPersistAction: suspend (AnalyzeRequest) -> AnalyzeExecutionResult,
     private val extractTextFromImageAction: suspend (Uri) -> String,
-    observeExtremePrivacyFlow: Flow<Boolean>
+    observeExtremePrivacyFlow: Flow<Boolean>,
+    private val stringResolver: StringResolver
 ) : ViewModel() {
 
     constructor(
         analyzeAndPersistUseCase: AnalyzeAndPersistUseCase,
         extractTextFromImageUseCase: ExtractTextFromImageUseCase,
-        observeExtremePrivacyUseCase: ObserveExtremePrivacyUseCase
+        observeExtremePrivacyUseCase: ObserveExtremePrivacyUseCase,
+        stringResolver: StringResolver
     ) : this(
         analyzeAndPersistAction = { request -> analyzeAndPersistUseCase(request) },
         extractTextFromImageAction = { uri -> extractTextFromImageUseCase(uri) },
-        observeExtremePrivacyFlow = observeExtremePrivacyUseCase()
+        observeExtremePrivacyFlow = observeExtremePrivacyUseCase(),
+        stringResolver = stringResolver
     )
 
     private val _uiState = MutableStateFlow(AnalyzeUiState())
@@ -54,7 +58,8 @@ class AnalyzeViewModel(
     fun analyze(inputText: String, title: String?, sourceApp: SourceApp) {
         val sanitizedInput = inputText.trim()
         if (sanitizedInput.isBlank()) {
-            setError("Introduce texto o enlace para analizar.", inputError = "Introduce texto o enlace para analizar.")
+            val message = stringResolver.get(R.string.analyze_error_input_required)
+            setError(message = message, inputError = message)
             return
         }
 
@@ -62,7 +67,7 @@ class AnalyzeViewModel(
             state.copy(
                 isLoading = true,
                 inputError = null,
-                statusMessage = "Analizando entrada...",
+                statusMessage = stringResolver.get(R.string.analyze_status_analyzing),
                 flowState = AnalyzeFlowState.Analyzing
             )
         }
@@ -81,7 +86,7 @@ class AnalyzeViewModel(
                 logDebug("Analisis completado en ${elapsedMs}ms")
                 publishAnalysisResult(result)
             } catch (error: Exception) {
-                setError("No se pudo completar el analisis. Intentalo de nuevo.")
+                setError(stringResolver.get(R.string.analyze_error_analysis_failed))
                 logError("Error al analizar texto", error)
             }
         }
@@ -102,7 +107,7 @@ class AnalyzeViewModel(
             state.copy(
                 isLoading = false,
                 flowState = AnalyzeFlowState.Idle,
-                statusMessage = "Seleccion de imagen cancelada."
+                statusMessage = stringResolver.get(R.string.analyze_status_image_selection_cancelled)
             )
         }
     }
@@ -117,7 +122,7 @@ class AnalyzeViewModel(
                 isLoading = true,
                 flowState = AnalyzeFlowState.OcrRunning,
                 inputError = null,
-                statusMessage = "Procesando OCR local en el dispositivo..."
+                statusMessage = stringResolver.get(R.string.analyze_status_ocr_processing)
             )
         }
 
@@ -125,18 +130,18 @@ class AnalyzeViewModel(
             try {
                 val ocrText = extractTextFromImageAction(uri)
                 if (ocrText.isBlank()) {
-                    setError("No se detecto texto en la imagen seleccionada.")
+                    setError(stringResolver.get(R.string.analyze_error_no_text_detected))
                     return@launch
                 }
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
                         flowState = AnalyzeFlowState.OcrReady(ocrText),
-                        statusMessage = "Texto detectado listo para revision."
+                        statusMessage = stringResolver.get(R.string.analyze_status_ocr_ready)
                     )
                 }
             } catch (error: Exception) {
-                setError("No se pudo extraer texto de la imagen.")
+                setError(stringResolver.get(R.string.analyze_error_ocr_failed))
                 logError("Error en OCR local", error)
             }
         }
@@ -154,7 +159,7 @@ class AnalyzeViewModel(
         _uiState.update { state ->
             state.copy(
                 flowState = AnalyzeFlowState.Idle,
-                statusMessage = "Revision OCR cancelada."
+                statusMessage = stringResolver.get(R.string.analyze_status_ocr_review_cancelled)
             )
         }
     }
@@ -162,9 +167,9 @@ class AnalyzeViewModel(
     private fun publishAnalysisResult(result: AnalyzeExecutionResult) {
         val recommendations = RecommendationCatalog.fromCodes(result.output.recommendationCodes)
         val statusMessage = if (result.usedExtremePrivacy) {
-            "Privacidad extrema activa: analisis mostrado sin guardar historial."
+            stringResolver.get(R.string.analyze_status_result_privacy_on)
         } else {
-            "Analisis guardado en historial privado."
+            stringResolver.get(R.string.analyze_status_result_saved)
         }
         _uiState.update { state ->
             state.copy(
@@ -173,7 +178,7 @@ class AnalyzeViewModel(
                 flowState = AnalyzeFlowState.ResultReady,
                 result = AnalysisPresentation(
                     score = result.output.score,
-                    trafficLightLabel = toTrafficLightLabel(result.output.trafficLight),
+                    trafficLight = result.output.trafficLight,
                     sourceTypeLabel = result.output.sourceType.name,
                     sanitizedDomain = result.output.sanitizedDomain,
                     signals = result.output.signals,
@@ -192,14 +197,6 @@ class AnalyzeViewModel(
                 statusMessage = message,
                 flowState = AnalyzeFlowState.Error(message)
             )
-        }
-    }
-
-    private fun toTrafficLightLabel(light: TrafficLight): String {
-        return when (light) {
-            TrafficLight.GREEN -> "VERDE"
-            TrafficLight.YELLOW -> "AMARILLO"
-            TrafficLight.RED -> "ROJO"
         }
     }
 

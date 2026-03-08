@@ -2,11 +2,13 @@ package com.estef.antiphishingcoach.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.domain.usecase.ClearLocalDataUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
+import com.estef.antiphishingcoach.presentation.common.StringResolver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +20,8 @@ class SettingsViewModel(
     observeLocalLockUseCase: ObserveLocalLockUseCase,
     private val toggleExtremePrivacyUseCase: ToggleExtremePrivacyUseCase,
     private val toggleLocalLockUseCase: ToggleLocalLockUseCase,
-    private val clearLocalDataUseCase: ClearLocalDataUseCase
+    private val clearLocalDataUseCase: ClearLocalDataUseCase,
+    private val stringResolver: StringResolver
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -43,9 +46,9 @@ class SettingsViewModel(
             _uiState.update { state ->
                 state.copy(
                     statusMessage = if (enabled) {
-                        "Privacidad extrema activada."
+                        stringResolver.get(R.string.settings_extreme_privacy_on)
                     } else {
-                        "Privacidad extrema desactivada."
+                        stringResolver.get(R.string.settings_extreme_privacy_off)
                     }
                 )
             }
@@ -56,7 +59,7 @@ class SettingsViewModel(
         viewModelScope.launch {
             clearLocalDataUseCase()
             _uiState.update { state ->
-                state.copy(statusMessage = "Datos locales eliminados.")
+                state.copy(statusMessage = stringResolver.get(R.string.settings_data_cleared))
             }
         }
     }
@@ -67,9 +70,9 @@ class SettingsViewModel(
             _uiState.update { state ->
                 state.copy(
                     statusMessage = if (enabled) {
-                        "Bloqueo local activado para Historial y Ajustes."
+                        stringResolver.get(R.string.settings_local_lock_on)
                     } else {
-                        "Bloqueo local desactivado."
+                        stringResolver.get(R.string.settings_local_lock_off)
                     }
                 )
             }
@@ -79,7 +82,7 @@ class SettingsViewModel(
     fun onLocalLockNotAvailable() {
         _uiState.update { state ->
             state.copy(
-                statusMessage = "No hay biometria o credencial del dispositivo disponible para activar el bloqueo local."
+                statusMessage = stringResolver.get(R.string.settings_biometric_not_available)
             )
         }
     }
@@ -87,7 +90,7 @@ class SettingsViewModel(
     fun onAccessBlockedByAuthError() {
         _uiState.update { state ->
             state.copy(
-                statusMessage = "No se pudo autenticar para abrir Ajustes protegidos."
+                statusMessage = stringResolver.get(R.string.settings_auth_error)
             )
         }
     }

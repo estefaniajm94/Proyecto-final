@@ -17,8 +17,11 @@ import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.model.SourceApp
 import com.estef.antiphishingcoach.databinding.DialogOcrReviewBinding
 import com.estef.antiphishingcoach.databinding.FragmentAnalyzeBinding
+import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.toColorRes
+import com.estef.antiphishingcoach.presentation.common.toDisplayLabelEs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
@@ -31,7 +34,8 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         AnalyzeViewModelFactory(
             analyzeAndPersistUseCase = container.analyzeAndPersistUseCase,
             extractTextFromImageUseCase = container.extractTextFromImageUseCase,
-            observeExtremePrivacyUseCase = container.observeExtremePrivacyUseCase
+            observeExtremePrivacyUseCase = container.observeExtremePrivacyUseCase,
+            stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
     }
 
@@ -98,9 +102,9 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
     private fun render(state: AnalyzeUiState) = with(binding) {
         progressAnalyze.isVisible = state.isLoading
         tvPrivacyState.text = if (state.extremePrivacyEnabled) {
-            "Privacidad extrema: ACTIVA (no se guarda historial)."
+            getString(R.string.analyze_privacy_active)
         } else {
-            "Privacidad extrema: INACTIVA (se guardan metadatos)."
+            getString(R.string.analyze_privacy_inactive)
         }
         tilInput.error = state.inputError
         tvStatusMessage.text = state.statusMessage.orEmpty()
@@ -109,30 +113,44 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         cardResult.isVisible = result != null
         if (result != null) {
             tvScoreValue.text = result.score.toString()
-            tvTrafficLightValue.text = result.trafficLightLabel
+            tvTrafficLightValue.text = result.trafficLight.toDisplayLabelEs()
             tvSourceTypeValue.text = result.sourceTypeLabel
-            tvDomainValue.text = result.sanitizedDomain ?: "N/A"
+            tvDomainValue.text = result.sanitizedDomain ?: getString(R.string.detail_value_not_available)
             tvSignalsValue.text = if (result.signals.isEmpty()) {
-                "No se detectaron senales de riesgo en esta entrada."
+                getString(R.string.analyze_no_risk_signals)
             } else {
                 result.signals.joinToString("\n") { signal ->
-                    "- ${signal.title}: ${signal.explanation} (peso ${signal.weight})"
+                    getString(
+                        R.string.analyze_signal_line,
+                        signal.title,
+                        signal.explanation,
+                        signal.weight
+                    )
                 }
             }
             tvRecommendationsValue.text = if (result.recommendations.isEmpty()) {
-                "Sin recomendaciones adicionales."
+                getString(R.string.analyze_no_extra_recommendations)
             } else {
                 result.recommendations.joinToString("\n") { recommendation ->
-                    "- ${recommendation.title}: ${recommendation.detail}"
+                    getString(
+                        R.string.analyze_recommendation_line,
+                        recommendation.title,
+                        recommendation.detail
+                    )
                 }
             }
             tvPersistenceValue.text = if (result.persistedIncidentId == null) {
-                "No guardado por privacidad extrema."
+                getString(R.string.analyze_not_saved_by_privacy)
             } else {
-                "Guardado en historial con incidentId=${result.persistedIncidentId}"
+                getString(R.string.analyze_saved_with_incident_id, result.persistedIncidentId)
             }
             btnOpenDetail.isVisible = result.persistedIncidentId != null
-            tvTrafficLightValue.setTextColor(ContextCompat.getColor(requireContext(), result.toTrafficColorRes()))
+            tvTrafficLightValue.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    result.trafficLight.toColorRes()
+                )
+            )
         }
 
         when (val flowState = state.flowState) {
@@ -196,14 +214,6 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         dialog.show()
     }
 
-    private fun AnalysisPresentation.toTrafficColorRes(): Int {
-        return when (trafficLightLabel) {
-            "VERDE" -> R.color.traffic_green
-            "AMARILLO" -> R.color.traffic_yellow
-            else -> R.color.traffic_red
-        }
-    }
-
     private fun displayLabelToSourceApp(label: String?): SourceApp {
         return SourceApp.values().firstOrNull { sourceApp ->
             sourceApp.toDisplayLabel() == label
@@ -212,10 +222,10 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
 
     private fun SourceApp.toDisplayLabel(): String {
         return when (this) {
-            SourceApp.SMS -> "SMS"
-            SourceApp.WHATSAPP -> "WhatsApp"
-            SourceApp.EMAIL -> "Email"
-            SourceApp.OTHER -> "Otro"
+            SourceApp.SMS -> getString(R.string.source_app_sms)
+            SourceApp.WHATSAPP -> getString(R.string.source_app_whatsapp)
+            SourceApp.EMAIL -> getString(R.string.source_app_email)
+            SourceApp.OTHER -> getString(R.string.source_app_other)
         }
     }
 }

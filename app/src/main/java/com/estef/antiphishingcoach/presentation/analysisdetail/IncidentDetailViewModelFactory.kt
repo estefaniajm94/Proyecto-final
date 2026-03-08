@@ -2,7 +2,7 @@ package com.estef.antiphishingcoach.presentation.analysisdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.estef.antiphishingcoach.domain.usecase.ExportReportToFileUseCase
+import com.estef.antiphishingcoach.data.export.ExportReportToFileUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveIncidentDetailUseCase
 
 class IncidentDetailViewModelFactory(
