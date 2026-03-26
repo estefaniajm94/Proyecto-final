@@ -23,7 +23,7 @@ flowchart LR
 1. El usuario introduce texto/enlace y selecciona origen (SMS/WhatsApp/Email/Otro).
 2. Pulsa "Analizar ahora".
 3. El sistema ejecuta reglas explicables, calcula score (0-100) y semaforo.
-4. El sistema muestra senales detectadas y recomendaciones.
+4. El sistema muestra texto resaltado, lectura rapida, desglose del enlace, senales, recomendaciones y plan de accion.
 5. Si privacidad extrema esta desactivada, se guardan solo metadatos en Room.
 - Flujos alternativos:
 1. A1 - Entrada vacia:
@@ -34,6 +34,8 @@ flowchart LR
    El sistema informa error y no persiste datos.
 4. A4 - Privacidad extrema activa:
    Se muestra resultado pero no se persiste incidente.
+5. A5 - Entrada compartida desde otra app:
+   La app recibe `ACTION_SEND`, abre la pantalla Analizar y precarga el contenido para revision previa.
 - Postcondiciones:
 1. Siempre hay resultado visible o mensaje de error controlado.
 2. Nunca se guarda texto original ni imagen OCR.
@@ -48,7 +50,8 @@ flowchart LR
 - Flujo principal:
 1. El usuario abre detalle desde Analizar o Historial.
 2. El sistema carga `Incident + AnalysisResult + Signals`.
-3. Muestra score, semaforo, fuente, dominio sanitizado, senales y recomendaciones.
+3. Muestra score, semaforo, fuente, dominio sanitizado, senales, recomendaciones y plan de accion.
+4. Opcionalmente navega a `Recursos oficiales`.
 - Flujos alternativos:
 1. A1 - `incidentId` inexistente:
    El sistema muestra estado de "analisis no encontrado".

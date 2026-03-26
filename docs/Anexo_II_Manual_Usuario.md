@@ -24,11 +24,20 @@ Desde Home se accede a:
 4. Pegar texto/enlace sospechoso.
 5. Pulsar `Analizar ahora`.
 
+Alternativa rapida:
+1. Desde WhatsApp, navegador, correo u otra app, usar `Compartir`.
+2. Seleccionar `Anti-phishing Coach`.
+3. La app abre `Analizar` con el contenido cargado para revisar y ejecutar el analisis.
+
 Resultado mostrado:
 - score (0-100),
 - semaforo (`VERDE`, `AMARILLO`, `ROJO`),
 - tipo de fuente,
 - dominio sanitizado,
+- texto analizado con frases sospechosas resaltadas,
+- lectura rapida del riesgo,
+- desglose del enlace (dominio, esquema, ruta, parametros, observaciones),
+- plan de accion inmediato ("que hacer ahora"),
 - senales detectadas,
 - recomendaciones.
 
@@ -61,6 +70,8 @@ En modo normal:
 
 En detalle:
 - ver score/semaforo/senales/recomendaciones.
+- ver plan de accion reconstruido a partir de senales y recomendaciones persistidas.
+- abrir `Recursos oficiales` cuando el riesgo aconseja verificacion externa.
 - en detalle de analisis, exportar reporte Markdown por compartir.
 
 ## 9. Ajustes de privacidad
@@ -79,3 +90,15 @@ La pantalla `Recursos oficiales` ofrece accesos informativos a:
 
 Uso recomendado:
 - ante riesgo alto, contactar canal oficial antes de cualquier accion.
+
+## 11. Uso en emulador Android
+Si se prueba la app en emulador Android desde Windows:
+1. Copiar el texto de prueba en el portapapeles del PC.
+2. Enfocar el campo de entrada del emulador.
+3. Ejecutar en PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\paste_clipboard_to_emulator.ps1
+```
+
+El texto se enviara al campo enfocado del emulador.

@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_primary">#1E5E52</color>
+    <color name="brand_primary">#7D47E7</color>
     <color name="brand_on_primary">#FFFFFF</color>
-    <color name="brand_secondary">#C7A43C</color>
-    <color name="brand_background">#F6F7F2</color>
+    <color name="brand_secondary">#FFAC1C</color>
+    <color name="brand_background">#F5F1FF</color>
     <color name="brand_surface">#FFFFFF</color>
-    <color name="brand_on_surface">#1C1D1A</color>
-    <color name="brand_on_surface_soft">#B31C1D1A</color>
-    <color name="card_outline_soft">#1F1C1D1A</color>
-    <color name="home_primary_card">#EEF6F4</color>
-    <color name="icon_container_bg">#14265C52</color>
+    <color name="brand_on_surface">#25184B</color>
+    <color name="brand_on_surface_soft">#8F25184B</color>
+    <color name="card_outline_soft">#1F7D47E7</color>
+    <color name="home_primary_card">#8A6AF2</color>
+    <color name="icon_container_bg">#14FFFFFF</color>
+    <color name="brand_primary_dark">#5B31CB</color>
+    <color name="brand_primary_light">#B15BEB</color>
+    <color name="brand_secondary_soft">#FFF0CF</color>
+    <color name="brand_surface_soft">#FDFBFF</color>
+    <color name="brand_gradient_start">#B54FD9</color>
+    <color name="brand_gradient_mid">#7B4DE6</color>
+    <color name="brand_gradient_end">#FFB11A</color>
+    <color name="brand_toolbar_icon">#FFFFFF</color>
     <color name="traffic_green">#2E7D32</color>
     <color name="traffic_yellow">#A87900</color>
     <color name="traffic_red">#C62828</color>

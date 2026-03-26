@@ -2,21 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_base">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarHome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/brand_surface"
+        android:background="@android:color/transparent"
         android:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:itemIconTint="@color/brand_toolbar_icon"
         app:menu="@menu/menu_home_toolbar"
+        app:navigationIconTint="@color/brand_toolbar_icon"
         app:subtitle="Offline-first | Privacidad por defecto"
+        app:subtitleTextColor="#D9FFFFFF"
         app:title="Anti-phishing &amp; ciberfraude coach"
-        app:titleTextAppearance="@style/TextAppearance.App.SectionTitle" />
+        app:titleTextColor="@android:color/white" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollHome"
@@ -39,14 +43,17 @@
                 style="@style/Widget.App.Card.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_primary_gradient"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_primary_gradient"
                     android:orientation="vertical"
-                    android:padding="@dimen/spacing_16">
+                    android:padding="@dimen/spacing_20">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -66,7 +73,7 @@
                                 android:layout_gravity="center"
                                 android:contentDescription="@null"
                                 android:src="@android:drawable/ic_menu_search"
-                                app:tint="@color/brand_primary" />
+                                app:tint="@android:color/white" />
                         </FrameLayout>
 
                         <LinearLayout
@@ -79,23 +86,38 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.App.SectionTitle"
+                                style="@style/TextAppearance.App.HeroTitle"
                                 android:text="Analizar" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_4"
-                                style="@style/TextAppearance.App.CardBody"
+                                style="@style/TextAppearance.App.HeroBody"
                                 android:text="Analiza SMS, email, chat o enlaces con heuristicas explicables." />
                         </LinearLayout>
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_16"
+                        android:background="@drawable/bg_info_pill"
+                        android:paddingStart="@dimen/spacing_12"
+                        android:paddingTop="@dimen/spacing_8"
+                        android:paddingEnd="@dimen/spacing_12"
+                        android:paddingBottom="@dimen/spacing_8"
+                        android:text="Escanea enlaces y mensajes con contexto visual"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPrimaryAnalyze"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_16"
+                        android:textColor="@color/brand_primary_dark"
+                        app:backgroundTint="@android:color/white"
                         android:text="ANALIZAR AHORA" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -105,6 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_20"
                 style="@style/TextAppearance.App.SectionTitle"
+                android:textColor="@android:color/white"
                 android:text="Accesos rapidos" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -217,7 +240,7 @@
                                 android:layout_height="32dp"
                                 android:contentDescription="@null"
                                 android:src="@android:drawable/ic_dialog_info"
-                                app:tint="@color/brand_primary" />
+                                app:tint="@color/brand_primary_dark" />
 
                             <TextView
                                 android:id="@+id/tvLatestAnalysisEmpty"
@@ -230,7 +253,7 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnAnalyzeFromLatestEmpty"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.App.Button.Outline"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_12"
@@ -293,7 +316,7 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnLatestAnalysisDetail"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.App.Button.Outline"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_12"
@@ -335,7 +358,7 @@
                             android:layout_height="32dp"
                             android:contentDescription="@null"
                             android:src="@android:drawable/ic_menu_agenda"
-                            app:tint="@color/brand_primary" />
+                            app:tint="@color/brand_primary_dark" />
 
                         <TextView
                             android:id="@+id/tvLatestTrainingSummary"
@@ -347,7 +370,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnRepeatTraining"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            style="@style/Widget.App.Button.Outline"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_12"

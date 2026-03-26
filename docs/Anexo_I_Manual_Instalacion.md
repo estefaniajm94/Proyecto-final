@@ -64,7 +64,22 @@ adb shell am start -n com.estef.antiphishingcoach/.presentation.navigation.MainA
 - Build lento en primera ejecucion:
 1. Es normal por descarga inicial de dependencias.
 
-## 9. Verificacion minima post-instalacion
+## 9. Utilidad auxiliar para pegar texto en el emulador
+Si se usa el emulador Android en Windows, el proyecto incluye:
+- `scripts/paste_clipboard_to_emulator.ps1`
+
+Uso:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\paste_clipboard_to_emulator.ps1
+```
+
+Funcion:
+1. Lee el portapapeles de Windows.
+2. Comprueba que el emulador esta arrancado.
+3. Envia el texto al campo enfocado del emulador mediante `adb shell input text`.
+
+## 10. Verificacion minima post-instalacion
 1. Abrir pantalla Analizar y ejecutar un caso.
 2. Abrir Historial y comprobar registro.
 3. Activar privacidad extrema y repetir analisis (no debe guardarse).
+4. Compartir un texto de prueba desde otra app o usar el script de portapapeles en emulador.

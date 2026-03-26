@@ -4,6 +4,8 @@
 Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del flujo:
 
 - Analisis heuristico explicable (score, semaforo, senales, recomendaciones).
+- Lectura rapida, desglose del enlace y plan de accion contextual.
+- Entrada por compartir desde otras apps (`ACTION_SEND text/plain`).
 - Guardado de metadatos sin texto original.
 - Respeto de privacidad extrema.
 - Bloqueo local enforced en Historial y Ajustes.
@@ -63,6 +65,12 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-27 | Historial filtros y busqueda | En Historial, usar query + chips + orden | Lista reacciona en vivo sin recargar pantalla | OK |
 | PF-28 | Export a fichero `.md` real | En detalle, pulsar Exportar | Comparte `content://...` con archivo Markdown real | OK |
 | PF-29 | Export sin texto original | Revisar contenido del `.md` generado | Solo metadatos/senales/recomendaciones/disclaimer | OK |
+| PF-30 | Compartir desde otra app | Enviar `text/plain` a la app desde navegador/WhatsApp/email | Se abre `Analizar` con texto precargado y sin autoanalizar | OK |
+| PF-31 | Lectura rapida y desglose | Analizar enlace sospechoso con dominio no oficial | Muestra lectura rapida, dominio real, esquema, ruta y observaciones | OK |
+| PF-32 | Resaltado de frases sospechosas | Analizar mensaje con urgencia/premio/password | El texto mostrado resalta visualmente las frases detectadas | OK |
+| PF-33 | Plan de accion en Analizar | Analizar caso amarillo/rojo | Se muestran pasos numerados adaptados al riesgo | OK |
+| PF-34 | Plan de accion en detalle | Guardar incidente y abrir detalle | El detalle reconstruye y muestra el plan de accion | OK |
+| PF-35 | Atajo a recursos oficiales | Caso con recomendacion de verificacion oficial | Aparece boton para abrir `Recursos oficiales` | OK |
 
 ## 5. Matriz tecnica automatizada
 Cobertura actual:
@@ -72,6 +80,8 @@ Cobertura actual:
 - `AnalyzeViewModelOcrTest` (2 casos de estado OCR).
 - `HistoryViewModelTest` (4 casos de filtro/orden/estado vacio).
 - `ReportExporterTest` (2 casos de markdown y escritura de fichero).
+- `AnalyzeInputInsightBuilderTest` (2 casos de desglose y frases sospechosas).
+- `AnalyzeActionPlanBuilderTest` (2 casos de plan de accion).
 
 | ID | Test unitario | Esperado |
 |---|---|---|
@@ -99,12 +109,17 @@ Cobertura actual:
 | PT-22 | Historial orden riesgo | Ordena por score descendente |
 | PT-23 | Historial vacio extremo | Muestra mensaje de privacidad extrema |
 | PT-24 | Export markdown fichero | Crea archivo > 0 bytes y sin texto original |
+| PT-25 | Insight builder URL | Extrae dominio y observaciones del enlace |
+| PT-26 | Insight builder frases | Detecta frases sospechosas por categorias |
+| PT-27 | Action plan rojo | Prioriza bloqueo, verificacion y no compartir credenciales |
+| PT-28 | Action plan verde | Mantiene guidance ligera y sin recursos forzados |
 
 ## 6. Criterios de aceptacion del bloque Analizar
 - `assembleDebug`, `testDebugUnitTest` e `installDebug` finalizan en exito.
 - PF-01..PF-05 y PF-07, PF-09..PF-11 en `OK`.
 - Sin permisos invasivos (no lectura SMS, no accesibilidad).
 - Persistencia limitada a metadatos definidos.
+- PF-30..PF-35 en `OK`.
 
 ## 7. Criterios de aceptacion Coach + Training
 - PF-15..PF-18 en `OK`.

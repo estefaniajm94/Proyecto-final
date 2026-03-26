@@ -41,9 +41,10 @@ Se recomienda guardar imagenes en `docs/images/mockups/` con estos nombres:
 1. Todas las pantallas obligatorias del MVP A tienen mockup.
 2. Se ve disclaimer legal en Home/Analizar.
 3. En Analizar se aprecia boton "Analizar desde captura".
-4. En OCR se ve texto de privacidad y edicion manual.
-5. En Ajustes se ven "Privacidad extrema", "Bloqueo local" y "Borrar datos".
-6. Navegacion y jerarquia visual son consistentes.
+4. En Analizar se ve texto resaltado, lectura rapida, desglose del enlace y plan de accion.
+5. En OCR se ve texto de privacidad y edicion manual.
+6. En Ajustes se ven "Privacidad extrema", "Bloqueo local" y "Borrar datos".
+7. Navegacion y jerarquia visual son consistentes.
 
 ## 6. Nota para memoria
 Incluir una subseccion corta por pantalla con:

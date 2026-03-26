@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_base"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -9,27 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/training_result_title"
-        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvResultScore"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.App.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="17sp" />
+        android:layout_marginTop="12dp">
 
-    <TextView
-        android:id="@+id/tvResultRatio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnRestartQuiz"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="@string/training_restart" />
+            <TextView
+                android:id="@+id/tvResultScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvResultRatio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRestartQuiz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/training_restart" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

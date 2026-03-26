@@ -11,6 +11,8 @@ durante el desarrollo de AntiPhishingCoach.
 | [Semana 02](2026-Semana-02.md) | 22 feb 2026 | `50cfdce` | Dashboard home, historial, export |
 | [Semana 03](2026-Semana-03.md) | 8 mar 2026  | `16ca1cf` | Revisión técnica y pulido final |
 
+| [Semana 04](2026-Semana-04.md) | 26 mar 2026 | `1a50605` | Analisis guiado, share intent y soporte emulador |
+
 ## Formato de cada entrada
 
 1. Problema

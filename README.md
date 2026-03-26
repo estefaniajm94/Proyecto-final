@@ -13,6 +13,11 @@ El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayud
 ## 2. Solucion implementada (MVP A)
 - Analizador de texto/enlaces con score 0-100 y semaforo.
 - Explicacion de senales detectadas y recomendaciones concretas.
+- Lectura rapida del riesgo con foco en enlace o mensaje.
+- Desglose local del enlace: dominio real, esquema, ruta, parametros y observaciones.
+- Resaltado visual de frases sospechosas detectadas en el texto analizado.
+- Plan de accion inmediato ("que hacer ahora") segun semaforo, senales y recomendaciones.
+- Entrada por compartir desde otras apps (`ACTION_SEND` para `text/plain`).
 - Coach por escenarios con checklist local.
 - Entrenamiento tipo quiz con feedback inmediato.
 - Historial privado de metadatos (sin texto original).
@@ -78,6 +83,12 @@ Reglas explicables implementadas:
 - TLD sospechoso,
 - simbolo `@` en URL,
 - subdominio enganoso,
+- esquemas no web / deep links (`intent:`, `javascript:`, `data:`...),
+- archivos ejecutables o instalables,
+- host en IP,
+- punycode / caracteres no ASCII / mezcla de alfabetos,
+- URL anidada en parametros,
+- URL muy larga, con muchos parametros o tokens de alta entropia,
 - keywords de suplantacion.
 
 Semaforo:
@@ -111,6 +122,12 @@ Comandos:
 .\gradlew.bat :app:installDebug
 ```
 
+Utilidad auxiliar para emulador:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\paste_clipboard_to_emulator.ps1
+```
+Permite enviar el texto actual del portapapeles de Windows al campo enfocado del emulador.
+
 ## 10. Pruebas
 Matriz funcional y tecnica:
 - `docs/Plan_de_Pruebas.md`
@@ -119,6 +136,8 @@ Tests unitarios activos:
 - `RuleEngineTest`
 - `SeedJsonParserTest`
 - `QuizEngineTest`
+- `AnalyzeInputInsightBuilderTest`
+- `AnalyzeActionPlanBuilderTest`
 
 ## 11. Documentacion de memoria
 - `docs/Modelo_ER.md`
@@ -136,6 +155,7 @@ Tests unitarios activos:
 Se recomienda anadir capturas en `docs/images/`:
 - home.png
 - analizar_resultado_rojo.png
+- analizar_resultado_destacado.png
 - historial.png
 - coach_checklist.png
 - quiz_feedback.png
@@ -148,4 +168,5 @@ Se recomienda anadir capturas en `docs/images/`:
 
 ## 14. Trabajo futuro
 - Mejorar cobertura de reglas y calibracion por perfiles.
+- Resaltado visual por fragmentos/URL dentro de tarjetas mas ricas.
 - Exportacion avanzada adicional (por ejemplo PDF).
