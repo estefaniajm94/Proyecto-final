@@ -24,10 +24,15 @@ sealed interface AnalyzeFlowState {
 }
 
 data class AnalysisPresentation(
+    val analyzedInput: String,
     val score: Int,
     val trafficLight: TrafficLight,
     val sourceTypeLabel: String,
     val sanitizedDomain: String?,
+    val quickExplanation: String,
+    val urlInsights: List<AnalyzeUrlInsight>,
+    val suspiciousPhrases: List<SuspiciousPhraseInsight>,
+    val actionPlan: AnalyzeActionPlan,
     val signals: List<DetectedSignal>,
     val recommendations: List<RecommendationItem>,
     val persistedIncidentId: Long?

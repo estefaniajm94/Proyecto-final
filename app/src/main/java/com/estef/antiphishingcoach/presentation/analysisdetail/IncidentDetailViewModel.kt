@@ -3,10 +3,13 @@ package com.estef.antiphishingcoach.presentation.analysisdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.estef.antiphishingcoach.core.export.ReportExporter
+import com.estef.antiphishingcoach.core.model.TrafficLight
 import com.estef.antiphishingcoach.domain.model.RecommendationCatalog
 import com.estef.antiphishingcoach.data.export.ExportedReportFile
 import com.estef.antiphishingcoach.data.export.ExportReportToFileUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveIncidentDetailUseCase
+import com.estef.antiphishingcoach.presentation.analyze.AnalyzeActionPlan
+import com.estef.antiphishingcoach.presentation.analyze.AnalyzeActionPlanBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,16 +41,25 @@ class IncidentDetailViewModel(
                             notFound = true,
                             incident = null,
                             recommendations = emptyList(),
+                            actionPlan = AnalyzeActionPlan(emptyList(), false),
                             createdAtText = ""
                         )
                     }
                 } else {
+                    val recommendations = RecommendationCatalog.fromCodes(incident.recommendationCodes)
+                    val trafficLight = runCatching { TrafficLight.valueOf(incident.trafficLight) }
+                        .getOrDefault(TrafficLight.GREEN)
                     _uiState.update { state ->
                         state.copy(
                             isLoading = false,
                             notFound = false,
                             incident = incident,
-                            recommendations = RecommendationCatalog.fromCodes(incident.recommendationCodes),
+                            recommendations = recommendations,
+                            actionPlan = AnalyzeActionPlanBuilder.build(
+                                trafficLight = trafficLight,
+                                signals = incident.signals,
+                                recommendations = recommendations
+                            ),
                             createdAtText = dateFormat.format(Date(incident.createdAt))
                         )
                     }

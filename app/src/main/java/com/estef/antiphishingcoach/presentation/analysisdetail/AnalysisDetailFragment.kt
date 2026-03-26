@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.FragmentAnalysisDetailBinding
@@ -34,6 +35,9 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
     override fun onBoundView(savedInstanceState: Bundle?) {
         binding.btnShareReport.setOnClickListener {
             shareMarkdownReport()
+        }
+        binding.btnOpenOfficialResources.setOnClickListener {
+            findNavController().navigate(R.id.action_analysisDetail_to_resources)
         }
         observeUiState()
     }
@@ -67,6 +71,10 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
         tvCreatedAt.text = getString(R.string.detail_created, state.createdAtText)
         tvSignals.text = renderSignals(incident)
         tvRecommendations.text = renderRecommendations(state)
+        tvActionPlan.text = state.actionPlan.steps.mapIndexed { index, step ->
+            getString(R.string.analyze_action_plan_line, index + 1, step)
+        }.joinToString("\n")
+        btnOpenOfficialResources.isVisible = state.actionPlan.showOfficialResources
 
         tvTrafficLight.setTextColor(
             ContextCompat.getColor(

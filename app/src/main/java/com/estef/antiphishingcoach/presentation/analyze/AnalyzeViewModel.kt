@@ -84,7 +84,7 @@ class AnalyzeViewModel(
                 )
                 val elapsedMs = System.currentTimeMillis() - startMs
                 logDebug("Analisis completado en ${elapsedMs}ms")
-                publishAnalysisResult(result)
+                publishAnalysisResult(result, sanitizedInput)
             } catch (error: Exception) {
                 setError(stringResolver.get(R.string.analyze_error_analysis_failed))
                 logError("Error al analizar texto", error)
@@ -164,8 +164,25 @@ class AnalyzeViewModel(
         }
     }
 
-    private fun publishAnalysisResult(result: AnalyzeExecutionResult) {
+    fun onSharedInputLoaded() {
+        _uiState.update { state ->
+            state.copy(
+                inputError = null,
+                statusMessage = stringResolver.get(R.string.analyze_status_shared_input_loaded),
+                flowState = AnalyzeFlowState.Idle,
+                result = null
+            )
+        }
+    }
+
+    private fun publishAnalysisResult(result: AnalyzeExecutionResult, analyzedInput: String) {
         val recommendations = RecommendationCatalog.fromCodes(result.output.recommendationCodes)
+        val insights = AnalyzeInputInsightBuilder.inspect(analyzedInput)
+        val actionPlan = AnalyzeActionPlanBuilder.build(
+            trafficLight = result.output.trafficLight,
+            signals = result.output.signals,
+            recommendations = recommendations
+        )
         val statusMessage = if (result.usedExtremePrivacy) {
             stringResolver.get(R.string.analyze_status_result_privacy_on)
         } else {
@@ -177,10 +194,15 @@ class AnalyzeViewModel(
                 statusMessage = statusMessage,
                 flowState = AnalyzeFlowState.ResultReady,
                 result = AnalysisPresentation(
+                    analyzedInput = analyzedInput,
                     score = result.output.score,
                     trafficLight = result.output.trafficLight,
                     sourceTypeLabel = result.output.sourceType.name,
                     sanitizedDomain = result.output.sanitizedDomain,
+                    quickExplanation = insights.quickExplanation,
+                    urlInsights = insights.urlInsights,
+                    suspiciousPhrases = insights.suspiciousPhrases,
+                    actionPlan = actionPlan,
                     signals = result.output.signals,
                     recommendations = recommendations,
                     persistedIncidentId = result.persistedIncidentId
