@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.estef.antiphishingcoach.R
+import com.estef.antiphishingcoach.app.AntiPhishingCoachApp
 import com.estef.antiphishingcoach.core.model.SourceApp
 import com.estef.antiphishingcoach.databinding.ActivityMainBinding
 
@@ -53,7 +54,10 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
             ?: return
         val navController = navHostFragment.navController
-        if (navController.currentDestination?.id != R.id.analyzeFragment) {
+        val isAuthenticated = (application as AntiPhishingCoachApp)
+            .appContainer
+            .hasAuthenticatedUser()
+        if (isAuthenticated && navController.currentDestination?.id != R.id.analyzeFragment) {
             navController.navigate(R.id.analyzeFragment)
         }
 

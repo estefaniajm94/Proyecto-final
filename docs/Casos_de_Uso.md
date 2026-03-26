@@ -1,4 +1,4 @@
-# Casos de Uso (MVP A)
+﻿# Casos de Uso (MVP A)
 
 ## Diagrama (Mermaid)
 ```mermaid
@@ -11,14 +11,16 @@ flowchart LR
     U --> UC06[UC06 Consultar historial privado]
     U --> UC07[UC07 Exportar reporte Markdown/TXT]
     U --> UC08[UC08 Configurar privacidad y seguridad local]
+    U --> UC09[UC09 Registrarse e iniciar sesion local]
 ```
 
 ## UC01 - Analizar entrada sospechosa (texto o captura OCR)
 - Actor principal: Usuario
 - Disparador: El usuario quiere evaluar un SMS/email/chat/enlace.
 - Precondiciones:
-1. App abierta en pantalla Analizar.
-2. Motor heuristico local disponible.
+1. Sesion local activa.
+2. App abierta en pantalla Analizar.
+3. Motor heuristico local disponible.
 - Flujo principal:
 1. El usuario introduce texto/enlace y selecciona origen (SMS/WhatsApp/Email/Otro).
 2. Pulsa "Analizar ahora".
@@ -35,7 +37,7 @@ flowchart LR
 4. A4 - Privacidad extrema activa:
    Se muestra resultado pero no se persiste incidente.
 5. A5 - Entrada compartida desde otra app:
-   La app recibe `ACTION_SEND`, abre la pantalla Analizar y precarga el contenido para revision previa.
+   La app recibe `ACTION_SEND`, conserva el contenido y, tras autenticar si hace falta, abre Analizar con el texto precargado.
 - Postcondiciones:
 1. Siempre hay resultado visible o mensaje de error controlado.
 2. Nunca se guarda texto original ni imagen OCR.
@@ -63,6 +65,7 @@ flowchart LR
 - Disparador: El usuario entra en Coach.
 - Precondiciones:
 1. Archivo `assets/coach_scenarios.json` disponible.
+2. Sesion local activa.
 - Flujo principal:
 1. El sistema carga escenarios desde assets.
 2. Muestra lista de escenarios con descripcion.
@@ -93,6 +96,7 @@ flowchart LR
 - Disparador: El usuario inicia entrenamiento.
 - Precondiciones:
 1. Archivo `assets/training_questions.json` valido.
+2. Sesion local activa.
 - Flujo principal:
 1. El sistema carga preguntas y opciones.
 2. Muestra pregunta actual.
@@ -111,7 +115,8 @@ flowchart LR
 - Actor principal: Usuario
 - Disparador: El usuario abre Historial.
 - Precondiciones:
-1. Si bloqueo local esta activo, biometria/credencial disponible.
+1. Sesion local activa.
+2. Si bloqueo local esta activo, biometria/credencial disponible.
 - Flujo principal:
 1. El sistema solicita autenticacion local cuando aplica.
 2. Tras autenticar, lista incidentes con score/semaforo/fecha/origen.
@@ -150,14 +155,37 @@ flowchart LR
 1. Activar/desactivar privacidad extrema.
 2. Activar/desactivar bloqueo local (Historial/Ajustes).
 3. Guardar flags locales cifrados.
-4. Ejecutar "Borrar datos locales" bajo confirmacion.
-5. El sistema elimina historial y resultados en Room.
+4. Ejecutar `Borrar datos locales`.
+5. Consultar cuenta local activa y cerrar sesion si procede.
 - Flujos alternativos:
 1. A1 - Cancelacion de autenticacion al entrar en Ajustes:
    Se cierra pantalla protegida.
-2. A2 - Cancelacion de borrado:
-   No se modifica ningun dato.
 - Postcondiciones:
 1. Con privacidad extrema activa, nuevos analisis no se persisten.
 2. Con bloqueo local activo, Historial y Ajustes quedan protegidos.
-3. Borrado local elimina datos previos si se confirma.
+3. El cierre de sesion obliga a reautenticar para volver a entrar en la app.
+
+## UC09 - Registrarse e iniciar sesion local
+- Actor principal: Usuario
+- Disparador: El usuario abre la app sin sesion activa o decide cerrar sesion.
+- Precondiciones:
+1. App instalada en el dispositivo.
+2. Almacenamiento local disponible.
+- Flujo principal:
+1. El sistema muestra `Login` cuando no existe sesion local.
+2. Si el usuario no tiene cuenta, pulsa `Crear cuenta local`.
+3. Introduce nombre, correo y contrasena.
+4. El sistema valida formato y coincidencia de contrasenas.
+5. Se crea el usuario en Room y se guarda la sesion local cifrada.
+6. El usuario entra en Home o en Analizar si habia contenido compartido pendiente.
+7. Desde Ajustes puede cerrar sesion.
+- Flujos alternativos:
+1. A1 - Correo duplicado:
+   El sistema informa que ya existe una cuenta local con ese correo.
+2. A2 - Credenciales incorrectas:
+   El sistema muestra error y no abre la aplicacion.
+3. A3 - Campos invalidos:
+   El sistema marca errores de validacion en nombre, correo o contrasena.
+- Postcondiciones:
+1. Existe una sesion local activa mientras el usuario no cierre sesion.
+2. La autenticacion no depende de red ni backend.

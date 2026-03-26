@@ -25,6 +25,7 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
     private var navigatedToResult: Boolean = false
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         if (viewModel.uiState.value.currentQuestion == null && !viewModel.uiState.value.completed) {
             viewModel.startQuiz()
         }
@@ -52,7 +53,7 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
         }
 
         val question = state.currentQuestion ?: return@with
-        tvQuestionCounter.text = getString(
+        tvHeaderTitle.text = getString(
             R.string.training_question_counter,
             state.currentPosition,
             state.totalQuestions

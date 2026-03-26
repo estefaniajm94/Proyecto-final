@@ -21,6 +21,7 @@ class QuizResultFragment : BaseFragment<FragmentQuizResultBinding>(
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         binding.btnRestartQuiz.setOnClickListener {
             viewModel.restart()
             findNavController().popBackStack(R.id.trainingStartFragment, false)

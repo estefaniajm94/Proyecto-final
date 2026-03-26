@@ -15,8 +15,8 @@ import com.estef.antiphishingcoach.databinding.FragmentAnalysisDetailBinding
 import com.estef.antiphishingcoach.domain.model.IncidentRecord
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
 import com.estef.antiphishingcoach.presentation.common.showShortMessage
-import com.estef.antiphishingcoach.presentation.common.toTrafficColorRes
 import kotlinx.coroutines.launch
 
 class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
@@ -33,6 +33,7 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         binding.btnShareReport.setOnClickListener {
             shareMarkdownReport()
         }
@@ -60,8 +61,7 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
         val incident = state.incident ?: return@with
         tvIncidentId.text = getString(R.string.incident_id_label, incident.id)
         tvTitle.text = incident.title ?: getString(R.string.history_item_title_fallback)
-        tvScore.text = getString(R.string.detail_score, incident.score)
-        tvTrafficLight.text = getString(R.string.detail_light, incident.trafficLight)
+        riskGaugeDetail.renderRiskGauge(incident.score)
         tvSourceApp.text = getString(R.string.detail_source, incident.sourceApp)
         tvSourceType.text = getString(R.string.detail_source_type, incident.sourceType)
         tvDomain.text = getString(
@@ -75,13 +75,6 @@ class AnalysisDetailFragment : BaseFragment<FragmentAnalysisDetailBinding>(
             getString(R.string.analyze_action_plan_line, index + 1, step)
         }.joinToString("\n")
         btnOpenOfficialResources.isVisible = state.actionPlan.showOfficialResources
-
-        tvTrafficLight.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                incident.trafficLight.toTrafficColorRes()
-            )
-        )
     }
 
     private fun renderSignals(incident: IncidentRecord): String {

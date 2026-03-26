@@ -201,12 +201,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <View
-                        android:id="@+id/viewLatestSeverityBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="4dp"
-                        android:background="@drawable/bg_severity_bar_green" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -268,49 +262,47 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView
-                                android:id="@+id/tvLatestTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                style="@style/TextAppearance.App.CardTitle"
-                                android:text="Analisis sin titulo" />
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_8"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
-                                <com.google.android.material.chip.Chip
-                                    android:id="@+id/chipLatestTraffic"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@android:color/white" />
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
 
-                                <TextView
-                                    android:id="@+id/tvLatestScore"
+                                    <TextView
+                                        android:id="@+id/tvLatestTitle"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        style="@style/TextAppearance.App.CardTitle"
+                                        android:text="Analisis sin titulo" />
+
+                                    <TextView
+                                        android:id="@+id/tvLatestDate"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/spacing_8"
+                                        style="@style/TextAppearance.App.CardBody"
+                                        android:text="Fecha" />
+                                </LinearLayout>
+
+                                <include
+                                    android:id="@+id/riskGaugeLatestIncident"
+                                    layout="@layout/view_risk_gauge"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/spacing_12"
-                                    android:text="0/100"
-                                    android:textSize="28sp"
-                                    android:textStyle="bold" />
+                                    android:layout_marginStart="@dimen/spacing_12" />
                             </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tvLatestDate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_8"
-                                style="@style/TextAppearance.App.CardBody"
-                                android:text="Fecha" />
 
                             <TextView
                                 android:id="@+id/tvLatestDomain"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_4"
+                                android:layout_marginTop="@dimen/spacing_8"
                                 style="@style/TextAppearance.App.CardBody"
                                 android:visibility="gone" />
 

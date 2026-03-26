@@ -22,12 +22,18 @@ class SecureSettingsDataSource(context: Context) {
 
     private val privacyFlow = MutableStateFlow(isExtremePrivacyEnabled())
     private val localLockFlow = MutableStateFlow(isLocalLockEnabled())
+    private val currentUserIdFlow = MutableStateFlow(getCurrentUserId())
 
     fun observeExtremePrivacy(): Flow<Boolean> = privacyFlow.asStateFlow()
     fun observeLocalLock(): Flow<Boolean> = localLockFlow.asStateFlow()
+    fun observeCurrentUserId(): Flow<Long?> = currentUserIdFlow.asStateFlow()
 
     fun isExtremePrivacyEnabled(): Boolean = prefs.getBoolean(KEY_EXTREME_PRIVACY, false)
     fun isLocalLockEnabled(): Boolean = prefs.getBoolean(KEY_LOCAL_LOCK_ENABLED, false)
+    fun getCurrentUserId(): Long? {
+        if (!prefs.contains(KEY_CURRENT_USER_ID)) return null
+        return prefs.getLong(KEY_CURRENT_USER_ID, -1L).takeIf { it > 0L }
+    }
 
     fun setExtremePrivacy(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_EXTREME_PRIVACY, enabled).apply()
@@ -39,9 +45,21 @@ class SecureSettingsDataSource(context: Context) {
         localLockFlow.value = enabled
     }
 
+    fun setCurrentUserId(userId: Long?) {
+        prefs.edit().apply {
+            if (userId == null) {
+                remove(KEY_CURRENT_USER_ID)
+            } else {
+                putLong(KEY_CURRENT_USER_ID, userId)
+            }
+        }.apply()
+        currentUserIdFlow.value = userId
+    }
+
     companion object {
         private const val PREF_FILE = "secure_settings"
         private const val KEY_EXTREME_PRIVACY = "extreme_privacy"
         private const val KEY_LOCAL_LOCK_ENABLED = "local_lock_enabled"
+        private const val KEY_CURRENT_USER_ID = "current_user_id"
     }
 }

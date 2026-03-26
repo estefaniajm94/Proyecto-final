@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.estef.antiphishingcoach.R
 
 /**
  * Base para Fragments con ViewBinding y limpieza automática en onDestroyView.
@@ -25,6 +27,15 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     protected open fun onBoundView(savedInstanceState: Bundle?) = Unit
+
+    protected fun setupBackNavigation(trigger: View) {
+        trigger.setOnClickListener {
+            val navController = findNavController()
+            if (!navController.popBackStack()) {
+                navController.navigate(R.id.homeFragment)
+            }
+        }
+    }
 
     override fun onDestroyView() {
         _binding = null

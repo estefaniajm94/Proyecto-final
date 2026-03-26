@@ -1,8 +1,9 @@
-# Plan de Pruebas (MVP A)
+﻿# Plan de Pruebas (MVP A)
 
 ## 1. Objetivo
 Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del flujo:
 
+- Autenticacion local (registro, login, logout y sesion persistida).
 - Analisis heuristico explicable (score, semaforo, senales, recomendaciones).
 - Lectura rapida, desglose del enlace y plan de accion contextual.
 - Entrada por compartir desde otras apps (`ACTION_SEND text/plain`).
@@ -41,9 +42,9 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-03 | Riesgo alto compuesto | Entrada: `https://bit.ly/abc` + `http://cliente@banco-seguro-1234.top` | Score 92, semaforo ROJO, multiples senales URL/impersonacion | OK |
 | PF-04 | Recomendaciones coherentes | Ejecutar PF-02 y PF-03 | Recomendaciones cambian segun codigos y score | OK |
 | PF-05 | Tipo de fuente LINK | Entrada solo URL | `sourceType = LINK` | OK |
-| PF-06 | Tipo de fuente MIXED | Entrada texto + URL | `sourceType = MIXED` | ok |
+| PF-06 | Tipo de fuente MIXED | Entrada texto + URL | `sourceType = MIXED` | OK |
 | PF-07 | Guardado normal | Privacidad extrema OFF + analizar | Se guarda en historial con `incidentId` | OK |
-| PF-08 | No guardar en privacidad extrema | Privacidad extrema ON + analizar | No aparece nuevo registro en historial | ok |
+| PF-08 | No guardar en privacidad extrema | Privacidad extrema ON + analizar | No aparece nuevo registro en historial | OK |
 | PF-09 | Historial lista real | Ir a Historial tras varios analisis | Lista con fecha, score, semaforo y sourceApp | OK |
 | PF-10 | Detalle por SafeArgs | Abrir item de historial | Muestra datos completos del incidente seleccionado | OK |
 | PF-11 | Exportar Markdown | En detalle de analisis pulsar Exportar | Abre chooser Android con reporte Markdown | OK |
@@ -57,7 +58,7 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-19 | Bloqueo local en Historial | Ajustes: activar bloqueo local. Ir a Historial | Solicita biometria/credencial antes de mostrar datos | OK |
 | PF-20 | Bloqueo local en Ajustes | Con bloqueo local activo, salir y volver a Ajustes | Solicita biometria/credencial al entrar | OK |
 | PF-21 | Cancelacion de autenticacion | Cancelar prompt en Historial o Ajustes | Se bloquea acceso y vuelve a pantalla anterior | PENDIENTE |
-| PF-22 | OCR local con captura real | Analizar > Analizar desde captura > elegir imagen legible (SMS/email/web) | Se extrae texto local, se muestra dialogo editable y permite analizar | OK |
+| PF-22 | OCR local con captura real | Analizar > Analizar desde captura > elegir imagen legible | Se extrae texto local, se muestra dialogo editable y permite analizar | OK |
 | PF-23 | OCR con imagen borrosa | Repetir PF-22 con captura borrosa | Puede devolver texto incompleto o error claro, sin crash | PENDIENTE |
 | PF-24 | Cancelar OCR o revision | Cancelar picker o pulsar Cancelar en dialogo OCR | Se descarta texto OCR y no se analiza ni se persiste nada | OK |
 | PF-25 | Home dashboard visible | Abrir Home | Se muestran tarjetas y bloques de ultimo analisis/entrenamiento | OK |
@@ -71,6 +72,12 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-33 | Plan de accion en Analizar | Analizar caso amarillo/rojo | Se muestran pasos numerados adaptados al riesgo | OK |
 | PF-34 | Plan de accion en detalle | Guardar incidente y abrir detalle | El detalle reconstruye y muestra el plan de accion | OK |
 | PF-35 | Atajo a recursos oficiales | Caso con recomendacion de verificacion oficial | Aparece boton para abrir `Recursos oficiales` | OK |
+| PF-36 | Alta de cuenta local | Abrir app sin sesion > `Crear cuenta local` > completar formulario valido | Se crea usuario en Room, entra en Home y queda sesion activa | OK |
+| PF-37 | Login local valido | Introducir correo/contrasena correctos | Entra en Home sin errores | OK |
+| PF-38 | Login local invalido | Introducir credenciales incorrectas | Muestra error y no permite acceso | OK |
+| PF-39 | Registro con correo duplicado | Crear cuenta con email ya usado | Muestra error de correo duplicado | OK |
+| PF-40 | Logout local | Ajustes > Cerrar sesion | Vuelve a Login y bloquea acceso hasta autenticar de nuevo | OK |
+| PF-41 | Contenido compartido sin sesion | Compartir `text/plain` a la app estando sin login | Se conserva el texto; tras login se abre `Analizar` con contenido precargado | OK |
 
 ## 5. Matriz tecnica automatizada
 Cobertura actual:
@@ -83,36 +90,9 @@ Cobertura actual:
 - `AnalyzeInputInsightBuilderTest` (2 casos de desglose y frases sospechosas).
 - `AnalyzeActionPlanBuilderTest` (2 casos de plan de accion).
 
-| ID | Test unitario | Esperado |
-|---|---|---|
-| PT-01 | urgencia | Detecta `URGENCY_THREAT` |
-| PT-02 | premio | Detecta `PRIZE_GIFT` |
-| PT-03 | datos sensibles | Detecta `SENSITIVE_DATA_REQUEST` |
-| PT-04 | http inseguro | Detecta `URL_HTTP_INSECURE` |
-| PT-05 | acortador | Detecta `URL_SHORTENER` |
-| PT-06 | patron dominio | Detecta `URL_DOMAIN_PATTERN` |
-| PT-07 | tld + arroba | Detecta `URL_SUSPICIOUS_TLD` y `URL_AT_SYMBOL` |
-| PT-08 | subdominio enganoso | Detecta `URL_DECEPTIVE_SUBDOMAIN` |
-| PT-09 | inferencia sourceType | Detecta `LINK` y dominio sanitizado |
-| PT-10 | umbral rojo | Score >= 70 => `TrafficLight.RED` |
-| PT-11 | parser coach valido | Parsea escenarios seed validos |
-| PT-12 | parser coach invalido | Filtra entradas sin id/titulo/checklist |
-| PT-13 | parser training valido | Parsea preguntas validas |
-| PT-14 | parser training invalido | Filtra preguntas con indice fuera de rango |
-| PT-15 | quiz score correcto | Suma puntos solo en respuestas correctas |
-| PT-16 | quiz no doble respuesta | No permite responder dos veces misma pregunta |
-| PT-17 | quiz avance y completado | Solo avanza tras responder y finaliza al final |
-| PT-18 | VM OCR exito | `OcrReady` -> confirmar -> `ResultReady` |
-| PT-19 | VM OCR error | Error OCR -> `AnalyzeFlowState.Error` |
-| PT-20 | Historial query | Filtra por titulo/dominio en memoria |
-| PT-21 | Historial filtro semaforo | Filtra por chip Verde/Amarillo/Rojo |
-| PT-22 | Historial orden riesgo | Ordena por score descendente |
-| PT-23 | Historial vacio extremo | Muestra mensaje de privacidad extrema |
-| PT-24 | Export markdown fichero | Crea archivo > 0 bytes y sin texto original |
-| PT-25 | Insight builder URL | Extrae dominio y observaciones del enlace |
-| PT-26 | Insight builder frases | Detecta frases sospechosas por categorias |
-| PT-27 | Action plan rojo | Prioriza bloqueo, verificacion y no compartir credenciales |
-| PT-28 | Action plan verde | Mantiene guidance ligera y sin recursos forzados |
+Nota:
+- El flujo de autenticacion local tiene validacion funcional manual en esta iteracion.
+- No se han anadido aun tests unitarios especificos para `AuthRepository` o `Login/RegisterViewModel`.
 
 ## 6. Criterios de aceptacion del bloque Analizar
 - `assembleDebug`, `testDebugUnitTest` e `installDebug` finalizan en exito.
@@ -120,6 +100,7 @@ Cobertura actual:
 - Sin permisos invasivos (no lectura SMS, no accesibilidad).
 - Persistencia limitada a metadatos definidos.
 - PF-30..PF-35 en `OK`.
+- PF-36..PF-41 en `OK`.
 
 ## 7. Criterios de aceptacion Coach + Training
 - PF-15..PF-18 en `OK`.
@@ -134,6 +115,7 @@ Cobertura actual:
 ## 9. Criterios de aceptacion seguridad local
 - PF-19 y PF-20 en `OK`.
 - Si el prompt falla o se cancela, no se muestran datos protegidos.
+- La sesion local debe cerrarse correctamente con `Logout`.
 
 ## 10. Registro de incidencias (plantilla)
 Usar esta plantilla en cada fallo:

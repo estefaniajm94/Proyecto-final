@@ -16,7 +16,7 @@ import com.estef.antiphishingcoach.presentation.analysisdetail.IncidentDetailVie
 import com.estef.antiphishingcoach.presentation.analysisdetail.IncidentDetailViewModelFactory
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
-import com.estef.antiphishingcoach.presentation.common.toTrafficColorRes
+import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
 import kotlinx.coroutines.launch
 
 class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
@@ -33,6 +33,7 @@ class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         observeUiState()
     }
 
@@ -54,8 +55,7 @@ class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
         val incident = state.incident ?: return@with
         tvIncidentId.text = getString(R.string.incident_id_label, incident.id)
         tvTitle.text = incident.title ?: getString(R.string.history_item_title_fallback)
-        tvScore.text = getString(R.string.detail_score, incident.score)
-        tvTrafficLight.text = getString(R.string.detail_light, incident.trafficLight)
+        riskGaugeDetail.renderRiskGauge(incident.score)
         tvSourceApp.text = getString(R.string.detail_source, incident.sourceApp)
         tvSourceType.text = getString(R.string.detail_source_type, incident.sourceType)
         tvDomain.text = getString(
@@ -65,13 +65,6 @@ class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
         tvCreatedAt.text = getString(R.string.detail_created, state.createdAtText)
         tvSignals.text = renderSignals(incident)
         tvRecommendations.text = renderRecommendations(state)
-
-        tvTrafficLight.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                incident.trafficLight.toTrafficColorRes()
-            )
-        )
     }
 
     private fun renderSignals(incident: IncidentRecord): String {

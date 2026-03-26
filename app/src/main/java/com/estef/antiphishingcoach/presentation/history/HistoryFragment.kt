@@ -38,6 +38,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
     private var authInProgress = false
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         setLockedStateVisible(false)
     }
 

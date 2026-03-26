@@ -11,19 +11,35 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_analyze"
-            android:textColor="@android:color/white"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/navigation_back"
+                android:padding="8dp"
+                android:src="@drawable/ic_arrow_back_24"
+                android:tint="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/screen_title_analyze"
+                android:textAppearance="@style/TextAppearance.App.ToolbarTitle" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvPrivacyState"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="14dp"
             android:background="@drawable/bg_info_pill"
             android:padding="12dp"
             android:textColor="@android:color/white"
@@ -136,18 +152,19 @@
                     android:text="@string/analyze_result_title"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvScoreValue"
-                    android:layout_width="match_parent"
+                <include
+                    android:id="@+id/riskGaugeResult"
+                    layout="@layout/view_risk_gauge"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp" />
 
                 <TextView
-                    android:id="@+id/tvTrafficLightValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Tipo de fuente"
                     android:textStyle="bold" />
 
                 <TextView
@@ -286,6 +303,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:paddingBottom="16dp"
             android:text="@string/disclaimer_main"
             android:textColor="@color/brand_on_surface_soft"
             android:textSize="12sp" />

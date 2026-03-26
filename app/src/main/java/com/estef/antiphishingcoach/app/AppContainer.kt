@@ -5,10 +5,12 @@ import com.estef.antiphishingcoach.data.local.db.AppDatabase
 import com.estef.antiphishingcoach.data.local.preferences.SecureSettingsDataSource
 import com.estef.antiphishingcoach.data.local.seed.SeedAssetLoader
 import com.estef.antiphishingcoach.data.ocr.MlKitOcrRepository
+import com.estef.antiphishingcoach.data.repository.AuthRepositoryImpl
 import com.estef.antiphishingcoach.data.repository.CoachRepositoryImpl
 import com.estef.antiphishingcoach.data.repository.IncidentRepositoryImpl
 import com.estef.antiphishingcoach.data.repository.SettingsRepositoryImpl
 import com.estef.antiphishingcoach.data.repository.TrainingRepositoryImpl
+import com.estef.antiphishingcoach.domain.repository.AuthRepository
 import com.estef.antiphishingcoach.domain.repository.CoachRepository
 import com.estef.antiphishingcoach.domain.repository.IncidentRepository
 import com.estef.antiphishingcoach.domain.repository.OcrRepository
@@ -22,11 +24,15 @@ import com.estef.antiphishingcoach.domain.usecase.ExtractTextFromImageUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetCoachScenariosUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetTrainingQuestionsUseCase
 import com.estef.antiphishingcoach.domain.usecase.IsLocalLockEnabledUseCase
+import com.estef.antiphishingcoach.domain.usecase.LoginLocalUserUseCase
+import com.estef.antiphishingcoach.domain.usecase.LogoutCurrentUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveHistoryUseCase
+import com.estef.antiphishingcoach.domain.usecase.ObserveCurrentUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveIncidentDetailUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLatestIncidentSummaryUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
+import com.estef.antiphishingcoach.domain.usecase.RegisterLocalUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
 
@@ -52,6 +58,13 @@ class AppContainer(context: Context) {
 
     val settingsRepository: SettingsRepository by lazy {
         SettingsRepositoryImpl(secureSettingsDataSource)
+    }
+
+    val authRepository: AuthRepository by lazy {
+        AuthRepositoryImpl(
+            userDao = database.userDao(),
+            secureSettingsDataSource = secureSettingsDataSource
+        )
     }
 
     val coachRepository: CoachRepository by lazy {
@@ -92,6 +105,10 @@ class AppContainer(context: Context) {
         ObserveHistoryUseCase(incidentRepository)
     }
 
+    val observeCurrentUserUseCase: ObserveCurrentUserUseCase by lazy {
+        ObserveCurrentUserUseCase(authRepository)
+    }
+
     val observeLatestIncidentSummaryUseCase: ObserveLatestIncidentSummaryUseCase by lazy {
         ObserveLatestIncidentSummaryUseCase(incidentRepository)
     }
@@ -112,6 +129,18 @@ class AppContainer(context: Context) {
         ClearLocalDataUseCase(incidentRepository)
     }
 
+    val registerLocalUserUseCase: RegisterLocalUserUseCase by lazy {
+        RegisterLocalUserUseCase(authRepository)
+    }
+
+    val loginLocalUserUseCase: LoginLocalUserUseCase by lazy {
+        LoginLocalUserUseCase(authRepository)
+    }
+
+    val logoutCurrentUserUseCase: LogoutCurrentUserUseCase by lazy {
+        LogoutCurrentUserUseCase(authRepository)
+    }
+
     val getCoachScenariosUseCase: GetCoachScenariosUseCase by lazy {
         GetCoachScenariosUseCase(coachRepository)
     }
@@ -127,4 +156,6 @@ class AppContainer(context: Context) {
     val exportReportToFileUseCase: ExportReportToFileUseCase by lazy {
         ExportReportToFileUseCase(appContext)
     }
+
+    fun hasAuthenticatedUser(): Boolean = authRepository.hasActiveSession()
 }

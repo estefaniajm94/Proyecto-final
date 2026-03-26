@@ -26,8 +26,8 @@ import com.estef.antiphishingcoach.databinding.FragmentAnalyzeBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
-import com.estef.antiphishingcoach.presentation.common.toColorRes
 import com.estef.antiphishingcoach.presentation.common.toDisplayLabelEs
+import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
 import com.estef.antiphishingcoach.presentation.navigation.SharedContentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -55,6 +55,7 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
     private var lastRenderedOcrText: String? = null
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         setupSourceAppDropdown()
         setupActions()
         observeUiState()
@@ -124,8 +125,7 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         val result = state.result
         cardResult.isVisible = result != null
         if (result != null) {
-            tvScoreValue.text = result.score.toString()
-            tvTrafficLightValue.text = result.trafficLight.toDisplayLabelEs()
+            riskGaugeResult.renderRiskGauge(result.score)
             tvSourceTypeValue.text = result.sourceTypeLabel
             tvDomainValue.text = result.sanitizedDomain ?: getString(R.string.detail_value_not_available)
             tvAnalyzedInputValue.text = buildHighlightedAnalyzedInput(
@@ -195,12 +195,6 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
                 getString(R.string.analyze_saved_with_incident_id, result.persistedIncidentId)
             }
             btnOpenDetail.isVisible = result.persistedIncidentId != null
-            tvTrafficLightValue.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    result.trafficLight.toColorRes()
-                )
-            )
         }
 
         when (val flowState = state.flowState) {

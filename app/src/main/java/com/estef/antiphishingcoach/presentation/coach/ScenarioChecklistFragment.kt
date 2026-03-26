@@ -29,6 +29,7 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
     private var renderedKey: String = ""
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         observeUi()
     }
 

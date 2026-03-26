@@ -1,4 +1,4 @@
-# Anexo I - Manual de Instalacion
+﻿# Anexo I - Manual de Instalacion
 
 ## 1. Alcance
 Este anexo describe como preparar y ejecutar el proyecto Android del TFG en entorno local.
@@ -55,6 +55,12 @@ Tambien se puede lanzar con:
 adb shell am start -n com.estef.antiphishingcoach/.presentation.navigation.MainActivity
 ```
 
+En la primera apertura:
+1. La app muestra `Login`.
+2. Si aun no existe cuenta local, pulsar `Crear cuenta local`.
+3. Completar nombre, correo y contrasena.
+4. Tras el alta, se crea sesion local automaticamente.
+
 ## 8. Problemas comunes
 - Error `SDK location not found`:
 1. Revisar `local.properties`.
@@ -79,7 +85,13 @@ Funcion:
 3. Envia el texto al campo enfocado del emulador mediante `adb shell input text`.
 
 ## 10. Verificacion minima post-instalacion
-1. Abrir pantalla Analizar y ejecutar un caso.
-2. Abrir Historial y comprobar registro.
-3. Activar privacidad extrema y repetir analisis (no debe guardarse).
-4. Compartir un texto de prueba desde otra app o usar el script de portapapeles en emulador.
+1. Crear una cuenta local o iniciar sesion.
+2. Abrir pantalla Analizar y ejecutar un caso.
+3. Abrir Historial y comprobar registro.
+4. Activar privacidad extrema y repetir analisis (no debe guardarse).
+5. Compartir un texto de prueba desde otra app o usar el script de portapapeles en emulador.
+
+## 11. Nota sobre datos locales existentes
+El esquema Room actual esta en version `2` e incorpora la tabla `users`.
+Como la base usa `fallbackToDestructiveMigration()`, al cambiar desde una version previa
+pueden perderse datos locales antiguos del emulador/dispositivo durante la migracion.

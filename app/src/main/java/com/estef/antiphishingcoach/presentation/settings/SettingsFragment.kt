@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.privacy.LocalAuthManager
@@ -23,11 +24,13 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     private val viewModel: SettingsViewModel by viewModels {
         val container = appContainer()
         SettingsViewModelFactory(
+            observeCurrentUserUseCase = container.observeCurrentUserUseCase,
             observeExtremePrivacyUseCase = container.observeExtremePrivacyUseCase,
             observeLocalLockUseCase = container.observeLocalLockUseCase,
             toggleExtremePrivacyUseCase = container.toggleExtremePrivacyUseCase,
             toggleLocalLockUseCase = container.toggleLocalLockUseCase,
             clearLocalDataUseCase = container.clearLocalDataUseCase,
+            logoutCurrentUserUseCase = container.logoutCurrentUserUseCase,
             stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
     }
@@ -36,6 +39,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     private var authInProgress = false
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         setProtectedControlsEnabled(false)
         setupActions()
         observeUiState()
@@ -66,6 +70,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         btnClearData.setOnClickListener {
             viewModel.clearLocalData()
         }
+        btnLogout.setOnClickListener {
+            viewModel.logout()
+        }
     }
 
     private fun observeUiState() {
@@ -74,7 +81,25 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                 viewModel.uiState.collect { state ->
                     binding.switchExtremePrivacy.isChecked = state.extremePrivacyEnabled
                     binding.switchLocalLock.isChecked = state.localLockEnabled
+                    binding.tvAccountName.text = getString(
+                        R.string.settings_account_name,
+                        state.currentUserName.orEmpty()
+                    )
+                    binding.tvAccountEmail.text = getString(
+                        R.string.settings_account_email,
+                        state.currentUserEmail.orEmpty()
+                    )
                     binding.tvSettingsStatus.text = state.statusMessage.orEmpty()
+
+                    if (state.logoutCompleted) {
+                        findNavController().navigate(
+                            R.id.loginFragment,
+                            null,
+                            NavOptions.Builder()
+                                .setPopUpTo(R.id.nav_graph, true)
+                                .build()
+                        )
+                    }
                 }
             }
         }
@@ -137,5 +162,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         switchExtremePrivacy.isEnabled = enabled
         switchLocalLock.isEnabled = enabled
         btnClearData.isEnabled = enabled
+        btnLogout.isEnabled = enabled
     }
 }

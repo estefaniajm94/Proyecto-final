@@ -1,11 +1,9 @@
 package com.estef.antiphishingcoach.presentation.home
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,8 +15,7 @@ import com.estef.antiphishingcoach.databinding.FragmentHomeBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
-import com.estef.antiphishingcoach.presentation.common.toTrafficColorRes
-import com.estef.antiphishingcoach.presentation.common.toTrafficSeverityBarRes
+import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 
@@ -129,24 +126,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
         if (latest != null) {
             tvLatestTitle.text = latest.title
-            chipLatestTraffic.text = latest.trafficLightCode
-            chipLatestTraffic.chipBackgroundColor = ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    requireContext(),
-                    latest.trafficLightCode.toTrafficColorRes(fallbackRes = R.color.traffic_red)
-                )
-            )
-            tvLatestScore.text = "${latest.score}/100"
+            riskGaugeLatestIncident.renderRiskGauge(latest.score)
             tvLatestDate.text = latest.createdAtLine
             tvLatestDomain.isVisible = latest.sanitizedDomainLine != null
             tvLatestDomain.text = latest.sanitizedDomainLine.orEmpty()
-            viewLatestSeverityBar.setBackgroundResource(
-                latest.trafficLightCode.toTrafficSeverityBarRes(
-                    fallbackRes = R.drawable.bg_severity_bar_red
-                )
-            )
-        } else {
-            viewLatestSeverityBar.setBackgroundResource(R.drawable.bg_severity_bar_green)
         }
 
         tvLatestTrainingSummary.text = state.latestTrainingSummary

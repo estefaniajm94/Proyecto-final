@@ -1,4 +1,4 @@
-# Anti-phishing & ciberfraude coach (MVP A)
+﻿# Anti-phishing & ciberfraude coach (MVP A)
 
 Aplicacion Android educativa para ayudar a detectar senales de phishing/ciberfraude con reglas heuristicas explicables, sin IA generativa y con enfoque offline-first.
 
@@ -8,9 +8,11 @@ El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayud
 - detectar senales de riesgo,
 - entender por que un mensaje parece fraude,
 - tomar acciones seguras,
-- entrenarse con casos practicos.
+- entrenarse con casos practicos,
+- proteger su historial local con una cuenta minima en el dispositivo.
 
 ## 2. Solucion implementada (MVP A)
+- Flujo de autenticacion local con registro, login y sesion persistida en el dispositivo.
 - Analizador de texto/enlaces con score 0-100 y semaforo.
 - Explicacion de senales detectadas y recomendaciones concretas.
 - Lectura rapida del riesgo con foco en enlace o mensaje.
@@ -24,7 +26,7 @@ El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayud
 - OCR local desde captura con revision manual editable antes de analizar.
 - Exportacion de reporte Markdown (compartir por intent).
 - Recursos oficiales informativos.
-- Ajustes de privacidad extrema, bloqueo local y borrado de datos.
+- Ajustes de privacidad extrema, bloqueo local, borrado de datos y cierre de sesion.
 
 ## 3. Arquitectura
 Patron: `MVVM` con separacion por capas.
@@ -35,7 +37,7 @@ Estructura principal:
 - `core/`: modelos comunes, utilidades, export, privacidad.
 - `data/`: Room, repositorios, preferencias cifradas, seed local.
 - `domain/`: modelos de dominio, casos de uso, heuristicas y quiz engine.
-- `presentation/`: Fragments, ViewModels, adapters, navegacion.
+- `presentation/`: Fragments, ViewModels, adapters, navegacion y auth local.
 
 ## 4. Stack tecnico
 - Kotlin + Android XML (sin Compose).
@@ -47,6 +49,8 @@ Estructura principal:
 
 ## 5. Privacidad y seguridad
 Medidas aplicadas:
+- Autenticacion local sin backend; la cuenta vive solo en el dispositivo.
+- Contrasena almacenada como hash SHA-256, no en texto plano.
 - No se solicitan permisos invasivos (sin lectura SMS, sin accesibilidad).
 - Por defecto no se guarda texto original analizado.
 - Solo se persisten metadatos:
@@ -57,15 +61,16 @@ Medidas aplicadas:
 5. dominio sanitizado opcional.
 - Modo `Privacidad extrema`: no se guarda ningun analisis nuevo.
 - `Borrar datos`: elimina datos locales de historial.
-- Ajustes sensibles en almacenamiento cifrado local.
+- Ajustes sensibles y sesion local en almacenamiento cifrado.
 - Bloqueo local opcional (biometria/credencial) enforced al entrar en Historial y Ajustes.
 
 Disclaimer visible en la app:
 `Herramienta educativa. No garantiza deteccion perfecta. No sustituye asesoramiento profesional.`
 
 ## 6. Modelo de datos (Room)
-Cadena de 3 tablas relacionadas:
+Cadena principal de 3 tablas de analisis mas una tabla de usuarios locales:
 
+- `UserEntity`
 - `IncidentEntity (1)`
 - `AnalysisResultEntity (1)` por incidente
 - `DetectedSignalEntity (N)` por resultado
@@ -97,6 +102,9 @@ Semaforo:
 - Rojo `>= 70`
 
 ## 8. Modulos funcionales
+- AuthGate
+- Login
+- Registro local
 - Home
 - Analizar
 - Detalle analisis + export
@@ -121,6 +129,10 @@ Comandos:
 .\gradlew.bat :app:testDebugUnitTest
 .\gradlew.bat :app:installDebug
 ```
+
+Primera ejecucion:
+- Si no existe sesion local activa, la app abre `Login`.
+- Si no existe cuenta local previa, el usuario puede crearla desde `Crear cuenta local`.
 
 Utilidad auxiliar para emulador:
 ```powershell
@@ -153,6 +165,8 @@ Tests unitarios activos:
 
 ## 12. Capturas (placeholder)
 Se recomienda anadir capturas en `docs/images/`:
+- login_local.png
+- register_local.png
 - home.png
 - analizar_resultado_rojo.png
 - analizar_resultado_destacado.png
@@ -162,11 +176,14 @@ Se recomienda anadir capturas en `docs/images/`:
 - ajustes_privacidad.png
 
 ## 13. Limitaciones del MVP A
+- Sin backend, sincronizacion ni recuperacion de cuenta.
+- Un unico contexto local por dispositivo/emulador.
 - No integra backend ni deteccion remota.
 - No incluye timeline de incidentes ni PDF avanzado.
 - Reglas heuristicas locales, no cobertura exhaustiva de todos los fraudes.
 
 ## 14. Trabajo futuro
 - Mejorar cobertura de reglas y calibracion por perfiles.
-- Resaltado visual por fragmentos/URL dentro de tarjetas mas ricas.
+- Anadir tests unitarios especificos para autenticacion local.
 - Exportacion avanzada adicional (por ejemplo PDF).
+- Valorar sincronizacion o multiusuario solo si el alcance del producto lo justificara.

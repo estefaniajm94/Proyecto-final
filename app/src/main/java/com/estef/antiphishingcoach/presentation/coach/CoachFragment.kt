@@ -25,6 +25,7 @@ class CoachFragment : BaseFragment<FragmentCoachBinding>(
     private lateinit var adapter: CoachScenarioAdapter
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         setupList()
         observeUi()
     }

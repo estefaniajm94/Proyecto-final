@@ -1,8 +1,22 @@
-# Diagrama de Clases (vista simplificada)
+﻿# Diagrama de Clases (vista simplificada)
 
 ## Diagrama (Mermaid)
 ```mermaid
 classDiagram
+    class AuthGateFragment
+    class AuthGateViewModel
+    class LoginFragment
+    class LoginViewModel
+    class RegisterFragment
+    class RegisterViewModel
+    class LoginLocalUserUseCase
+    class RegisterLocalUserUseCase
+    class ObserveCurrentUserUseCase
+    class LogoutCurrentUserUseCase
+    class AuthRepository
+    class AuthRepositoryImpl
+    class UserDao
+    class UserEntity
     class AnalyzeFragment
     class AnalyzeViewModel
     class AnalyzeAndPersistUseCase
@@ -33,6 +47,20 @@ classDiagram
     class HistoryFragment
     class HistoryViewModel
     class ObserveHistoryUseCase
+
+    AuthGateFragment --> AuthGateViewModel
+    AuthGateViewModel --> ObserveCurrentUserUseCase
+    ObserveCurrentUserUseCase --> AuthRepository
+    LoginFragment --> LoginViewModel
+    LoginViewModel --> LoginLocalUserUseCase
+    LoginLocalUserUseCase --> AuthRepository
+    RegisterFragment --> RegisterViewModel
+    RegisterViewModel --> RegisterLocalUserUseCase
+    RegisterLocalUserUseCase --> AuthRepository
+    AuthRepository <|.. AuthRepositoryImpl
+    AuthRepositoryImpl --> UserDao
+    AuthRepositoryImpl --> SecureSettingsDataSource
+    UserDao --> UserEntity
 
     AnalyzeFragment --> AnalyzeViewModel
     AnalyzeViewModel --> AnalyzeAndPersistUseCase
@@ -70,6 +98,7 @@ classDiagram
 
 ## Notas de arquitectura
 - `presentation`: Fragments + ViewModels (`StateFlow`) para estado UI.
+- `presentation/auth`: gate de sesion, login y registro local.
 - `domain`: use cases y motor heuristico/quiz (logica testeable).
 - `data`: repositorios, Room y seed local desde `assets`.
 - Separacion MVVM mantenida: `UI -> ViewModel -> UseCase -> Repository -> Fuente de datos`.

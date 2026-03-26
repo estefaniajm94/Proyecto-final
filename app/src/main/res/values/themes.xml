@@ -25,6 +25,12 @@
         <item name="cardBackgroundColor">@android:color/transparent</item>
     </style>
 
+    <style name="TextAppearance.App.ToolbarTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
     <style name="TextAppearance.App.SectionTitle" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/brand_on_surface</item>

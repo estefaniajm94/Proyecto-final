@@ -14,6 +14,7 @@ class ResourcesFragment : BaseFragment<FragmentResourcesBinding>(
     FragmentResourcesBinding::bind
 ) {
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         val adapter = ResourcesAdapter(
             onOpenUrl = { url -> openUrl(url) },
             onDialPhone = { phone -> dialPhone(phone) }

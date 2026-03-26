@@ -123,7 +123,7 @@ class HistoryViewModel(
         return HistoryItemUi(
             incidentId = id,
             title = title ?: stringResolver.get(R.string.history_item_title_fallback),
-            metaLine = stringResolver.get(R.string.history_item_meta, score, trafficLight, sourceApp),
+            metaLine = stringResolver.get(R.string.history_item_meta, sourceApp),
             createdAtLine = stringResolver.get(R.string.history_item_created, dateFormat.format(Date(createdAt))),
             trafficLight = trafficLight,
             score = score,

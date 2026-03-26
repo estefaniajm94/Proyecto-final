@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.estef.antiphishingcoach.databinding.ItemHistoryIncidentBinding
+import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
 
 class HistoryAdapter(
     private val onClick: (Long) -> Unit
@@ -31,6 +32,7 @@ class HistoryAdapter(
             tvTitle.text = item.title
             tvMeta.text = item.metaLine
             tvCreatedAt.text = item.createdAtLine
+            riskGaugeHistory.renderRiskGauge(item.score)
             chipSignal1.isVisible = item.signalTags.size >= 1
             chipSignal2.isVisible = item.signalTags.size >= 2
             if (item.signalTags.size >= 1) {

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/brand_background" />
-    <item
-        android:bottom="420dp"
-        android:drawable="@drawable/bg_app_gradient" />
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="0dp" />
+    <gradient
+        android:angle="315"
+        android:centerColor="@color/brand_gradient_mid"
+        android:endColor="@color/brand_gradient_end"
+        android:startColor="@color/brand_gradient_start"
+        android:type="linear" />
+</shape>

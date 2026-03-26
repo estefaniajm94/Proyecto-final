@@ -22,6 +22,7 @@ class TrainingStartFragment : BaseFragment<FragmentTrainingStartBinding>(
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        setupBackNavigation(binding.btnBack)
         viewModel.ensureLoaded()
         setupActions()
         observeUi()
