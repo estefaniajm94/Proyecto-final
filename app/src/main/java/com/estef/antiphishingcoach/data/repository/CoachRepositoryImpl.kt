@@ -12,8 +12,23 @@ class CoachRepositoryImpl(
             CoachScenario(
                 id = dto.id,
                 title = dto.title,
-                checklist = dto.checklist
+                summary = dto.summary.cleanText(),
+                threatLabel = dto.threatLabel.cleanText(),
+                typicalSigns = dto.typicalSigns.cleanList(),
+                whatToDoNow = (dto.whatToDoNow ?: dto.checklist).cleanList(),
+                whatToAvoid = dto.whatToAvoid.cleanList(),
+                whenToEscalate = dto.whenToEscalate.cleanList(),
+                recommendedAction = dto.recommendedAction.cleanText(),
+                closingNote = dto.closingNote.cleanText()
             )
         }
+    }
+
+    private fun String?.cleanText(): String {
+        return this?.trim().orEmpty()
+    }
+
+    private fun List<String>?.cleanList(): List<String> {
+        return this.orEmpty().map(String::trim).filter(String::isNotBlank)
     }
 }

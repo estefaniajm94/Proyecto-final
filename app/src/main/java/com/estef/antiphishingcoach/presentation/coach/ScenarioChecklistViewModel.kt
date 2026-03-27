@@ -27,8 +27,7 @@ class ScenarioChecklistViewModel(
             _uiState.update { state ->
                 state.copy(
                     isLoading = false,
-                    scenarioTitle = scenario?.title.orEmpty(),
-                    items = scenario?.checklist.orEmpty(),
+                    scenario = scenario,
                     markedCount = 0
                 )
             }

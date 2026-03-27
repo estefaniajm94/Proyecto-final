@@ -20,7 +20,7 @@ El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayud
 - Resaltado visual de frases sospechosas detectadas en el texto analizado.
 - Plan de accion inmediato ("que hacer ahora") segun semaforo, senales y recomendaciones.
 - Entrada por compartir desde otras apps (`ACTION_SEND` para `text/plain`).
-- Coach por escenarios con checklist local.
+- Guia rapida por situacion con senales, acciones recomendadas y cierre practico.
 - Entrenamiento tipo quiz por niveles (principiante, intermedio y avanzado) con feedback inmediato.
 - Historial privado de metadatos (sin texto original).
 - OCR local desde captura con revision manual editable antes de analizar.
@@ -108,8 +108,8 @@ Semaforo:
 - Home
 - Analizar
 - Detalle analisis + export
-- Coach
-- Checklist escenario
+- Guia rapida
+- Detalle de guia
 - Training inicio
 - Quiz
 - Resultado quiz
@@ -172,7 +172,8 @@ Se recomienda anadir capturas en `docs/images/`:
 - analizar_resultado_rojo.png
 - analizar_resultado_destacado.png
 - historial.png
-- coach_checklist.png
+- guia_rapida_lista.png
+- guia_rapida_detalle.png
 - quiz_feedback.png
 - ajustes_privacidad.png
 

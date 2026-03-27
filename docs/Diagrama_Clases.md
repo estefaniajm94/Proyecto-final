@@ -31,11 +31,15 @@ classDiagram
     class SecureSettingsDataSource
     class CoachFragment
     class CoachViewModel
+    class CoachScenario
+    class CoachScenarioDto
     class GetCoachScenariosUseCase
     class CoachRepository
     class CoachRepositoryImpl
     class SeedAssetLoader
     class SeedJsonParser
+    class ScenarioChecklistFragment
+    class ScenarioChecklistViewModel
     class TrainingViewModel
     class GetTrainingQuestionsUseCase
     class TrainingRepository
@@ -78,10 +82,15 @@ classDiagram
 
     CoachFragment --> CoachViewModel
     CoachViewModel --> GetCoachScenariosUseCase
+    CoachViewModel --> CoachScenario
     GetCoachScenariosUseCase --> CoachRepository
     CoachRepository <|.. CoachRepositoryImpl
     CoachRepositoryImpl --> SeedAssetLoader
     SeedAssetLoader --> SeedJsonParser
+    SeedJsonParser --> CoachScenarioDto
+    CoachRepositoryImpl --> CoachScenario
+    ScenarioChecklistFragment --> ScenarioChecklistViewModel
+    ScenarioChecklistViewModel --> GetCoachScenariosUseCase
 
     TrainingViewModel --> GetTrainingQuestionsUseCase
     GetTrainingQuestionsUseCase --> TrainingRepository

@@ -13,7 +13,18 @@ class SeedJsonParserTest {
     fun `parsea escenarios coach validos`() {
         val json = """
             [
-              {"id":"s1","title":"Smishing","checklist":["A","B"]},
+              {
+                "id":"s1",
+                "title":"Smishing",
+                "summary":"Resumen",
+                "threatLabel":"SMS fraudulento",
+                "typicalSigns":["A","B"],
+                "whatToDoNow":["Paso 1","Paso 2"],
+                "whatToAvoid":["No 1"],
+                "whenToEscalate":["Escalar"],
+                "recommendedAction":"Accion final",
+                "closingNote":"Cierre"
+              },
               {"id":"s2","title":"Vishing","checklist":["X"]}
             ]
         """.trimIndent()
@@ -22,6 +33,8 @@ class SeedJsonParserTest {
 
         assertEquals(2, result.size)
         assertEquals("s1", result.first().id)
+        assertEquals("SMS fraudulento", result.first().threatLabel)
+        assertEquals("Vishing", result[1].title)
     }
 
     @Test
@@ -29,7 +42,8 @@ class SeedJsonParserTest {
         val json = """
             [
               {"id":"","title":"Sin id","checklist":["A"]},
-              {"id":"ok","title":"Ok","checklist":["A"]}
+              {"id":"sin_pasos","title":"Sin pasos","summary":"Resumen","whatToDoNow":[]},
+              {"id":"ok","title":"Ok","summary":"Resumen","whatToDoNow":["A"]}
             ]
         """.trimIndent()
 
@@ -37,6 +51,21 @@ class SeedJsonParserTest {
 
         assertEquals(1, result.size)
         assertEquals("ok", result.first().id)
+    }
+
+    @Test
+    fun `mantiene compatibilidad con escenarios legacy basados en checklist`() {
+        val json = """
+            [
+              {"id":"legacy","title":"Caso antiguo","checklist":["Paso 1","Paso 2"]}
+            ]
+        """.trimIndent()
+
+        val result = parser.parseCoachScenarios(json)
+
+        assertEquals(1, result.size)
+        assertEquals("legacy", result.first().id)
+        assertEquals(2, result.first().checklist?.size)
     }
 
     @Test

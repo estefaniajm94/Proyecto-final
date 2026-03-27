@@ -6,7 +6,7 @@
 | F1 | Base proyecto (Gradle, navegacion, Room, estructura capas) | S1-S2 | Completada |
 | F2 | Analizador heuristico + privacidad extrema + historial minimo | S3-S4 | Completada |
 | F3 | Detalle de analisis + exportacion Markdown/TXT | S5 | Completada |
-| F4 | Coach por escenarios (seed + checklist) | S6 | Completada |
+| F4 | Guia rapida por situaciones (seed + detalle guiado) | S6 | Completada |
 | F5 | Training quiz (seed + feedback + resultado) | S6-S7 | Completada |
 | F6 | Pulido UX real (share intent, explicabilidad, acciones guiadas) | S8 | Completada |
 | F7 | Login local + cierre de sesion + documentacion final | S8-S9 | Completada |
@@ -28,7 +28,7 @@ gantt
     Detalle + export markdown             :done,    b3, after b2, 5d
 
     section Coach y training
-    Coach escenarios + checklist          :done,    c1, 2026-02-10, 5d
+    Guia rapida por situaciones           :done,    c1, 2026-02-10, 5d
     Quiz real con feedback                :done,    c2, after c1, 5d
     Tests seed parser + quiz flow         :done,    c3, after c2, 3d
 

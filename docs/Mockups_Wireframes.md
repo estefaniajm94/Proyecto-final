@@ -18,8 +18,8 @@ Se recomienda guardar imagenes en `docs/images/mockups/` con estos nombres:
 4. `04_analizar_texto.png`
 5. `05_analizar_ocr_revision.png`
 6. `06_resultado_analisis.png`
-7. `07_coach_lista.png`
-8. `08_coach_checklist.png`
+7. `07_guia_rapida_lista.png`
+8. `08_guia_rapida_detalle.png`
 9. `09_training_quiz.png`
 10. `10_historial_privado.png`
 11. `11_ajustes_privacidad_bloqueo.png`
@@ -34,8 +34,8 @@ Se recomienda guardar imagenes en `docs/images/mockups/` con estos nombres:
 | Analizar texto | UC01 |
 | OCR revision | UC01 (flujo alternativo A2) |
 | Detalle analisis | UC02, UC07 |
-| Coach | UC03 |
-| Checklist | UC04 |
+| Guia rapida | UC03 |
+| Detalle de guia | UC04 |
 | Training (quiz) | UC05 |
 | Historial | UC06 |
 | Ajustes | UC08, UC09 |

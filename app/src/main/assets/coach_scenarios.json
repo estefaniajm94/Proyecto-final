@@ -1,20 +1,170 @@
 [
   {
-    "id": "smishing_correos",
+    "id": "smishing_parcel",
     "title": "Smishing de paqueteria",
-    "checklist": [
-      "No pulses enlaces del mensaje.",
-      "Verifica el envio en la app oficial.",
-      "No introduzcas datos bancarios desde el SMS."
-    ]
+    "summary": "Recibes un SMS sobre un paquete retenido, un pago pequeno o una incidencia de entrega para que pulses un enlace y actues deprisa.",
+    "threatLabel": "SMS fraudulento",
+    "typicalSigns": [
+      "Te mete prisa para pagar o confirmar hoy mismo.",
+      "El enlace no coincide con la empresa de paqueteria real.",
+      "Pide tarjeta, datos personales o acceso a una web externa."
+    ],
+    "whatToDoNow": [
+      "No pulses el enlace ni respondas al SMS.",
+      "Comprueba el envio desde la app o web oficial escrita por ti.",
+      "Si ya abriste la pagina, no introduzcas datos y cierrala.",
+      "Si ya pagaste o diste tarjeta, contacta con tu banco cuanto antes."
+    ],
+    "whatToAvoid": [
+      "No pagar pequenas cantidades solo para salir de dudas.",
+      "No reutilizar el enlace mas tarde desde otro dispositivo.",
+      "No compartir capturas con codigos o datos personales."
+    ],
+    "whenToEscalate": [
+      "Si has dado datos bancarios o autorizado un pago.",
+      "Si instalaste una app o descargaste un archivo desde el SMS."
+    ],
+    "recommendedAction": "Verifica el envio por el canal oficial de la empresa y bloquea la tarjeta si ya facilitaste datos de pago.",
+    "closingNote": "Si aun no has interactuado, normalmente basta con ignorar el mensaje y revisar el estado real del envio por la via oficial."
   },
   {
     "id": "bank_impersonation",
     "title": "Suplantacion bancaria",
-    "checklist": [
-      "No compartas PIN ni codigo OTP.",
-      "Cuelga y llama al telefono oficial del banco.",
-      "Bloquea tarjetas si diste datos."
-    ]
+    "summary": "Te escriben o llaman diciendo que hay un cargo, una transferencia o un problema urgente en tu cuenta para que compartas codigos o hagas una operacion inmediata.",
+    "threatLabel": "Suplantacion bancaria",
+    "typicalSigns": [
+      "Piden OTP, PIN o confirmar operaciones por telefono, SMS o chat.",
+      "Te hablan de una cuenta segura o de una cancelacion urgente.",
+      "Quieren que actues sin colgar ni verificar con tu banco."
+    ],
+    "whatToDoNow": [
+      "Corta la llamada o deja de responder al mensaje.",
+      "Contacta tu mismo con el banco por el telefono o app oficial.",
+      "Revisa movimientos y tarjetas desde el canal oficial.",
+      "Si compartiste datos o codigos, pide bloqueo y explica lo ocurrido."
+    ],
+    "whatToAvoid": [
+      "No compartir OTP, PIN ni claves de firma.",
+      "No mover dinero a cuentas que te indiquen por telefono.",
+      "No confiar solo en un SMS o llamada que mencione un cargo."
+    ],
+    "whenToEscalate": [
+      "Si ya diste codigos, credenciales o datos de tarjeta.",
+      "Si ves cargos, transferencias o accesos que no reconoces."
+    ],
+    "recommendedAction": "Habla con tu banco por el canal oficial y solicita medidas de bloqueo o fraude si ya hubo interaccion.",
+    "closingNote": "Si solo recibiste el mensaje o la llamada y no compartiste nada, lo importante es no seguir la conversacion y verificar por tu cuenta."
+  },
+  {
+    "id": "fake_tech_support",
+    "title": "Falso soporte tecnico",
+    "summary": "Un aviso o una llamada dice que tu movil o tu ordenador tiene un virus y te empuja a instalar una app, llamar a un numero o dar acceso remoto.",
+    "threatLabel": "Soporte falso",
+    "typicalSigns": [
+      "Usan mensajes alarmistas sobre virus, bloqueo o hackeo.",
+      "Quieren que instales software remoto o una app fuera de la tienda oficial.",
+      "Piden pago inmediato para limpiar o desbloquear el dispositivo."
+    ],
+    "whatToDoNow": [
+      "Cierra la pagina, cuelga la llamada o sal del aviso.",
+      "No instales nada desde ese mensaje ni des control remoto.",
+      "Revisa el dispositivo con herramientas y ajustes oficiales.",
+      "Si diste acceso remoto, desconecta internet y busca ayuda tecnica de confianza."
+    ],
+    "whatToAvoid": [
+      "No pagar por soporte iniciado desde un aviso emergente.",
+      "No compartir contrasenas ni codigos durante la llamada.",
+      "No permitir que te guien para desactivar protecciones."
+    ],
+    "whenToEscalate": [
+      "Si instalaron software remoto o una app sospechosa.",
+      "Si has introducido datos bancarios o credenciales durante el proceso."
+    ],
+    "recommendedAction": "Elimina herramientas remotas que no reconozcas, cambia contrasenas desde un entorno seguro y consulta soporte oficial del fabricante o del servicio afectado.",
+    "closingNote": "Si no llegaste a instalar nada, normalmente puedes cortar el intento sin mas pasos. Si diste acceso o pagaste, actua rapido."
+  },
+  {
+    "id": "fake_fine_notice",
+    "title": "Falsa multa o notificacion oficial",
+    "summary": "Recibes un SMS o correo que aparenta venir de Trafico, Hacienda u otro organismo y te pide pagar o identificarte desde un enlace.",
+    "threatLabel": "Notificacion falsa",
+    "typicalSigns": [
+      "La notificacion crea urgencia y amenaza con recargos o sanciones.",
+      "El enlace acorta u oculta el dominio real del organismo.",
+      "La comunicacion llega por un canal poco habitual para ese tramite."
+    ],
+    "whatToDoNow": [
+      "No abras el enlace ni descargues adjuntos.",
+      "Consulta el tramite desde la sede o app oficial escrita por ti.",
+      "Verifica si existe realmente una multa o aviso pendiente.",
+      "Si introdujiste datos, cambia credenciales y protege el medio de pago usado."
+    ],
+    "whatToAvoid": [
+      "No pagar para salir de dudas desde el propio mensaje.",
+      "No usar el enlace reenviado por otra persona.",
+      "No asumir que un logo o lenguaje formal garantizan autenticidad."
+    ],
+    "whenToEscalate": [
+      "Si ya pagaste o dejaste datos personales sensibles.",
+      "Si descargaste documentos o aplicaciones desde la notificacion."
+    ],
+    "recommendedAction": "Valida el aviso solo en la sede oficial correspondiente y revisa con tu banco si facilitaste datos de pago.",
+    "closingNote": "Cuando la notificacion es falsa, cortar el acceso al enlace y verificar por el portal oficial suele evitar el fraude a tiempo."
+  },
+  {
+    "id": "fake_prize",
+    "title": "Premio o sorteo falso",
+    "summary": "Te anuncian que has ganado un premio, un cupon o un sorteo inesperado y te piden pagar gastos, confirmar datos o entrar en una web dudosa.",
+    "threatLabel": "Premio falso",
+    "typicalSigns": [
+      "No recuerdas haberte apuntado al sorteo o promocion.",
+      "Piden un pago previo, datos bancarios o datos de acceso.",
+      "El mensaje promete un beneficio grande con muy poca verificacion."
+    ],
+    "whatToDoNow": [
+      "Desconfia si no esperabas el premio.",
+      "No pagues tasas, transporte ni gestion desde ese mensaje.",
+      "Busca la promocion real en la web oficial de la marca si existe.",
+      "Elimina el mensaje si no puedes verificarlo por una fuente fiable."
+    ],
+    "whatToAvoid": [
+      "No compartir fotos del DNI, tarjeta ni datos de cuenta.",
+      "No reenviar el mensaje para preguntarlo y acabar amplificando el fraude.",
+      "No iniciar sesion en paginas abiertas desde el aviso."
+    ],
+    "whenToEscalate": [
+      "Si ya pagaste o compartiste datos de identidad o de pago.",
+      "Si usaste tus credenciales de una cuenta real en la web falsa."
+    ],
+    "recommendedAction": "Verifica cualquier promocion desde la marca oficial y protege tus cuentas si ya introdujiste credenciales.",
+    "closingNote": "En estos casos, si no esperabas el premio, la mejor defensa suele ser no seguir el juego ni dar ningun dato."
+  },
+  {
+    "id": "urgent_family_message",
+    "title": "Mensaje urgente de familiar o cuenta comprometida",
+    "summary": "Un contacto conocido escribe desde otro numero o manda un mensaje extraño diciendo que necesita dinero, un codigo o ayuda inmediata.",
+    "threatLabel": "Cuenta comprometida",
+    "typicalSigns": [
+      "Hay urgencia economica o emocional para que actues ya.",
+      "El tono no encaja con la persona o el mensaje llega desde otro numero.",
+      "Piden transferencia, Bizum, tarjetas regalo o codigos de verificacion."
+    ],
+    "whatToDoNow": [
+      "Para y confirma la situacion por una llamada o canal que ya conocias.",
+      "No envies dinero, codigos ni capturas antes de verificar.",
+      "Pregunta algo que solo esa persona real sepa si no puedes llamarla.",
+      "Si la cuenta parece comprometida, avisa a ese contacto por otra via."
+    ],
+    "whatToAvoid": [
+      "No confiar solo en la foto de perfil o en el nombre guardado.",
+      "No dejarte llevar por la prisa o la culpa del mensaje.",
+      "No usar enlaces o formularios que te manden para pagar o ayudar."
+    ],
+    "whenToEscalate": [
+      "Si ya enviaste dinero, codigos o datos personales.",
+      "Si varias personas del mismo entorno han recibido mensajes parecidos."
+    ],
+    "recommendedAction": "Confirma siempre por otro canal y, si ya hubo pago o cesion de datos, actua enseguida con banco, operador o servicio afectado.",
+    "closingNote": "Si detectas la suplantacion antes de responder, lo mas eficaz suele ser cortar la conversacion y verificar con calma por una via segura."
   }
 ]

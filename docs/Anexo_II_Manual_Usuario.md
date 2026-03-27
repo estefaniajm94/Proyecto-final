@@ -72,11 +72,20 @@ Si privacidad extrema esta desactivada:
 - Amarillo `35-69`: riesgo moderado; verificar antes de actuar.
 - Rojo `>= 70`: riesgo alto; no compartir datos y usar canales oficiales.
 
-## 7. Coach por escenarios
+## 7. Guia rapida por situacion
 1. Ir a `Coach`.
 2. Elegir escenario.
-3. Abrir checklist y marcar pasos realizados.
-4. Revisar progreso de marcados.
+3. Revisar el resumen del caso y el tipo de amenaza.
+4. Abrir la guia y consultar:
+   - que esta ocurriendo,
+   - que hacer ahora,
+   - que no hacer,
+   - cuando pedir ayuda.
+5. Si aplica, usar el acceso a `Recursos oficiales`.
+
+Salida esperada:
+- si no has interactuado aun, la guia te orienta para cortar el fraude a tiempo;
+- si ya compartiste datos, pagaste o instalaste algo, te indica actuar con urgencia y verificar por canal oficial.
 
 ## 8. Entrenamiento (quiz)
 1. Ir a `Entrenamiento`.

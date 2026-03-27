@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.ItemCoachScenarioBinding
 import com.estef.antiphishingcoach.domain.model.CoachScenario
 
@@ -28,7 +29,20 @@ class CoachScenarioAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: CoachScenario) = with(binding) {
+            tvScenarioThreat.text = item.threatLabel
+            tvScenarioThreat.visibility = if (item.threatLabel.isBlank()) {
+                android.view.View.GONE
+            } else {
+                android.view.View.VISIBLE
+            }
             tvScenarioTitle.text = item.title
+            tvScenarioSummary.text = item.summary
+            tvScenarioMeta.text = root.context.getString(
+                R.string.coach_list_meta,
+                item.threatLabel.ifBlank { item.title },
+                item.typicalSigns.size,
+                item.whatToDoNow.size
+            )
             btnOpenChecklist.setOnClickListener {
                 onOpenChecklist(item)
             }

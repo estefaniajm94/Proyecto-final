@@ -32,10 +32,40 @@
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.App.Card.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_primary_gradient"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_coach"
+                android:textAppearance="@style/TextAppearance.App.HeroTitle" />
+
+            <TextView
+                android:id="@+id/tvCoachIntro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/coach_intro"
+                android:textAppearance="@style/TextAppearance.App.HeroBody" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         style="@style/Widget.App.Card"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="1">
 
         <LinearLayout

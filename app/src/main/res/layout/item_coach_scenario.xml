@@ -4,26 +4,52 @@
     style="@style/Widget.App.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp">
+    android:layout_marginTop="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="14dp">
+
+        <TextView
+            android:id="@+id/tvScenarioThreat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_info_pill"
+            android:paddingLeft="12dp"
+            android:paddingTop="6dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="6dp"
+            android:textColor="@color/brand_on_surface" />
 
         <TextView
             android:id="@+id/tvScenarioTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold" />
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/TextAppearance.App.CardTitle" />
+
+        <TextView
+            android:id="@+id/tvScenarioSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textAppearance="@style/TextAppearance.App.CardBody" />
+
+        <TextView
+            android:id="@+id/tvScenarioMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.App.CardBody" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnOpenChecklist"
             style="@style/Widget.App.Button.Outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:text="@string/coach_open_checklist" />
     </LinearLayout>
 

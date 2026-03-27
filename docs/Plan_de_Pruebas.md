@@ -13,7 +13,7 @@ Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del
 - OCR local desde captura con revision editable previa al analisis.
 - Historial y detalle por `incidentId`.
 - Exportacion Markdown a fichero real por compartir (`FileProvider`).
-- Carga local de escenarios Coach desde `assets`.
+- Carga local de guias rapidas por situacion desde `assets`.
 - Ejecucion de quiz por niveles con feedback desde `assets`.
 - Home tipo dashboard con resumen del ultimo analisis.
 - Historial con busqueda, filtros y orden.
@@ -51,8 +51,8 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-12 | Borrar datos | Ajustes > Borrar datos | Historial queda vacio | PENDIENTE |
 | PF-13 | No texto original persistido | Revisar modelo y datos almacenados | Solo metadatos (sin contenido original) | OK |
 | PF-14 | Mensaje legal visible | Home/Analizar | Disclaimer educativo visible | OK |
-| PF-15 | Lista de escenarios Coach | Home > Coach | Se muestran escenarios de `coach_scenarios.json` | OK |
-| PF-16 | Checklist de escenario | Coach > Abrir checklist | Se muestran items y contador de marcados | OK |
+| PF-15 | Lista de guias rapidas | Home > Coach | Se muestran escenarios con titulo, resumen y tipo de amenaza desde `coach_scenarios.json` | OK |
+| PF-16 | Detalle de guia por situacion | Coach > Abrir guia | Se muestran bloques de contexto, acciones, alertas y contador de progreso | OK |
 | PF-17 | Selector de nivel quiz | Training > abrir modulo | Se muestran niveles, descripcion y total de preguntas por nivel | OK |
 | PF-18 | Quiz con feedback | Training > elegir nivel > Comenzar > responder | Muestra correcto/incorrecto + explicacion por pregunta | OK |
 | PF-19 | Resultado final quiz | Completar todas las preguntas de un nivel | Muestra nivel, aciertos totales, porcentaje y mensaje final adaptado | OK |
@@ -107,6 +107,7 @@ Nota:
 ## 7. Criterios de aceptacion Coach + Training
 - PF-15..PF-19 en `OK`.
 - Sin acceso a red para cargar contenido educativo base.
+- La guia de escenario debe ofrecer acciones claras, senales tipicas y cierre practico.
 - Quiz finaliza con resultado consistente (`score <= total`).
 
 ## 8. Criterios de aceptacion OCR local

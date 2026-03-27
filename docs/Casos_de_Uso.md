@@ -5,8 +5,8 @@
 flowchart LR
     U[Usuario] --> UC01[UC01 Analizar entrada sospechosa]
     U --> UC02[UC02 Ver detalle de analisis]
-    U --> UC03[UC03 Consultar coach por escenario]
-    U --> UC04[UC04 Completar checklist del escenario]
+    U --> UC03[UC03 Consultar guia rapida por situacion]
+    U --> UC04[UC04 Revisar acciones del escenario]
     U --> UC05[UC05 Realizar entrenamiento quiz]
     U --> UC06[UC06 Consultar historial privado]
     U --> UC07[UC07 Exportar reporte Markdown/TXT]
@@ -60,7 +60,7 @@ flowchart LR
 - Postcondiciones:
 1. El detalle queda consultado sin modificar datos.
 
-## UC03 - Consultar coach por escenario
+## UC03 - Consultar guia rapida por situacion
 - Actor principal: Usuario
 - Disparador: El usuario entra en Coach.
 - Precondiciones:
@@ -68,28 +68,29 @@ flowchart LR
 2. Sesion local activa.
 - Flujo principal:
 1. El sistema carga escenarios desde assets.
-2. Muestra lista de escenarios con descripcion.
-3. El usuario selecciona uno para abrir checklist.
+2. Muestra lista de escenarios con titulo, descripcion corta y tipo de amenaza.
+3. El usuario selecciona uno para abrir la guia detallada.
 - Flujos alternativos:
 1. A1 - Seed vacia o invalida:
    Se muestra estado vacio con mensaje informativo.
 - Postcondiciones:
-1. Escenarios visibles para navegacion a checklist.
+1. Escenarios visibles para navegacion a una guia accionable.
 
-## UC04 - Completar checklist del escenario
+## UC04 - Revisar acciones del escenario
 - Actor principal: Usuario
-- Disparador: El usuario abre checklist de un escenario.
+- Disparador: El usuario abre la guia de un escenario.
 - Precondiciones:
 1. `scenarioId` valido.
 - Flujo principal:
-1. El sistema muestra items del checklist.
-2. El usuario marca/desmarca pasos.
-3. El sistema actualiza contador de progreso en pantalla.
+1. El sistema muestra el contexto del fraude, senales tipicas y acciones recomendadas.
+2. El usuario revisa los bloques `Que hacer ahora`, `Que no hacer` y `Cuando pedir ayuda`.
+3. El sistema actualiza el contador de acciones marcadas en `Que hacer ahora`.
+4. El usuario puede abrir `Recursos oficiales` desde la propia guia si necesita verificacion externa.
 - Flujos alternativos:
 1. A1 - `scenarioId` no encontrado:
    Se muestra estado vacio.
 - Postcondiciones:
-1. Checklist completado en sesion (no persistencia en MVP A).
+1. La guia queda consultada con progreso local en sesion (sin persistencia en MVP A).
 
 ## UC05 - Realizar entrenamiento quiz
 - Actor principal: Usuario

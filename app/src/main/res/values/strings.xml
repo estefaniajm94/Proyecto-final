@@ -5,8 +5,8 @@
     <string name="home_title">Panel principal</string>
     <string name="btn_analyze">Analizar texto/enlace</string>
     <string name="screen_title_analyze">Analizar texto/enlace</string>
-    <string name="btn_coach">Coach por escenarios</string>
-    <string name="screen_title_coach">Coach por escenarios</string>
+    <string name="btn_coach">Guia rapida por fraude</string>
+    <string name="screen_title_coach">Guia rapida por situacion</string>
     <string name="btn_training">Entrenamiento</string>
     <string name="screen_title_training">Entrenamiento</string>
     <string name="btn_history">Historial</string>
@@ -147,12 +147,25 @@
     <string name="detail_export_no_data">No hay datos para exportar.</string>
     <string name="detail_signal_line">- %1$s: %2$s (peso %3$d)</string>
     <string name="detail_recommendation_line">- %1$s: %2$s</string>
-    <string name="coach_empty">No hay escenarios disponibles.</string>
-    <string name="coach_loading">Cargando escenarios...</string>
-    <string name="coach_open_checklist">Abrir checklist</string>
-    <string name="coach_checklist_title">Checklist de escenario</string>
-    <string name="coach_checklist_progress">Marcados %1$d de %2$d</string>
-    <string name="coach_checklist_empty">Sin ítems en este escenario.</string>
+    <string name="coach_empty">No hay guias disponibles.</string>
+    <string name="coach_loading">Cargando guias rapidas...</string>
+    <string name="coach_intro">Elige el caso que mas se parezca a tu situacion y revisa que hacer ahora, que evitar y cuando pedir ayuda.</string>
+    <string name="coach_open_checklist">Ver guia</string>
+    <string name="coach_checklist_title">Como actuar ahora</string>
+    <string name="coach_checklist_progress">Acciones revisadas: %1$d de %2$d</string>
+    <string name="coach_checklist_empty">No hay pasos disponibles para este caso.</string>
+    <string name="coach_scenario_not_found">No se encontro esta guia.</string>
+    <string name="coach_list_meta">%1$s | %2$d señales | %3$d acciones</string>
+    <string name="coach_section_signs">Que esta ocurriendo</string>
+    <string name="coach_section_actions">Que hacer ahora</string>
+    <string name="coach_section_avoid">Que no hacer</string>
+    <string name="coach_section_escalate">Cuando pedir ayuda</string>
+    <string name="coach_section_closing">Cierre rapido</string>
+    <string name="coach_section_recommended_action">Accion recomendada final</string>
+    <string name="coach_status_not_started">Si todavia no has interactuado, estas a tiempo de cortar el fraude sin dar mas pasos.</string>
+    <string name="coach_status_in_progress">Vas bien. Revisa los pasos pendientes y completa las acciones urgentes cuanto antes.</string>
+    <string name="coach_status_completed">Ya has repasado las acciones clave. Si has dado datos, pagado o instalado algo, actua ahora por el canal oficial.</string>
+    <string name="coach_open_resources">Ver recursos oficiales</string>
     <string name="training_loading">Cargando preguntas...</string>
     <string name="training_level_selector_title">Quiz por niveles</string>
     <string name="training_level_selector_subtitle">Elige el nivel que quieres practicar y trabaja solo con preguntas de esa dificultad.</string>
@@ -198,8 +211,8 @@
     <string name="settings_unlock_subtitle">Verifica tu identidad para continuar</string>
 
     <!-- Home: tarjetas rápidas -->
-    <string name="home_quick_coach_title">Coach</string>
-    <string name="home_quick_coach_desc">Checklist por escenarios</string>
+    <string name="home_quick_coach_title">Guia rapida</string>
+    <string name="home_quick_coach_desc">Que hacer segun el fraude</string>
     <string name="home_quick_training_title">Entrenamiento</string>
     <string name="home_quick_training_desc">Quiz por niveles con feedback</string>
     <string name="home_quick_history_title">Historial</string>

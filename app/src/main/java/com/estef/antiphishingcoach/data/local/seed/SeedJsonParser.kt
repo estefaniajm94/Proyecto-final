@@ -13,7 +13,10 @@ class SeedJsonParser(
         val type = object : TypeToken<List<CoachScenarioDto>>() {}.type
         val parsed: List<CoachScenarioDto> = gson.fromJson(json, type) ?: emptyList()
         return parsed.filter { dto ->
-            dto.id.isNotBlank() && dto.title.isNotBlank() && dto.checklist.isNotEmpty()
+            val actionsNow = dto.whatToDoNow ?: dto.checklist
+            dto.id.isNotBlank() &&
+                dto.title.isNotBlank() &&
+                !actionsNow.isNullOrEmpty()
         }
     }
 
