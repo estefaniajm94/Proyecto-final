@@ -165,6 +165,7 @@
     <string name="training_level_advanced_description">Analizar URLs, dominios engañosos y señales técnicas.</string>
     <string name="training_total_questions">Total preguntas: %1$d</string>
     <string name="training_level_question_count">%1$d preguntas en este nivel</string>
+    <string name="training_level_question_count_short">%1$d preguntas</string>
     <string name="training_start_button">Comenzar entrenamiento</string>
     <string name="training_question_counter">Pregunta %1$d de %2$d</string>
     <string name="training_quiz_meta">%1$s | %2$s</string>

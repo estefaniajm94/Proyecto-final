@@ -1,6 +1,8 @@
 package com.estef.antiphishingcoach.presentation.training
 
 import android.os.Bundle
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -12,6 +14,7 @@ import com.estef.antiphishingcoach.databinding.FragmentTrainingStartBinding
 import com.estef.antiphishingcoach.domain.model.TrainingLevel
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 
 class TrainingStartFragment : BaseFragment<FragmentTrainingStartBinding>(
@@ -30,16 +33,9 @@ class TrainingStartFragment : BaseFragment<FragmentTrainingStartBinding>(
     }
 
     private fun setupActions() {
-        binding.toggleTrainingLevels.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (!isChecked) return@addOnButtonCheckedListener
-            val level = when (checkedId) {
-                R.id.btnLevelBeginner -> TrainingLevel.BEGINNER
-                R.id.btnLevelIntermediate -> TrainingLevel.INTERMEDIATE
-                R.id.btnLevelAdvanced -> TrainingLevel.ADVANCED
-                else -> return@addOnButtonCheckedListener
-            }
-            viewModel.selectLevel(level)
-        }
+        binding.cardLevelBeginner.setOnClickListener { viewModel.selectLevel(TrainingLevel.BEGINNER) }
+        binding.cardLevelIntermediate.setOnClickListener { viewModel.selectLevel(TrainingLevel.INTERMEDIATE) }
+        binding.cardLevelAdvanced.setOnClickListener { viewModel.selectLevel(TrainingLevel.ADVANCED) }
         binding.btnStartQuiz.setOnClickListener {
             viewModel.startQuiz()
             findNavController().navigate(R.id.action_trainingStart_to_quiz)
@@ -63,19 +59,66 @@ class TrainingStartFragment : BaseFragment<FragmentTrainingStartBinding>(
                         R.string.training_level_question_count,
                         state.selectedLevelQuestionCount
                     )
+                    binding.tvLevelBeginnerCount.text = getString(
+                        R.string.training_level_question_count_short,
+                        state.availableQuestionCounts[TrainingLevel.BEGINNER] ?: 0
+                    )
+                    binding.tvLevelIntermediateCount.text = getString(
+                        R.string.training_level_question_count_short,
+                        state.availableQuestionCounts[TrainingLevel.INTERMEDIATE] ?: 0
+                    )
+                    binding.tvLevelAdvancedCount.text = getString(
+                        R.string.training_level_question_count_short,
+                        state.availableQuestionCounts[TrainingLevel.ADVANCED] ?: 0
+                    )
                     binding.btnStartQuiz.isEnabled =
                         !state.isLoading && state.selectedLevelQuestionCount > 0
 
-                    val targetButtonId = when (state.selectedLevel) {
-                        TrainingLevel.BEGINNER -> R.id.btnLevelBeginner
-                        TrainingLevel.INTERMEDIATE -> R.id.btnLevelIntermediate
-                        TrainingLevel.ADVANCED -> R.id.btnLevelAdvanced
-                    }
-                    if (binding.toggleTrainingLevels.checkedButtonId != targetButtonId) {
-                        binding.toggleTrainingLevels.check(targetButtonId)
-                    }
+                    updateBubbleSelection(state.selectedLevel)
                 }
             }
         }
+    }
+
+    private fun updateBubbleSelection(selectedLevel: TrainingLevel) {
+        updateBubble(
+            card = binding.cardLevelBeginner,
+            titleView = binding.tvLevelBeginner,
+            isSelected = selectedLevel == TrainingLevel.BEGINNER
+        )
+        updateBubble(
+            card = binding.cardLevelIntermediate,
+            titleView = binding.tvLevelIntermediate,
+            isSelected = selectedLevel == TrainingLevel.INTERMEDIATE
+        )
+        updateBubble(
+            card = binding.cardLevelAdvanced,
+            titleView = binding.tvLevelAdvanced,
+            isSelected = selectedLevel == TrainingLevel.ADVANCED
+        )
+    }
+
+    private fun updateBubble(
+        card: MaterialCardView,
+        titleView: TextView,
+        isSelected: Boolean
+    ) {
+        val strokeColor = ContextCompat.getColor(
+            requireContext(),
+            if (isSelected) R.color.brand_primary else R.color.card_outline_soft
+        )
+        val backgroundColor = ContextCompat.getColor(
+            requireContext(),
+            if (isSelected) R.color.brand_secondary_soft else R.color.brand_surface
+        )
+        val titleColor = ContextCompat.getColor(
+            requireContext(),
+            if (isSelected) R.color.brand_primary_dark else R.color.brand_on_surface
+        )
+
+        card.strokeColor = strokeColor
+        card.strokeWidth = if (isSelected) 3 else 1
+        card.setCardBackgroundColor(backgroundColor)
+        titleView.setTextColor(titleColor)
     }
 }
