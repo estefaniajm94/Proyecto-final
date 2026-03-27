@@ -3,8 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_home_avatar"
+        android:icon="@drawable/avatar_default"
+        android:title="@string/home_avatar_content_description"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_home_settings"
-        android:icon="@android:drawable/ic_menu_manage"
+        android:icon="@drawable/ic_settings_gear_24"
         android:title="@string/btn_settings"
         app:showAsAction="ifRoom" />
 </menu>

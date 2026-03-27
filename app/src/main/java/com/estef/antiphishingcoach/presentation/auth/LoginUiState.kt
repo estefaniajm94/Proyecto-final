@@ -7,5 +7,7 @@ data class LoginUiState(
     val emailError: String? = null,
     val passwordError: String? = null,
     val statusMessage: String? = null,
-    val authenticatedUser: AuthUser? = null
+    val authenticatedUser: AuthUser? = null,
+    val previewAvatarId: String? = null,
+    val previewMessage: String? = null
 )

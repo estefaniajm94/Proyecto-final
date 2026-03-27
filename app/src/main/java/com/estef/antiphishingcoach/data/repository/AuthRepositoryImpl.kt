@@ -1,5 +1,6 @@
 package com.estef.antiphishingcoach.data.repository
 
+import com.estef.antiphishingcoach.core.avatar.AvatarCatalog
 import com.estef.antiphishingcoach.data.local.dao.UserDao
 import com.estef.antiphishingcoach.data.local.entity.UserEntity
 import com.estef.antiphishingcoach.data.local.preferences.SecureSettingsDataSource
@@ -37,7 +38,8 @@ class AuthRepositoryImpl(
     override suspend fun register(
         displayName: String,
         email: String,
-        password: String
+        password: String,
+        avatarId: String
     ): AuthActionResult {
         val normalizedEmail = email.normalizeEmail()
         if (userDao.findByEmail(normalizedEmail) != null) {
@@ -49,7 +51,8 @@ class AuthRepositoryImpl(
                 createdAt = System.currentTimeMillis(),
                 displayName = displayName.trim(),
                 email = normalizedEmail,
-                passwordHash = hashPassword(password)
+                passwordHash = hashPassword(password),
+                avatarId = AvatarCatalog.resolveAvatarId(avatarId)
             )
         )
         secureSettingsDataSource.setCurrentUserId(userId)
@@ -57,7 +60,8 @@ class AuthRepositoryImpl(
             AuthUser(
                 id = userId,
                 displayName = displayName.trim(),
-                email = normalizedEmail
+                email = normalizedEmail,
+                avatarId = AvatarCatalog.resolveAvatarId(avatarId)
             )
         )
     }
@@ -75,6 +79,18 @@ class AuthRepositoryImpl(
         return AuthActionResult.Success(user.toDomain())
     }
 
+    override suspend fun findUserByEmail(email: String): AuthUser? {
+        return userDao.findByEmail(email.normalizeEmail())?.toDomain()
+    }
+
+    override suspend fun updateCurrentUserAvatar(avatarId: String): Boolean {
+        val currentUserId = secureSettingsDataSource.getCurrentUserId() ?: return false
+        return userDao.updateAvatar(
+            userId = currentUserId,
+            avatarId = AvatarCatalog.resolveAvatarId(avatarId)
+        ) > 0
+    }
+
     override suspend fun logout() {
         secureSettingsDataSource.setCurrentUserId(null)
     }
@@ -83,7 +99,8 @@ class AuthRepositoryImpl(
         return AuthUser(
             id = id,
             displayName = displayName,
-            email = email
+            email = email,
+            avatarId = AvatarCatalog.resolveAvatarId(avatarId)
         )
     }
 

@@ -25,6 +25,29 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivLoginAvatar"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:contentDescription="@string/login_avatar_title"
+                android:src="@drawable/avatar_default" />
+
+            <TextView
+                android:id="@+id/tvLoginAvatarStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.App.Card"
             android:layout_width="match_parent"

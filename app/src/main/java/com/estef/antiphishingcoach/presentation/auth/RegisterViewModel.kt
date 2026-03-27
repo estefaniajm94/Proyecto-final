@@ -2,6 +2,7 @@ package com.estef.antiphishingcoach.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.estef.antiphishingcoach.core.avatar.AvatarCatalog
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.domain.model.AuthActionResult
 import com.estef.antiphishingcoach.domain.model.AuthErrorReason
@@ -18,8 +19,16 @@ class RegisterViewModel(
     private val stringResolver: StringResolver
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(RegisterUiState())
+    private val _uiState = MutableStateFlow(
+        RegisterUiState(selectedAvatarId = AvatarCatalog.DEFAULT_AVATAR_ID)
+    )
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
+
+    fun onAvatarSelected(avatarId: String) {
+        _uiState.update { state ->
+            state.copy(selectedAvatarId = AvatarCatalog.resolveAvatarId(avatarId))
+        }
+    }
 
     fun register(
         displayName: String,
@@ -80,7 +89,14 @@ class RegisterViewModel(
                 )
             }
 
-            when (val result = registerLocalUserUseCase(normalizedName, normalizedEmail, normalizedPassword)) {
+            when (
+                val result = registerLocalUserUseCase(
+                    normalizedName,
+                    normalizedEmail,
+                    normalizedPassword,
+                    _uiState.value.selectedAvatarId ?: AvatarCatalog.DEFAULT_AVATAR_ID
+                )
+            ) {
                 is AuthActionResult.Success -> {
                     _uiState.update { state ->
                         state.copy(

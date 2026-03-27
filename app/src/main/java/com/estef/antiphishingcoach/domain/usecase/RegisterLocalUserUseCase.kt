@@ -9,8 +9,9 @@ class RegisterLocalUserUseCase(
     suspend operator fun invoke(
         displayName: String,
         email: String,
-        password: String
+        password: String,
+        avatarId: String
     ): AuthActionResult {
-        return repository.register(displayName, email, password)
+        return repository.register(displayName, email, password, avatarId)
     }
 }

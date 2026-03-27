@@ -10,9 +10,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.FragmentRegisterBinding
+import com.estef.antiphishingcoach.presentation.avatar.AvatarPickerDialogFragment
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.renderAvatar
 import com.estef.antiphishingcoach.presentation.navigation.SharedContentViewModel
 import kotlinx.coroutines.launch
 
@@ -20,6 +22,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
     R.layout.fragment_register,
     FragmentRegisterBinding::bind
 ) {
+    private val avatarPickerRequestKey = "register_avatar_picker"
 
     private val sharedContentViewModel: SharedContentViewModel by activityViewModels()
     private val viewModel: RegisterViewModel by viewModels {
@@ -33,6 +36,19 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
 
     override fun onBoundView(savedInstanceState: Bundle?) {
         setupBackNavigation(binding.btnBack)
+        parentFragmentManager.setFragmentResultListener(
+            avatarPickerRequestKey,
+            viewLifecycleOwner
+        ) { _, result ->
+            val avatarId = result.getString(AvatarPickerDialogFragment.RESULT_AVATAR_ID) ?: return@setFragmentResultListener
+            viewModel.onAvatarSelected(avatarId)
+        }
+        binding.btnChangeAvatar.setOnClickListener {
+            AvatarPickerDialogFragment.newInstance(
+                requestKey = avatarPickerRequestKey,
+                selectedAvatarId = viewModel.uiState.value.selectedAvatarId
+            ).show(parentFragmentManager, AvatarPickerDialogFragment.TAG)
+        }
         binding.btnCreateAccount.setOnClickListener {
             viewModel.register(
                 displayName = binding.etDisplayName.text?.toString().orEmpty(),
@@ -57,6 +73,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                     binding.tilPassword.error = state.passwordError
                     binding.tilConfirmPassword.error = state.confirmPasswordError
                     binding.tvRegisterStatus.text = state.statusMessage.orEmpty()
+                    binding.ivRegisterAvatar.renderAvatar(state.selectedAvatarId)
 
                     if (state.authenticatedUser != null && !hasNavigated) {
                         hasNavigated = true

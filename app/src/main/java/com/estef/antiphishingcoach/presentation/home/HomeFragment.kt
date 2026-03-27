@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
+import com.estef.antiphishingcoach.core.avatar.AvatarCatalog
 import com.estef.antiphishingcoach.databinding.FragmentHomeBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
@@ -26,6 +28,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private val viewModel: HomeViewModel by viewModels {
         HomeViewModelFactory(
+            observeCurrentUserUseCase = appContainer().observeCurrentUserUseCase,
             observeLatestIncidentSummaryUseCase = appContainer().observeLatestIncidentSummaryUseCase,
             stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
@@ -42,7 +45,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private fun setupToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener { item: MenuItem ->
             when (item.itemId) {
-                R.id.action_home_settings -> {
+                R.id.action_home_settings, R.id.action_home_avatar -> {
                     findNavController().navigate(R.id.action_home_to_settings)
                     true
                 }
@@ -118,6 +121,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun render(state: HomeUiState) = with(binding) {
+        val avatarDrawable = ContextCompat.getDrawable(
+            requireContext(),
+            AvatarCatalog.resolve(state.currentUserAvatarId).drawableRes
+        )
+        toolbarHome.menu.findItem(R.id.action_home_avatar)?.let { item ->
+            item.icon = avatarDrawable
+            item.iconTintList = null
+        }
+        tvHomeGreeting.text = if (state.currentUserName.isNullOrBlank()) {
+            getString(R.string.home_avatar_header_default)
+        } else {
+            getString(R.string.home_avatar_header_named, state.currentUserName)
+        }
         progressLatestIncident.isVisible = state.isLoading
 
         val latest = state.latestIncident

@@ -9,6 +9,7 @@ import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
+import com.estef.antiphishingcoach.domain.usecase.UpdateCurrentUserAvatarUseCase
 import com.estef.antiphishingcoach.presentation.common.StringResolver
 
 class SettingsViewModelFactory(
@@ -18,6 +19,7 @@ class SettingsViewModelFactory(
     private val toggleExtremePrivacyUseCase: ToggleExtremePrivacyUseCase,
     private val toggleLocalLockUseCase: ToggleLocalLockUseCase,
     private val clearLocalDataUseCase: ClearLocalDataUseCase,
+    private val updateCurrentUserAvatarUseCase: UpdateCurrentUserAvatarUseCase,
     private val logoutCurrentUserUseCase: LogoutCurrentUserUseCase,
     private val stringResolver: StringResolver
 ) : ViewModelProvider.Factory {
@@ -32,6 +34,7 @@ class SettingsViewModelFactory(
                 toggleExtremePrivacyUseCase = toggleExtremePrivacyUseCase,
                 toggleLocalLockUseCase = toggleLocalLockUseCase,
                 clearLocalDataUseCase = clearLocalDataUseCase,
+                updateCurrentUserAvatarUseCase = updateCurrentUserAvatarUseCase,
                 logoutCurrentUserUseCase = logoutCurrentUserUseCase,
                 stringResolver = stringResolver
             ) as T

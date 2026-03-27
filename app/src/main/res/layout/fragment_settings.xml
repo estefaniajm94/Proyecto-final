@@ -43,23 +43,56 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_account_title"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvAccountName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" />
+                <FrameLayout
+                    android:layout_width="64dp"
+                    android:layout_height="64dp">
 
-            <TextView
-                android:id="@+id/tvAccountEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" />
+                    <ImageView
+                        android:id="@+id/ivSettingsAvatar"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:contentDescription="@string/settings_avatar_title"
+                        android:src="@drawable/avatar_default" />
+
+                    <ImageView
+                        android:id="@+id/ivSettingsAvatarEdit"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="bottom|end"
+                        android:background="@drawable/bg_avatar_edit_badge"
+                        android:contentDescription="@null"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_edit_pencil_16" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvAccountName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.App.SectionTitle"
+                        android:textColor="@color/brand_on_surface" />
+
+                    <TextView
+                        android:id="@+id/tvAccountEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textAppearance="@style/TextAppearance.App.CardBody" />
+                </LinearLayout>
+            </LinearLayout>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchExtremePrivacy"

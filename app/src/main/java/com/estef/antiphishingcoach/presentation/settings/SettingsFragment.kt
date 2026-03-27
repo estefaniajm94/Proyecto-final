@@ -12,15 +12,18 @@ import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.privacy.LocalAuthManager
 import com.estef.antiphishingcoach.databinding.FragmentSettingsBinding
+import com.estef.antiphishingcoach.presentation.avatar.AvatarPickerDialogFragment
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.renderAvatar
 import kotlinx.coroutines.launch
 
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     R.layout.fragment_settings,
     FragmentSettingsBinding::bind
 ) {
+    private val avatarPickerRequestKey = "settings_avatar_picker"
     private val viewModel: SettingsViewModel by viewModels {
         val container = appContainer()
         SettingsViewModelFactory(
@@ -30,6 +33,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             toggleExtremePrivacyUseCase = container.toggleExtremePrivacyUseCase,
             toggleLocalLockUseCase = container.toggleLocalLockUseCase,
             clearLocalDataUseCase = container.clearLocalDataUseCase,
+            updateCurrentUserAvatarUseCase = container.updateCurrentUserAvatarUseCase,
             logoutCurrentUserUseCase = container.logoutCurrentUserUseCase,
             stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
@@ -41,6 +45,13 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     override fun onBoundView(savedInstanceState: Bundle?) {
         setupBackNavigation(binding.btnBack)
         setProtectedControlsEnabled(false)
+        parentFragmentManager.setFragmentResultListener(
+            avatarPickerRequestKey,
+            viewLifecycleOwner
+        ) { _, result ->
+            val avatarId = result.getString(AvatarPickerDialogFragment.RESULT_AVATAR_ID) ?: return@setFragmentResultListener
+            viewModel.onAvatarSelected(avatarId)
+        }
         setupActions()
         observeUiState()
     }
@@ -70,6 +81,12 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         btnClearData.setOnClickListener {
             viewModel.clearLocalData()
         }
+        ivSettingsAvatarEdit.setOnClickListener {
+            AvatarPickerDialogFragment.newInstance(
+                requestKey = avatarPickerRequestKey,
+                selectedAvatarId = viewModel.uiState.value.currentUserAvatarId
+            ).show(parentFragmentManager, AvatarPickerDialogFragment.TAG)
+        }
         btnLogout.setOnClickListener {
             viewModel.logout()
         }
@@ -81,14 +98,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                 viewModel.uiState.collect { state ->
                     binding.switchExtremePrivacy.isChecked = state.extremePrivacyEnabled
                     binding.switchLocalLock.isChecked = state.localLockEnabled
-                    binding.tvAccountName.text = getString(
-                        R.string.settings_account_name,
-                        state.currentUserName.orEmpty()
-                    )
-                    binding.tvAccountEmail.text = getString(
-                        R.string.settings_account_email,
-                        state.currentUserEmail.orEmpty()
-                    )
+                    binding.tvAccountName.text = state.currentUserName.orEmpty()
+                    binding.tvAccountEmail.text = state.currentUserEmail.orEmpty()
+                    binding.ivSettingsAvatar.renderAvatar(state.currentUserAvatarId)
                     binding.tvSettingsStatus.text = state.statusMessage.orEmpty()
 
                     if (state.logoutCompleted) {
@@ -162,6 +174,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         switchExtremePrivacy.isEnabled = enabled
         switchLocalLock.isEnabled = enabled
         btnClearData.isEnabled = enabled
+        ivSettingsAvatarEdit.isEnabled = enabled
         btnLogout.isEnabled = enabled
     }
 }

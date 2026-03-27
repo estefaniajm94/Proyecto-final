@@ -10,6 +10,7 @@ import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
+import com.estef.antiphishingcoach.domain.usecase.UpdateCurrentUserAvatarUseCase
 import com.estef.antiphishingcoach.presentation.common.StringResolver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +25,7 @@ class SettingsViewModel(
     private val toggleExtremePrivacyUseCase: ToggleExtremePrivacyUseCase,
     private val toggleLocalLockUseCase: ToggleLocalLockUseCase,
     private val clearLocalDataUseCase: ClearLocalDataUseCase,
+    private val updateCurrentUserAvatarUseCase: UpdateCurrentUserAvatarUseCase,
     private val logoutCurrentUserUseCase: LogoutCurrentUserUseCase,
     private val stringResolver: StringResolver
 ) : ViewModel() {
@@ -37,7 +39,8 @@ class SettingsViewModel(
                 _uiState.update { state ->
                     state.copy(
                         currentUserName = user?.displayName,
-                        currentUserEmail = user?.email
+                        currentUserEmail = user?.email,
+                        currentUserAvatarId = user?.avatarId
                     )
                 }
             }
@@ -75,6 +78,22 @@ class SettingsViewModel(
             clearLocalDataUseCase()
             _uiState.update { state ->
                 state.copy(statusMessage = stringResolver.get(R.string.settings_data_cleared))
+            }
+        }
+    }
+
+    fun onAvatarSelected(avatarId: String) {
+        viewModelScope.launch {
+            val updated = updateCurrentUserAvatarUseCase(avatarId)
+            _uiState.update { state ->
+                state.copy(
+                    logoutCompleted = false,
+                    statusMessage = if (updated) {
+                        stringResolver.get(R.string.settings_avatar_updated)
+                    } else {
+                        stringResolver.get(R.string.settings_avatar_update_error)
+                    }
+                )
             }
         }
     }

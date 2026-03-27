@@ -1,6 +1,7 @@
 package com.estef.antiphishingcoach.presentation.auth
 
 import android.os.Bundle
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,6 +14,7 @@ import com.estef.antiphishingcoach.databinding.FragmentLoginBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.renderAvatar
 import com.estef.antiphishingcoach.presentation.navigation.SharedContentViewModel
 import kotlinx.coroutines.launch
 
@@ -25,6 +27,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
             loginLocalUserUseCase = appContainer().loginLocalUserUseCase,
+            findUserByEmailUseCase = appContainer().findUserByEmailUseCase,
             stringResolver = AndroidStringResolver(requireContext().applicationContext)
         )
     }
@@ -32,6 +35,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
     private var hasNavigated = false
 
     override fun onBoundView(savedInstanceState: Bundle?) {
+        binding.etEmail.doAfterTextChanged { editable ->
+            viewModel.onEmailChanged(editable?.toString().orEmpty())
+        }
+        viewModel.onEmailChanged(binding.etEmail.text?.toString().orEmpty())
         binding.btnLogin.setOnClickListener {
             viewModel.login(
                 email = binding.etEmail.text?.toString().orEmpty(),
@@ -52,6 +59,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                     binding.tilEmail.error = state.emailError
                     binding.tilPassword.error = state.passwordError
                     binding.tvLoginStatus.text = state.statusMessage.orEmpty()
+                    binding.ivLoginAvatar.renderAvatar(state.previewAvatarId)
+                    binding.tvLoginAvatarStatus.text = state.previewMessage.orEmpty()
 
                     if (state.authenticatedUser != null && !hasNavigated) {
                         hasNavigated = true

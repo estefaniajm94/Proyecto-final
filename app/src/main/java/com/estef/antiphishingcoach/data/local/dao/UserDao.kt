@@ -18,4 +18,7 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
     fun observeById(userId: Long): Flow<UserEntity?>
+
+    @Query("UPDATE users SET avatarId = :avatarId WHERE id = :userId")
+    suspend fun updateAvatar(userId: Long, avatarId: String): Int
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.domain.model.IncidentSummary
+import com.estef.antiphishingcoach.domain.usecase.ObserveCurrentUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLatestIncidentSummaryUseCase
 import com.estef.antiphishingcoach.presentation.common.StringResolver
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import java.util.Date
 import java.util.Locale
 
 class HomeViewModel(
+    observeCurrentUserUseCase: ObserveCurrentUserUseCase,
     observeLatestIncidentSummaryUseCase: ObserveLatestIncidentSummaryUseCase,
     private val stringResolver: StringResolver
 ) : ViewModel() {
@@ -30,6 +32,16 @@ class HomeViewModel(
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
     init {
+        viewModelScope.launch {
+            observeCurrentUserUseCase().collect { user ->
+                _uiState.update { state ->
+                    state.copy(
+                        currentUserName = user?.displayName,
+                        currentUserAvatarId = user?.avatarId
+                    )
+                }
+            }
+        }
         viewModelScope.launch {
             observeLatestIncidentSummaryUseCase().collect { latest ->
                 _uiState.update { state ->

@@ -3,7 +3,9 @@ package com.estef.antiphishingcoach.presentation.home
 data class HomeUiState(
     val isLoading: Boolean = true,
     val latestIncident: LatestIncidentUi? = null,
-    val latestTrainingSummary: String = ""
+    val latestTrainingSummary: String = "",
+    val currentUserName: String? = null,
+    val currentUserAvatarId: String? = null
 )
 
 data class LatestIncidentUi(

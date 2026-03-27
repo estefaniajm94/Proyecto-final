@@ -21,6 +21,7 @@ import com.estef.antiphishingcoach.domain.usecase.AnalyzeInputUseCase
 import com.estef.antiphishingcoach.domain.usecase.ClearLocalDataUseCase
 import com.estef.antiphishingcoach.data.export.ExportReportToFileUseCase
 import com.estef.antiphishingcoach.domain.usecase.ExtractTextFromImageUseCase
+import com.estef.antiphishingcoach.domain.usecase.FindUserByEmailUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetCoachScenariosUseCase
 import com.estef.antiphishingcoach.domain.usecase.GetTrainingQuestionsUseCase
 import com.estef.antiphishingcoach.domain.usecase.IsLocalLockEnabledUseCase
@@ -35,6 +36,7 @@ import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.RegisterLocalUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
+import com.estef.antiphishingcoach.domain.usecase.UpdateCurrentUserAvatarUseCase
 
 /**
  * Service locator simple para MVP A sin framework DI.
@@ -133,8 +135,16 @@ class AppContainer(context: Context) {
         RegisterLocalUserUseCase(authRepository)
     }
 
+    val findUserByEmailUseCase: FindUserByEmailUseCase by lazy {
+        FindUserByEmailUseCase(authRepository)
+    }
+
     val loginLocalUserUseCase: LoginLocalUserUseCase by lazy {
         LoginLocalUserUseCase(authRepository)
+    }
+
+    val updateCurrentUserAvatarUseCase: UpdateCurrentUserAvatarUseCase by lazy {
+        UpdateCurrentUserAvatarUseCase(authRepository)
     }
 
     val logoutCurrentUserUseCase: LogoutCurrentUserUseCase by lazy {

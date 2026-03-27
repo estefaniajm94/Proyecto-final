@@ -9,5 +9,6 @@ data class RegisterUiState(
     val passwordError: String? = null,
     val confirmPasswordError: String? = null,
     val statusMessage: String? = null,
-    val authenticatedUser: AuthUser? = null
+    val authenticatedUser: AuthUser? = null,
+    val selectedAvatarId: String? = null
 )

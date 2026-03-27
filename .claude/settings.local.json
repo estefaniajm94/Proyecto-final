@@ -1,5 +1,16 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(adb devices:*)",
+      "Read(//c/Users/Estef/Desktop/ProyectoFinal/$ANDROID_HOME/**)",
+      "Read(//c/Users/Estef/Desktop/ProyectoFinal/$LOCALAPPDATA/Android/Sdk/**)",
+      "Read(//c/Users/Estef/**)",
+      "Bash(\"$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe\" devices:*)",
+      "Bash(./gradlew installDebug)",
+      "Bash(xargs cat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
     "additionalDirectories": [
       "c:\\Users\\Estef\\Desktop"
     ]

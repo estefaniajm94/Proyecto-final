@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:minHeight="120dp"
         android:orientation="vertical"
         android:padding="@dimen/spacing_16">
@@ -34,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_8"
+            android:gravity="center"
             android:text="Titulo" />
 
         <TextView
@@ -42,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_8"
+            android:gravity="center"
             android:text="Descripcion breve" />
     </LinearLayout>
 

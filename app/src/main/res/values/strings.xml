@@ -18,11 +18,16 @@
     <string name="risk_level_low">Riesgo bajo</string>
     <string name="risk_level_medium">Riesgo moderado</string>
     <string name="risk_level_high">Riesgo alto</string>
+    <string name="login_avatar_title">Avatar de acceso</string>
+    <string name="login_avatar_default_message">Usaremos tu avatar guardado cuando reconozcamos el correo de tu cuenta local.</string>
+    <string name="login_avatar_known_message">Cuenta detectada: %1$s</string>
     <string name="login_title">Inicia sesión</string>
     <string name="login_subtitle">Accede a tu cuenta local para continuar con tus análisis y tu historial privado.</string>
     <string name="login_button">Entrar</string>
     <string name="login_open_register">Crear cuenta local</string>
     <string name="login_error_invalid_credentials">Correo o contraseña incorrectos.</string>
+    <string name="register_avatar_title">Imagen de perfil</string>
+    <string name="register_avatar_hint">Elige un avatar preinstalado. Si no cambias nada, se usara el avatar gris por defecto.</string>
     <string name="register_title">Crear cuenta</string>
     <string name="register_subtitle">Tu usuario se guardará solo en este dispositivo para acceder de forma local.</string>
     <string name="register_button">Crear cuenta y entrar</string>
@@ -40,6 +45,10 @@
     <string name="auth_error_confirm_password_required">Confirma la contraseña.</string>
     <string name="auth_error_password_mismatch">Las contraseñas no coinciden.</string>
     <string name="auth_error_generic">No se pudo completar la autenticación local.</string>
+    <string name="settings_avatar_title">Imagen de perfil</string>
+    <string name="settings_avatar_hint">Puedes cambiar tu avatar en cualquier momento desde este dispositivo.</string>
+    <string name="settings_avatar_updated">Imagen de perfil actualizada.</string>
+    <string name="settings_avatar_update_error">No se pudo actualizar la imagen de perfil.</string>
     <string name="settings_account_title">Cuenta local</string>
     <string name="settings_account_name">Usuario: %1$s</string>
     <string name="settings_account_email">Correo: %1$s</string>
@@ -198,6 +207,18 @@
     <string name="training_result_message_advanced">Trabajo técnico sólido. Este nivel te entrena para leer dominios reales, detectar redirecciones y analizar detalles que suelen pasar desapercibidos.</string>
     <string name="training_restart">Reiniciar quiz</string>
     <string name="resources_info_disclaimer">Información orientativa. Verifica siempre en canales oficiales actualizados antes de actuar.</string>
+    <string name="avatar_change_button">Cambiar avatar</string>
+    <string name="avatar_picker_title">Elige tu avatar</string>
+    <string name="avatar_picker_subtitle">Selecciona una imagen preinstalada para identificar tu cuenta de forma visual.</string>
+    <string name="avatar_picker_save">Guardar avatar</string>
+    <string name="avatar_picker_cancel">Cancelar</string>
+    <string name="avatar_default_label">Avatar gris</string>
+    <string name="avatar_01_label">Avatar azul</string>
+    <string name="avatar_02_label">Avatar coral</string>
+    <string name="avatar_03_label">Avatar turquesa</string>
+    <string name="avatar_04_label">Avatar violeta</string>
+    <string name="avatar_05_label">Avatar ambar</string>
+    <string name="avatar_06_label">Avatar rojizo</string>
 
     <!-- Settings -->
     <string name="settings_extreme_privacy_on">Privacidad extrema activada.</string>
@@ -224,6 +245,10 @@
     <string name="home_latest_date">Fecha: %1$s</string>
     <string name="home_latest_domain">Dominio: %1$s</string>
     <string name="home_training_no_progress">Sin progreso de entrenamiento registrado.</string>
+    <string name="home_avatar_header_default">¡Tu panel seguro!</string>
+    <string name="home_avatar_header_named">¡Hola, %1$s!</string>
+    <string name="home_avatar_header_hint">Tu cuenta local y tu avatar se sincronizan en este dispositivo.</string>
+    <string name="home_avatar_content_description">Abrir perfil local</string>
 
     <string-array name="history_sort_options">
         <item>@string/history_sort_most_recent</item>

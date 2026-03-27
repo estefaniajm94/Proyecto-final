@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/avatar_picker_title"
+        android:textAppearance="@style/TextAppearance.App.SectionTitle" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/avatar_picker_subtitle"
+        android:textColor="@color/brand_on_surface_soft" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivAvatarPickerPreview"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="@string/avatar_picker_title"
+            android:src="@drawable/avatar_default" />
+
+        <TextView
+            android:id="@+id/tvAvatarPickerSelected"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.App.CardTitle" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAvatarOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:nestedScrollingEnabled="false" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAvatarPickerSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/avatar_picker_save" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAvatarPickerCancel"
+        style="@style/Widget.App.Button.Outline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/avatar_picker_cancel" />
+
+</LinearLayout>
