@@ -7,9 +7,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.avatar.AvatarCatalog
@@ -17,9 +14,10 @@ import com.estef.antiphishingcoach.databinding.FragmentHomeBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
 import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home,
@@ -27,11 +25,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
 
     private val viewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory(
-            observeCurrentUserUseCase = appContainer().observeCurrentUserUseCase,
-            observeLatestIncidentSummaryUseCase = appContainer().observeLatestIncidentSummaryUseCase,
-            stringResolver = AndroidStringResolver(requireContext().applicationContext)
-        )
+        val c = appContainer()
+        viewModelFactory {
+            HomeViewModel(
+                observeCurrentUserUseCase = c.observeCurrentUserUseCase,
+                observeLatestIncidentSummaryUseCase = c.observeLatestIncidentSummaryUseCase,
+                stringResolver = AndroidStringResolver(requireContext().applicationContext)
+            )
+        }
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {
@@ -39,7 +40,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         setupPrimaryAction()
         setupQuickCards()
         setupSecondaryActions()
-        observeUiState()
+        collectOnStarted(viewModel.uiState) { state -> render(state) }
     }
 
     private fun setupToolbar() {
@@ -49,19 +50,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     findNavController().navigate(R.id.action_home_to_settings)
                     true
                 }
-
                 else -> false
             }
         }
     }
 
     private fun setupPrimaryAction() {
-        binding.cardPrimaryAnalyze.setOnClickListener {
-            navigateToAnalyze()
-        }
-        binding.btnPrimaryAnalyze.setOnClickListener {
-            navigateToAnalyze()
-        }
+        binding.cardPrimaryAnalyze.setOnClickListener { navigateToAnalyze() }
+        binding.btnPrimaryAnalyze.setOnClickListener { navigateToAnalyze() }
     }
 
     private fun setupQuickCards() {
@@ -99,9 +95,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun setupSecondaryActions() {
-        binding.btnAnalyzeFromLatestEmpty.setOnClickListener {
-            navigateToAnalyze()
-        }
+        binding.btnAnalyzeFromLatestEmpty.setOnClickListener { navigateToAnalyze() }
         binding.btnLatestAnalysisDetail.setOnClickListener {
             val latestIncident = viewModel.uiState.value.latestIncident ?: return@setOnClickListener
             val action = HomeFragmentDirections.actionHomeToAnalysisDetail(latestIncident.incidentId)
@@ -109,14 +103,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
         binding.btnRepeatTraining.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_trainingStart)
-        }
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state -> render(state) }
-            }
         }
     }
 

@@ -5,16 +5,14 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.FragmentScenarioChecklistBinding
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
-import kotlinx.coroutines.launch
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 
 class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>(
     R.layout.fragment_scenario_checklist,
@@ -22,10 +20,12 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
 ) {
     private val args: ScenarioChecklistFragmentArgs by navArgs()
     private val viewModel: ScenarioChecklistViewModel by viewModels {
-        ScenarioChecklistViewModelFactory(
-            scenarioId = args.scenarioId,
-            getCoachScenariosUseCase = appContainer().getCoachScenariosUseCase
-        )
+        viewModelFactory {
+            ScenarioChecklistViewModel(
+                scenarioId = args.scenarioId,
+                getCoachScenariosUseCase = appContainer().getCoachScenariosUseCase
+            )
+        }
     }
 
     private var renderedKey: String = ""
@@ -35,17 +35,7 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
         binding.btnOpenResources.setOnClickListener {
             findNavController().navigate(R.id.action_scenarioChecklist_to_resources)
         }
-        observeUi()
-    }
-
-    private fun observeUi() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    render(state)
-                }
-            }
-        }
+        collectOnStarted(viewModel.uiState) { state -> render(state) }
     }
 
     private fun render(state: ScenarioChecklistUiState) = with(binding) {
@@ -100,9 +90,7 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
         scenario.whatToDoNow.forEachIndexed { index, item ->
             val checkBox = CheckBox(requireContext()).apply {
                 text = item
-                setOnCheckedChangeListener { _, _ ->
-                    viewModel.onCheckedCountChanged(countMarked())
-                }
+                setOnCheckedChangeListener { _, _ -> viewModel.onCheckedCountChanged(countMarked()) }
             }
             checklistContainer.addView(checkBox, index)
         }
@@ -112,10 +100,7 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
         var count = 0
         val parent = binding.checklistContainer
         for (i in 0 until parent.childCount) {
-            val child = parent.getChildAt(i)
-            if (child is CheckBox && child.isChecked) {
-                count += 1
-            }
+            if ((parent.getChildAt(i) as? CheckBox)?.isChecked == true) count++
         }
         return count
     }
@@ -131,11 +116,9 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
         }
     }
 
-    private fun buildStatusMessage(markedCount: Int, total: Int): String {
-        return when {
-            total == 0 || markedCount == 0 -> getString(R.string.coach_status_not_started)
-            markedCount < total -> getString(R.string.coach_status_in_progress)
-            else -> getString(R.string.coach_status_completed)
-        }
+    private fun buildStatusMessage(markedCount: Int, total: Int): String = when {
+        total == 0 || markedCount == 0 -> getString(R.string.coach_status_not_started)
+        markedCount < total -> getString(R.string.coach_status_in_progress)
+        else -> getString(R.string.coach_status_completed)
     }
 }

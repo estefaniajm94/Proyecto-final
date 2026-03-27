@@ -123,7 +123,4 @@ class RegisterViewModel(
         }
     }
 
-    companion object {
-        private val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
-    }
 }

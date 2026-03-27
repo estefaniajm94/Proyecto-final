@@ -3,23 +3,21 @@ package com.estef.antiphishingcoach.presentation.training
 import android.os.Bundle
 import android.widget.RadioButton
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.FragmentQuizBinding
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
 import com.estef.antiphishingcoach.presentation.common.showShortMessage
-import kotlinx.coroutines.launch
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 
 class QuizFragment : BaseFragment<FragmentQuizBinding>(
     R.layout.fragment_quiz,
     FragmentQuizBinding::bind
 ) {
     private val viewModel: TrainingViewModel by activityViewModels {
-        TrainingViewModelFactory(appContainer().getTrainingQuestionsUseCase)
+        viewModelFactory { TrainingViewModel(appContainer().getTrainingQuestionsUseCase) }
     }
     private var renderedQuestionId: String? = null
     private var navigatedToResult: Boolean = false
@@ -29,20 +27,8 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
         if (viewModel.uiState.value.currentQuestion == null && !viewModel.uiState.value.completed) {
             viewModel.startQuiz()
         }
-        binding.btnQuizAction.setOnClickListener {
-            onActionClicked()
-        }
-        observeUi()
-    }
-
-    private fun observeUi() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    render(state)
-                }
-            }
-        }
+        binding.btnQuizAction.setOnClickListener { onActionClicked() }
+        collectOnStarted(viewModel.uiState) { state -> render(state) }
     }
 
     private fun render(state: TrainingUiState) = with(binding) {
@@ -88,10 +74,7 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
             } else {
                 getString(R.string.training_feedback_incorrect)
             }
-            val explanation = getString(
-                R.string.training_feedback_explanation,
-                state.lastExplanation.orEmpty()
-            )
+            val explanation = getString(R.string.training_feedback_explanation, state.lastExplanation.orEmpty())
             tvFeedback.text = "$label\n$explanation"
             btnQuizAction.text = if (state.currentPosition == state.totalQuestions) {
                 getString(R.string.training_show_result)
@@ -115,7 +98,6 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
             showShortMessage(getString(R.string.training_select_option))
             return
         }
-        val selectedOptionIndex = selectedRadio - 1000
-        viewModel.submitAnswer(selectedOptionIndex)
+        viewModel.submitAnswer(selectedRadio - 1000)
     }
 }

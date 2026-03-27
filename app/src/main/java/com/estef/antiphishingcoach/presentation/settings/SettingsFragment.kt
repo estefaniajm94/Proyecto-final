@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
@@ -16,7 +13,10 @@ import com.estef.antiphishingcoach.presentation.avatar.AvatarPickerDialogFragmen
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
 import com.estef.antiphishingcoach.presentation.common.renderAvatar
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
@@ -25,18 +25,20 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 ) {
     private val avatarPickerRequestKey = "settings_avatar_picker"
     private val viewModel: SettingsViewModel by viewModels {
-        val container = appContainer()
-        SettingsViewModelFactory(
-            observeCurrentUserUseCase = container.observeCurrentUserUseCase,
-            observeExtremePrivacyUseCase = container.observeExtremePrivacyUseCase,
-            observeLocalLockUseCase = container.observeLocalLockUseCase,
-            toggleExtremePrivacyUseCase = container.toggleExtremePrivacyUseCase,
-            toggleLocalLockUseCase = container.toggleLocalLockUseCase,
-            clearLocalDataUseCase = container.clearLocalDataUseCase,
-            updateCurrentUserAvatarUseCase = container.updateCurrentUserAvatarUseCase,
-            logoutCurrentUserUseCase = container.logoutCurrentUserUseCase,
-            stringResolver = AndroidStringResolver(requireContext().applicationContext)
-        )
+        val c = appContainer()
+        viewModelFactory {
+            SettingsViewModel(
+                observeCurrentUserUseCase = c.observeCurrentUserUseCase,
+                observeExtremePrivacyUseCase = c.observeExtremePrivacyUseCase,
+                observeLocalLockUseCase = c.observeLocalLockUseCase,
+                toggleExtremePrivacyUseCase = c.toggleExtremePrivacyUseCase,
+                toggleLocalLockUseCase = c.toggleLocalLockUseCase,
+                clearLocalDataUseCase = c.clearLocalDataUseCase,
+                updateCurrentUserAvatarUseCase = c.updateCurrentUserAvatarUseCase,
+                logoutCurrentUserUseCase = c.logoutCurrentUserUseCase,
+                stringResolver = AndroidStringResolver(requireContext().applicationContext)
+            )
+        }
     }
     private val localAuthManager = LocalAuthManager()
     private var accessValidated = false
@@ -49,11 +51,29 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             avatarPickerRequestKey,
             viewLifecycleOwner
         ) { _, result ->
-            val avatarId = result.getString(AvatarPickerDialogFragment.RESULT_AVATAR_ID) ?: return@setFragmentResultListener
+            val avatarId = result.getString(AvatarPickerDialogFragment.RESULT_AVATAR_ID)
+                ?: return@setFragmentResultListener
             viewModel.onAvatarSelected(avatarId)
         }
         setupActions()
-        observeUiState()
+        collectOnStarted(viewModel.uiState) { state ->
+            binding.switchExtremePrivacy.isChecked = state.extremePrivacyEnabled
+            binding.switchLocalLock.isChecked = state.localLockEnabled
+            binding.tvAccountName.text = state.currentUserName.orEmpty()
+            binding.tvAccountEmail.text = state.currentUserEmail.orEmpty()
+            binding.ivSettingsAvatar.renderAvatar(state.currentUserAvatarId)
+            binding.tvSettingsStatus.text = state.statusMessage.orEmpty()
+
+            if (state.logoutCompleted) {
+                findNavController().navigate(
+                    R.id.loginFragment,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_graph, true)
+                        .build()
+                )
+            }
+        }
     }
 
     override fun onResume() {
@@ -68,9 +88,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             }
         }
         switchLocalLock.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked == viewModel.uiState.value.localLockEnabled) {
-                return@setOnCheckedChangeListener
-            }
+            if (isChecked == viewModel.uiState.value.localLockEnabled) return@setOnCheckedChangeListener
             if (isChecked && !localAuthManager.canAuthenticate(requireActivity())) {
                 switchLocalLock.isChecked = false
                 viewModel.onLocalLockNotAvailable()
@@ -78,43 +96,14 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             }
             viewModel.onLocalLockChanged(isChecked)
         }
-        btnClearData.setOnClickListener {
-            viewModel.clearLocalData()
-        }
+        btnClearData.setOnClickListener { viewModel.clearLocalData() }
         ivSettingsAvatarEdit.setOnClickListener {
             AvatarPickerDialogFragment.newInstance(
                 requestKey = avatarPickerRequestKey,
                 selectedAvatarId = viewModel.uiState.value.currentUserAvatarId
             ).show(parentFragmentManager, AvatarPickerDialogFragment.TAG)
         }
-        btnLogout.setOnClickListener {
-            viewModel.logout()
-        }
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    binding.switchExtremePrivacy.isChecked = state.extremePrivacyEnabled
-                    binding.switchLocalLock.isChecked = state.localLockEnabled
-                    binding.tvAccountName.text = state.currentUserName.orEmpty()
-                    binding.tvAccountEmail.text = state.currentUserEmail.orEmpty()
-                    binding.ivSettingsAvatar.renderAvatar(state.currentUserAvatarId)
-                    binding.tvSettingsStatus.text = state.statusMessage.orEmpty()
-
-                    if (state.logoutCompleted) {
-                        findNavController().navigate(
-                            R.id.loginFragment,
-                            null,
-                            NavOptions.Builder()
-                                .setPopUpTo(R.id.nav_graph, true)
-                                .build()
-                        )
-                    }
-                }
-            }
-        }
+        btnLogout.setOnClickListener { viewModel.logout() }
     }
 
     private fun enforceProtectedAccess() {
@@ -135,9 +124,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                 return@launch
             }
             setProtectedControlsEnabled(false)
-            if (!authInProgress) {
-                requestAuthentication()
-            }
+            if (!authInProgress) requestAuthentication()
         }
     }
 

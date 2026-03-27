@@ -1,4 +1,4 @@
-﻿package com.estef.antiphishingcoach.presentation.history
+package com.estef.antiphishingcoach.presentation.history
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -7,9 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.estef.antiphishingcoach.R
@@ -18,6 +16,8 @@ import com.estef.antiphishingcoach.databinding.FragmentHistoryBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 import kotlinx.coroutines.launch
 
 class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
@@ -25,11 +25,14 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
     FragmentHistoryBinding::bind
 ) {
     private val viewModel: HistoryViewModel by viewModels {
-        HistoryViewModelFactory(
-            observeHistoryUseCase = appContainer().observeHistoryUseCase,
-            observeExtremePrivacyUseCase = appContainer().observeExtremePrivacyUseCase,
-            stringResolver = AndroidStringResolver(requireContext().applicationContext)
-        )
+        val c = appContainer()
+        viewModelFactory {
+            HistoryViewModel(
+                observeHistoryUseCase = c.observeHistoryUseCase,
+                observeExtremePrivacyUseCase = c.observeExtremePrivacyUseCase,
+                stringResolver = AndroidStringResolver(requireContext().applicationContext)
+            )
+        }
     }
     private val localAuthManager = LocalAuthManager()
     private lateinit var historyAdapter: HistoryAdapter
@@ -64,8 +67,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         }
 
         chipGroupTrafficFilter.setOnCheckedStateChangeListener { _, checkedIds ->
-            val checked = checkedIds.firstOrNull()
-            val filter = when (checked) {
+            val filter = when (checkedIds.firstOrNull()) {
                 R.id.chipFilterGreen -> HistoryTrafficLightFilter.GREEN
                 R.id.chipFilterYellow -> HistoryTrafficLightFilter.YELLOW
                 R.id.chipFilterRed -> HistoryTrafficLightFilter.RED
@@ -79,11 +81,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         actvHistorySort.setAdapter(sortAdapter)
         actvHistorySort.setText(orderOptions.first(), false)
         actvHistorySort.setOnItemClickListener { _, _, position, _ ->
-            val mode = if (position == 1) {
-                HistorySortMode.HIGHEST_RISK
-            } else {
-                HistorySortMode.MOST_RECENT
-            }
+            val mode = if (position == 1) HistorySortMode.HIGHEST_RISK else HistorySortMode.MOST_RECENT
             viewModel.onSortModeChanged(mode)
         }
 
@@ -109,9 +107,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
                 return@launch
             }
             setLockedStateVisible(true)
-            if (!authInProgress) {
-                requestAuthentication()
-            }
+            if (!authInProgress) requestAuthentication()
         }
     }
 
@@ -149,25 +145,17 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         contentStarted = true
         setupList()
         setupControls()
-        observeUiState()
+        collectOnStarted(viewModel.uiState) { state ->
+            binding.progressHistory.isVisible = state.isLoading
+            binding.tvHistoryEmpty.isVisible = !state.isLoading && state.items.isEmpty()
+            binding.tvHistoryEmpty.text = state.emptyMessage
+            binding.btnGoAnalyzeFromHistory.isVisible = !state.isLoading && state.items.isEmpty()
+            historyAdapter.submitList(state.items)
+        }
     }
 
     private fun setLockedStateVisible(isLocked: Boolean) = with(binding) {
         tvHistoryLocked.isVisible = isLocked
         contentHistory.isVisible = !isLocked
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    binding.progressHistory.isVisible = state.isLoading
-                    binding.tvHistoryEmpty.isVisible = !state.isLoading && state.items.isEmpty()
-                    binding.tvHistoryEmpty.text = state.emptyMessage
-                    binding.btnGoAnalyzeFromHistory.isVisible = !state.isLoading && state.items.isEmpty()
-                    historyAdapter.submitList(state.items)
-                }
-            }
-        }
     }
 }

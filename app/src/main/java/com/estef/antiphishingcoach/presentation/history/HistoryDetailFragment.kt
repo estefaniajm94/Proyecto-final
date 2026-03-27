@@ -1,23 +1,19 @@
 package com.estef.antiphishingcoach.presentation.history
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.FragmentHistoryDetailBinding
 import com.estef.antiphishingcoach.domain.model.IncidentRecord
 import com.estef.antiphishingcoach.presentation.analysisdetail.IncidentDetailUiState
 import com.estef.antiphishingcoach.presentation.analysisdetail.IncidentDetailViewModel
-import com.estef.antiphishingcoach.presentation.analysisdetail.IncidentDetailViewModelFactory
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
 import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
-import kotlinx.coroutines.launch
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 
 class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
     R.layout.fragment_history_detail,
@@ -25,26 +21,19 @@ class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
 ) {
     private val args: HistoryDetailFragmentArgs by navArgs()
     private val viewModel: IncidentDetailViewModel by viewModels {
-        IncidentDetailViewModelFactory(
-            incidentId = args.incidentId,
-            observeIncidentDetailUseCase = appContainer().observeIncidentDetailUseCase,
-            exportReportToFileUseCase = appContainer().exportReportToFileUseCase
-        )
+        val c = appContainer()
+        viewModelFactory {
+            IncidentDetailViewModel(
+                incidentId = args.incidentId,
+                observeIncidentDetailUseCase = c.observeIncidentDetailUseCase,
+                exportReportToFileUseCase = c.exportReportToFileUseCase
+            )
+        }
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {
         setupBackNavigation(binding.btnBack)
-        observeUiState()
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    render(state)
-                }
-            }
-        }
+        collectOnStarted(viewModel.uiState) { state -> render(state) }
     }
 
     private fun render(state: IncidentDetailUiState) = with(binding) {
@@ -70,23 +59,14 @@ class HistoryDetailFragment : BaseFragment<FragmentHistoryDetailBinding>(
     private fun renderSignals(incident: IncidentRecord): String {
         if (incident.signals.isEmpty()) return getString(R.string.detail_no_signals)
         return incident.signals.joinToString("\n") { signal ->
-            getString(
-                R.string.detail_signal_line,
-                signal.title,
-                signal.explanation,
-                signal.weight
-            )
+            getString(R.string.detail_signal_line, signal.title, signal.explanation, signal.weight)
         }
     }
 
     private fun renderRecommendations(state: IncidentDetailUiState): String {
         if (state.recommendations.isEmpty()) return getString(R.string.detail_no_recommendations)
         return state.recommendations.joinToString("\n") { recommendation ->
-            getString(
-                R.string.detail_recommendation_line,
-                recommendation.title,
-                recommendation.detail
-            )
+            getString(R.string.detail_recommendation_line, recommendation.title, recommendation.detail)
         }
     }
 }

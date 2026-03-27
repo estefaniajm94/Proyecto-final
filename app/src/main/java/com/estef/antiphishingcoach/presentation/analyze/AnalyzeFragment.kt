@@ -15,9 +15,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.model.SourceApp
@@ -26,11 +23,11 @@ import com.estef.antiphishingcoach.databinding.FragmentAnalyzeBinding
 import com.estef.antiphishingcoach.presentation.common.AndroidStringResolver
 import com.estef.antiphishingcoach.presentation.common.BaseFragment
 import com.estef.antiphishingcoach.presentation.common.appContainer
-import com.estef.antiphishingcoach.presentation.common.toDisplayLabelEs
+import com.estef.antiphishingcoach.presentation.common.collectOnStarted
 import com.estef.antiphishingcoach.presentation.common.renderRiskGauge
+import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 import com.estef.antiphishingcoach.presentation.navigation.SharedContentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 
 class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
     R.layout.fragment_analyze,
@@ -38,18 +35,21 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
 ) {
     private val sharedContentViewModel: SharedContentViewModel by activityViewModels()
     private val viewModel: AnalyzeViewModel by viewModels {
-        val container = appContainer()
-        AnalyzeViewModelFactory(
-            analyzeAndPersistUseCase = container.analyzeAndPersistUseCase,
-            extractTextFromImageUseCase = container.extractTextFromImageUseCase,
-            observeExtremePrivacyUseCase = container.observeExtremePrivacyUseCase,
-            stringResolver = AndroidStringResolver(requireContext().applicationContext)
-        )
+        val c = appContainer()
+        viewModelFactory {
+            AnalyzeViewModel(
+                analyzeAndPersistUseCase = c.analyzeAndPersistUseCase,
+                extractTextFromImageUseCase = c.extractTextFromImageUseCase,
+                observeExtremePrivacyUseCase = c.observeExtremePrivacyUseCase,
+                stringResolver = AndroidStringResolver(requireContext().applicationContext)
+            )
+        }
     }
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        viewModel.onImageSelected(uri)
-    }
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            viewModel.onImageSelected(uri)
+        }
 
     private var ocrReviewDialog: AlertDialog? = null
     private var lastRenderedOcrText: String? = null
@@ -58,8 +58,17 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         setupBackNavigation(binding.btnBack)
         setupSourceAppDropdown()
         setupActions()
-        observeUiState()
-        observeSharedContent()
+        collectOnStarted(viewModel.uiState) { state -> render(state) }
+        collectOnStarted(sharedContentViewModel.pendingSharedInput) { sharedInput ->
+            if (sharedInput == null) return@collectOnStarted
+            binding.etInput.setText(sharedInput.inputText)
+            if (binding.etTitle.text.isNullOrBlank()) {
+                binding.etTitle.setText(sharedInput.title.orEmpty())
+            }
+            binding.actvSourceApp.setText(sharedInput.sourceApp.toDisplayLabel(), false)
+            viewModel.onSharedInputLoaded()
+            sharedContentViewModel.consume()
+        }
     }
 
     override fun onDestroyView() {
@@ -70,9 +79,7 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
     }
 
     private fun setupSourceAppDropdown() {
-        val options = SourceApp.values().map { sourceApp ->
-            sourceApp.toDisplayLabel()
-        }
+        val options = SourceApp.values().map { it.toDisplayLabel() }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, options)
         binding.actvSourceApp.setAdapter(adapter)
         binding.actvSourceApp.setText(SourceApp.OTHER.toDisplayLabel(), false)
@@ -81,11 +88,10 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
     private fun setupActions() = with(binding) {
         etInput.doAfterTextChanged { tilInput.error = null }
         btnAnalyzeNow.setOnClickListener {
-            val sourceApp = displayLabelToSourceApp(actvSourceApp.text?.toString())
             viewModel.analyze(
                 inputText = etInput.text?.toString().orEmpty(),
                 title = etTitle.text?.toString(),
-                sourceApp = sourceApp
+                sourceApp = displayLabelToSourceApp(actvSourceApp.text?.toString())
             )
         }
         btnAnalyzeFromCapture.setOnClickListener {
@@ -95,20 +101,13 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
             )
         }
         btnOpenDetail.setOnClickListener {
-            val incidentId = viewModel.uiState.value.result?.persistedIncidentId ?: return@setOnClickListener
+            val incidentId = viewModel.uiState.value.result?.persistedIncidentId
+                ?: return@setOnClickListener
             val action = AnalyzeFragmentDirections.actionAnalyzeToAnalysisDetail(incidentId)
             findNavController().navigate(action)
         }
         btnOpenResources.setOnClickListener {
             findNavController().navigate(R.id.action_analyze_to_resources)
-        }
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state -> render(state) }
-            }
         }
     }
 
@@ -127,7 +126,8 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         if (result != null) {
             riskGaugeResult.renderRiskGauge(result.score)
             tvSourceTypeValue.text = result.sourceTypeLabel
-            tvDomainValue.text = result.sanitizedDomain ?: getString(R.string.detail_value_not_available)
+            tvDomainValue.text = result.sanitizedDomain
+                ?: getString(R.string.detail_value_not_available)
             tvAnalyzedInputValue.text = buildHighlightedAnalyzedInput(
                 input = result.analyzedInput,
                 suspiciousPhrases = result.suspiciousPhrases
@@ -155,11 +155,7 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
                 getString(R.string.analyze_suspicious_phrases_empty)
             } else {
                 result.suspiciousPhrases.joinToString("\n") { insight ->
-                    getString(
-                        R.string.analyze_suspicious_phrase_line,
-                        insight.phrase,
-                        insight.category
-                    )
+                    getString(R.string.analyze_suspicious_phrase_line, insight.phrase, insight.category)
                 }
             }
             tvActionPlanValue.text = result.actionPlan.steps.mapIndexed { index, step ->
@@ -170,23 +166,14 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
                 getString(R.string.analyze_no_risk_signals)
             } else {
                 result.signals.joinToString("\n") { signal ->
-                    getString(
-                        R.string.analyze_signal_line,
-                        signal.title,
-                        signal.explanation,
-                        signal.weight
-                    )
+                    getString(R.string.analyze_signal_line, signal.title, signal.explanation, signal.weight)
                 }
             }
             tvRecommendationsValue.text = if (result.recommendations.isEmpty()) {
                 getString(R.string.analyze_no_extra_recommendations)
             } else {
-                result.recommendations.joinToString("\n") { recommendation ->
-                    getString(
-                        R.string.analyze_recommendation_line,
-                        recommendation.title,
-                        recommendation.detail
-                    )
+                result.recommendations.joinToString("\n") { r ->
+                    getString(R.string.analyze_recommendation_line, r.title, r.detail)
                 }
             }
             tvPersistenceValue.text = if (result.persistedIncidentId == null) {
@@ -202,9 +189,7 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
             AnalyzeFlowState.PickingImage,
             AnalyzeFlowState.OcrRunning,
             AnalyzeFlowState.Analyzing,
-            AnalyzeFlowState.ResultReady -> {
-                lastRenderedOcrText = null
-            }
+            AnalyzeFlowState.ResultReady -> lastRenderedOcrText = null
 
             is AnalyzeFlowState.OcrReady -> {
                 if (lastRenderedOcrText != flowState.text || ocrReviewDialog?.isShowing != true) {
@@ -213,9 +198,7 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
                 }
             }
 
-            is AnalyzeFlowState.Error -> {
-                lastRenderedOcrText = null
-            }
+            is AnalyzeFlowState.Error -> lastRenderedOcrText = null
         }
     }
 
@@ -245,32 +228,22 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
                 dialog.dismiss()
             }
         }
-        dialog.setOnCancelListener {
-            viewModel.onOcrReviewCancelled()
-        }
-        dialog.setOnDismissListener {
-            if (ocrReviewDialog === dialog) {
-                ocrReviewDialog = null
-            }
-        }
+        dialog.setOnCancelListener { viewModel.onOcrReviewCancelled() }
+        dialog.setOnDismissListener { if (ocrReviewDialog === dialog) ocrReviewDialog = null }
 
         ocrReviewDialog = dialog
         dialog.show()
     }
 
     private fun displayLabelToSourceApp(label: String?): SourceApp {
-        return SourceApp.values().firstOrNull { sourceApp ->
-            sourceApp.toDisplayLabel() == label
-        } ?: SourceApp.OTHER
+        return SourceApp.values().firstOrNull { it.toDisplayLabel() == label } ?: SourceApp.OTHER
     }
 
-    private fun SourceApp.toDisplayLabel(): String {
-        return when (this) {
-            SourceApp.SMS -> getString(R.string.source_app_sms)
-            SourceApp.WHATSAPP -> getString(R.string.source_app_whatsapp)
-            SourceApp.EMAIL -> getString(R.string.source_app_email)
-            SourceApp.OTHER -> getString(R.string.source_app_other)
-        }
+    private fun SourceApp.toDisplayLabel(): String = when (this) {
+        SourceApp.SMS -> getString(R.string.source_app_sms)
+        SourceApp.WHATSAPP -> getString(R.string.source_app_whatsapp)
+        SourceApp.EMAIL -> getString(R.string.source_app_email)
+        SourceApp.OTHER -> getString(R.string.source_app_other)
     }
 
     private fun buildHighlightedAnalyzedInput(
@@ -298,25 +271,6 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
                     )
                 }
         }
-
         return spannable
-    }
-
-    private fun observeSharedContent() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedContentViewModel.pendingSharedInput.collect { sharedInput ->
-                    if (sharedInput == null) return@collect
-
-                    binding.etInput.setText(sharedInput.inputText)
-                    if (binding.etTitle.text.isNullOrBlank()) {
-                        binding.etTitle.setText(sharedInput.title.orEmpty())
-                    }
-                    binding.actvSourceApp.setText(sharedInput.sourceApp.toDisplayLabel(), false)
-                    viewModel.onSharedInputLoaded()
-                    sharedContentViewModel.consume()
-                }
-            }
-        }
     }
 }

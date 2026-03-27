@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+internal val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
+
 class LoginViewModel(
     private val loginLocalUserUseCase: LoginLocalUserUseCase,
     private val findUserByEmailUseCase: FindUserByEmailUseCase,
@@ -117,10 +119,6 @@ class LoginViewModel(
                 }
             }
         }
-    }
-
-    companion object {
-        private val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
     }
 
     private fun resetPreview() {
