@@ -51,8 +51,6 @@ class TrainingStartFragment : BaseFragment<FragmentTrainingStartBinding>(
                         R.string.training_total_questions,
                         state.selectedLevelQuestionCount
                     )
-                    binding.tvSelectedLevelTitle.text =
-                        getString(state.selectedLevel.labelResId())
                     binding.tvSelectedLevelDescription.text =
                         getString(state.selectedLevel.descriptionResId())
                     binding.tvSelectedLevelCount.text = getString(
