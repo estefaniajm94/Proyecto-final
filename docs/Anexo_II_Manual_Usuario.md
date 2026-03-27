@@ -80,11 +80,13 @@ Si privacidad extrema esta desactivada:
 
 ## 8. Entrenamiento (quiz)
 1. Ir a `Entrenamiento`.
-2. Pulsar `Comenzar entrenamiento`.
-3. Responder cada pregunta.
-4. Revisar feedback inmediato (correcto/incorrecto + explicacion).
-5. Al finalizar, consultar aciertos y porcentaje.
-6. Usar `Reiniciar quiz` para repetir.
+2. Elegir un nivel: `Principiante`, `Intermedio` o `Avanzado`.
+3. Revisar la descripcion breve del nivel y el numero de preguntas disponibles.
+4. Pulsar `Comenzar entrenamiento`.
+5. Responder cada pregunta.
+6. Revisar feedback inmediato (correcto/incorrecto + explicacion).
+7. Al finalizar, consultar nivel jugado, aciertos, porcentaje y mensaje final adaptado.
+8. Usar `Reiniciar quiz` para repetir el nivel o volver a elegir otro.
 
 ## 9. Historial y detalle
 En modo normal:

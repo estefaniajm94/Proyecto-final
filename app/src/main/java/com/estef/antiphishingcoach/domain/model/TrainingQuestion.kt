@@ -5,5 +5,11 @@ data class TrainingQuestion(
     val prompt: String,
     val options: List<String>,
     val correctIndex: Int,
-    val explanation: String
-)
+    val explanation: String,
+    val level: TrainingLevel = TrainingLevel.BEGINNER,
+    val category: String = DEFAULT_CATEGORY
+) {
+    companion object {
+        const val DEFAULT_CATEGORY = "General"
+    }
+}

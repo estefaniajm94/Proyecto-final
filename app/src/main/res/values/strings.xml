@@ -154,9 +154,20 @@
     <string name="coach_checklist_progress">Marcados %1$d de %2$d</string>
     <string name="coach_checklist_empty">Sin ítems en este escenario.</string>
     <string name="training_loading">Cargando preguntas...</string>
+    <string name="training_level_selector_title">Quiz por niveles</string>
+    <string name="training_level_selector_subtitle">Elige el nivel que quieres practicar y trabaja solo con preguntas de esa dificultad.</string>
+    <string name="training_choose_level">Elige nivel</string>
+    <string name="training_level_beginner">Principiante</string>
+    <string name="training_level_intermediate">Intermedio</string>
+    <string name="training_level_advanced">Avanzado</string>
+    <string name="training_level_beginner_description">Reconocer señales básicas y hábitos seguros.</string>
+    <string name="training_level_intermediate_description">Detectar suplantaciones, presión, enlaces y fraudes habituales.</string>
+    <string name="training_level_advanced_description">Analizar URLs, dominios engañosos y señales técnicas.</string>
     <string name="training_total_questions">Total preguntas: %1$d</string>
+    <string name="training_level_question_count">%1$d preguntas en este nivel</string>
     <string name="training_start_button">Comenzar entrenamiento</string>
     <string name="training_question_counter">Pregunta %1$d de %2$d</string>
+    <string name="training_quiz_meta">%1$s | %2$s</string>
     <string name="training_submit_answer">Comprobar respuesta</string>
     <string name="training_next_question">Siguiente pregunta</string>
     <string name="training_show_result">Ver resultado</string>
@@ -165,8 +176,12 @@
     <string name="training_feedback_explanation">Explicación: %1$s</string>
     <string name="training_select_option">Selecciona una opción.</string>
     <string name="training_result_title">Resultado del quiz</string>
+    <string name="training_result_level">Nivel: %1$s</string>
     <string name="training_result_score">Aciertos: %1$d/%2$d</string>
     <string name="training_result_ratio">Precisión: %1$d%%</string>
+    <string name="training_result_message_beginner">Buen comienzo. Ya estás entrenando la mirada para detectar urgencias, códigos y enlaces sospechosos antes de reaccionar.</string>
+    <string name="training_result_message_intermediate">Buen avance. Este nivel refuerza cómo frenar fraudes comunes y verificar identidades antes de abrir adjuntos, responder o pagar.</string>
+    <string name="training_result_message_advanced">Trabajo técnico sólido. Este nivel te entrena para leer dominios reales, detectar redirecciones y analizar detalles que suelen pasar desapercibidos.</string>
     <string name="training_restart">Reiniciar quiz</string>
     <string name="resources_info_disclaimer">Información orientativa. Verifica siempre en canales oficiales actualizados antes de actuar.</string>
 
@@ -185,7 +200,7 @@
     <string name="home_quick_coach_title">Coach</string>
     <string name="home_quick_coach_desc">Checklist por escenarios</string>
     <string name="home_quick_training_title">Entrenamiento</string>
-    <string name="home_quick_training_desc">Mini quiz con feedback</string>
+    <string name="home_quick_training_desc">Quiz por niveles con feedback</string>
     <string name="home_quick_history_title">Historial</string>
     <string name="home_quick_history_desc">Análisis privados guardados</string>
     <string name="home_quick_resources_title">Recursos</string>

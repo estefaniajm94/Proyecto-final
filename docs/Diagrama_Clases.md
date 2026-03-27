@@ -40,6 +40,8 @@ classDiagram
     class GetTrainingQuestionsUseCase
     class TrainingRepository
     class TrainingRepositoryImpl
+    class TrainingLevel
+    class TrainingQuestion
     class QuizEngine
     class AnalysisDetailFragment
     class IncidentDetailViewModel
@@ -85,6 +87,8 @@ classDiagram
     GetTrainingQuestionsUseCase --> TrainingRepository
     TrainingRepository <|.. TrainingRepositoryImpl
     TrainingRepositoryImpl --> SeedAssetLoader
+    TrainingViewModel --> TrainingLevel
+    TrainingRepositoryImpl --> TrainingQuestion
     TrainingViewModel --> QuizEngine
 
     AnalysisDetailFragment --> IncidentDetailViewModel

@@ -5,5 +5,7 @@ data class TrainingQuestionDto(
     val prompt: String,
     val options: List<String>,
     val correctIndex: Int,
-    val explanation: String
+    val explanation: String,
+    val level: String? = null,
+    val category: String? = null
 )

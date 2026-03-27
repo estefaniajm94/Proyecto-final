@@ -1,24 +1,422 @@
 [
   {
-    "id": "q01",
-    "prompt": "Recibes un SMS urgente con enlace acortado para pagar una multa. Que haces?",
+    "id": "b01",
+    "prompt": "Recibes un SMS urgente con un enlace acortado para pagar una multa hoy mismo. Que deberias hacer?",
     "options": [
       "Pagar rapido para evitar recargos.",
-      "Ignorar el SMS y verificar en canal oficial.",
-      "Reenviar el SMS a tus contactos."
+      "Verificar la multa en la web o app oficial antes de actuar.",
+      "Responder al SMS pidiendo mas datos.",
+      "Reenviar el mensaje a familiares para avisarles."
     ],
     "correctIndex": 1,
-    "explanation": "La verificacion por canal oficial reduce riesgo de fraude."
+    "explanation": "Los fraudes usan urgencia y enlaces acortados para que actues sin comprobar la fuente oficial.",
+    "level": "beginner",
+    "category": "Smishing"
   },
   {
-    "id": "q02",
-    "prompt": "Un email te pide el PIN de la tarjeta para desbloquear cuenta.",
+    "id": "b02",
+    "prompt": "Una supuesta entidad bancaria te pide por chat el codigo OTP que acabas de recibir. Cual es la accion segura?",
     "options": [
-      "Enviar PIN por email.",
-      "Llamar al remitente del email.",
-      "No compartir PIN y contactar soporte oficial."
+      "Compartirlo si el logo del chat parece autentico.",
+      "Dar solo los dos ultimos numeros del codigo.",
+      "No compartir el OTP y contactar por el canal oficial.",
+      "Mandar una captura del SMS para confirmar."
     ],
     "correctIndex": 2,
-    "explanation": "Ninguna entidad legitima pide PIN por email o chat."
+    "explanation": "Los codigos OTP son personales y permiten autorizar operaciones. Ninguna entidad legitima debe pedirlos por chat.",
+    "level": "beginner",
+    "category": "OTP"
+  },
+  {
+    "id": "b03",
+    "prompt": "Un correo dice que tu cuenta caduca hoy y debes pulsar un enlace para mantenerla activa. Que es lo mejor?",
+    "options": [
+      "Entrar por el enlace del correo para no perder acceso.",
+      "Abrir la app o web oficial escribiendo tu mismo la direccion.",
+      "Responder al remitente con tu usuario.",
+      "Guardar el correo por si luego hace falta."
+    ],
+    "correctIndex": 1,
+    "explanation": "Es mas seguro acceder desde un canal oficial que desde un enlace recibido en un mensaje alarmista.",
+    "level": "beginner",
+    "category": "Canales oficiales"
+  },
+  {
+    "id": "b04",
+    "prompt": "Te llega un SMS de paqueteria diciendo que falta un pequeno pago para liberar tu envio. Que señal basica indica riesgo?",
+    "options": [
+      "Que mencione un paquete.",
+      "Que use un tono urgente y te lleve a un enlace externo.",
+      "Que llegue por la manana.",
+      "Que el mensaje sea corto."
+    ],
+    "correctIndex": 1,
+    "explanation": "La combinacion de urgencia y enlace para pagar es una senal clasica de smishing de paqueteria.",
+    "level": "beginner",
+    "category": "Paqueteria falsa"
+  },
+  {
+    "id": "b05",
+    "prompt": "Un aviso emergente en el navegador dice que tu movil tiene virus y te pide llamar a soporte. Que debes hacer?",
+    "options": [
+      "Llamar cuanto antes para evitar danos.",
+      "Cerrar el aviso y revisar el dispositivo desde herramientas oficiales.",
+      "Dar permiso remoto para que lo revisen.",
+      "Pagar una licencia de seguridad desde ese aviso."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los avisos que asustan para que llames o pagues suelen ser fraude. Usa soporte y herramientas oficiales.",
+    "level": "beginner",
+    "category": "Soporte falso"
+  },
+  {
+    "id": "b06",
+    "prompt": "Recibes por email una factura inesperada con un archivo ZIP adjunto. Cual es la reaccion mas segura?",
+    "options": [
+      "Abrir el ZIP por si es un error facil de aclarar.",
+      "Reenviar el correo a otro contacto para preguntar.",
+      "No abrir el adjunto y verificar con el proveedor real si existe esa factura.",
+      "Descargarlo pero no ejecutarlo todavia."
+    ],
+    "correctIndex": 2,
+    "explanation": "Los adjuntos inesperados pueden contener malware. Verifica la factura por un canal conocido antes de abrir nada.",
+    "level": "beginner",
+    "category": "Adjuntos"
+  },
+  {
+    "id": "b07",
+    "prompt": "Un contacto conocido te manda un mensaje raro con un enlace y sin contexto. Que habito es el mas recomendable?",
+    "options": [
+      "Abrirlo porque conoces a la persona.",
+      "Responder solo con un emoji.",
+      "Confirmar por otro canal si realmente te lo envio.",
+      "Guardar el enlace para revisarlo luego."
+    ],
+    "correctIndex": 2,
+    "explanation": "Las cuentas comprometidas pueden enviar mensajes fraudulentos. Confirmar por otra via reduce el riesgo.",
+    "level": "beginner",
+    "category": "Suplantacion"
+  },
+  {
+    "id": "b08",
+    "prompt": "Una pagina te pide numero de tarjeta, CVV y PIN para desbloquear tu cuenta. Que indica eso?",
+    "options": [
+      "Que el formulario esta completo.",
+      "Que es una comprobacion bancaria normal.",
+      "Que probablemente es una pagina fraudulenta.",
+      "Que conviene probar con una tarjeta secundaria."
+    ],
+    "correctIndex": 2,
+    "explanation": "Pedir datos tan sensibles juntos, especialmente el PIN, es una senal fuerte de fraude.",
+    "level": "beginner",
+    "category": "Pagina falsa"
+  },
+  {
+    "id": "b09",
+    "prompt": "Una persona te llama diciendo ser del banco y te pide mover tu dinero a una cuenta segura. Que haces?",
+    "options": [
+      "Seguir las instrucciones para proteger el dinero.",
+      "Colgar y llamar tu mismo al numero oficial del banco.",
+      "Pedir que te mande un SMS y entonces decidir.",
+      "Dar tus datos para que valide la cuenta."
+    ],
+    "correctIndex": 1,
+    "explanation": "La supuesta cuenta segura es una tactica habitual de vishing. Siempre corta la llamada y verifica por el canal oficial.",
+    "level": "beginner",
+    "category": "Vishing"
+  },
+  {
+    "id": "b10",
+    "prompt": "Que accion es mas segura si dudas de un enlace recibido por mensaje?",
+    "options": [
+      "Pulsarlo rapidamente y cerrar si parece raro.",
+      "Copiarlo en un grupo para que otros opinen.",
+      "Esperar a estar en casa y abrirlo desde el ordenador.",
+      "No abrirlo y acceder al servicio desde su web o app oficial."
+    ],
+    "correctIndex": 3,
+    "explanation": "Si un enlace genera dudas, la opcion mas segura es no usarlo y entrar al servicio por una direccion oficial escrita por ti.",
+    "level": "beginner",
+    "category": "Habitos seguros"
+  },
+  {
+    "id": "i01",
+    "prompt": "Recibes un correo de 'facturacion@micr0soft-security.com' pidiendo validar credenciales. Que detalle debe alertarte?",
+    "options": [
+      "Que use minusculas en la direccion.",
+      "Que el dominio intenta parecerse a una marca conocida pero no es el oficial.",
+      "Que el correo tenga asunto largo.",
+      "Que incluya una despedida cordial."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los remitentes con dominios parecidos a marcas reales son tipicos en suplantaciones y robo de credenciales.",
+    "level": "intermediate",
+    "category": "Remitente falso"
+  },
+  {
+    "id": "i02",
+    "prompt": "Un SMS de paqueteria te pide pagar gastos de aduana con un enlace que no coincide con la empresa. Que deberias concluir?",
+    "options": [
+      "Que es normal si el pedido viene del extranjero.",
+      "Que puede ser un fraude y conviene revisar el seguimiento oficial.",
+      "Que basta con pagar una cantidad pequena.",
+      "Que es seguro si el mensaje incluye tu nombre."
+    ],
+    "correctIndex": 1,
+    "explanation": "Si el dominio no coincide con la empresa y el mensaje te presiona para pagar, es una senal clara de smishing.",
+    "level": "intermediate",
+    "category": "Smishing"
+  },
+  {
+    "id": "i03",
+    "prompt": "Una persona que dice ser de soporte tecnico te llama y te pide instalar una app de control remoto. Que indica eso?",
+    "options": [
+      "Que el soporte es mas eficiente.",
+      "Que es un posible intento de tomar control de tu dispositivo.",
+      "Que solo quieren comprobar la version del sistema.",
+      "Que conviene seguir mientras no pida dinero."
+    ],
+    "correctIndex": 1,
+    "explanation": "El falso soporte usa herramientas remotas para acceder al dispositivo, robar datos o forzar pagos.",
+    "level": "intermediate",
+    "category": "Soporte remoto"
+  },
+  {
+    "id": "i04",
+    "prompt": "Recibes un WhatsApp de alguien que dice ser tu jefe desde otro numero y te pide comprar tarjetas regalo de inmediato. Que paso es mas seguro?",
+    "options": [
+      "Comprar las tarjetas y enviar fotos por rapidez.",
+      "Pedir que te lo confirme por llamada o por el canal habitual de la empresa.",
+      "Negociar una cantidad menor.",
+      "Mandar solo los codigos parciales."
+    ],
+    "correctIndex": 1,
+    "explanation": "La combinacion de identidad conocida, nuevo numero y urgencia economica es muy comun en fraudes de suplantacion.",
+    "level": "intermediate",
+    "category": "Suplantacion de identidad"
+  },
+  {
+    "id": "i05",
+    "prompt": "Un correo bancario parece legitimo, pero adjunta un archivo HTML para iniciar sesion. Cual es la mejor interpretacion?",
+    "options": [
+      "Es un acceso rapido para clientes.",
+      "Es sospechoso porque un HTML adjunto puede abrir una pagina falsa.",
+      "Es normal cuando la web esta en mantenimiento.",
+      "Es seguro si el logo coincide."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los archivos HTML adjuntos se usan para mostrar formularios falsos que imitan a bancos o servicios conocidos.",
+    "level": "intermediate",
+    "category": "Adjuntos maliciosos"
+  },
+  {
+    "id": "i06",
+    "prompt": "Una red social te envia un mensaje directo pidiendo el codigo de verificacion para evitar el cierre de tu cuenta. Que debes asumir?",
+    "options": [
+      "Que es un proceso rutinario dentro de la app.",
+      "Que necesitas compartirlo solo si te lo piden una vez.",
+      "Que alguien intenta tomar control de la cuenta usando tu codigo.",
+      "Que basta con cambiar la foto de perfil despues."
+    ],
+    "correctIndex": 2,
+    "explanation": "Los codigos de verificacion nunca deben compartirse. Quien los solicita suele intentar secuestrar la cuenta.",
+    "level": "intermediate",
+    "category": "Codigos OTP"
+  },
+  {
+    "id": "i07",
+    "prompt": "En una app de compraventa, un supuesto comprador te manda un enlace externo para confirmar el envio. Que riesgo hay?",
+    "options": [
+      "Ninguno, porque la venta ya esta acordada.",
+      "Que te saque de la plataforma y te lleve a una pagina falsa de pago o verificacion.",
+      "Que la entrega tarde mas dias.",
+      "Que el sistema pida repetir el anuncio."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los estafadores intentan sacar la conversacion fuera de la plataforma para usar formularios falsos y robar datos.",
+    "level": "intermediate",
+    "category": "Marketplace"
+  },
+  {
+    "id": "i08",
+    "prompt": "Te llega un mensaje diciendo que se ha iniciado una transferencia y que debes compartir un OTP para cancelarla. Que indica esto?",
+    "options": [
+      "Que el OTP sirve para anular la operacion.",
+      "Que probablemente el OTP autoriza la operacion en lugar de cancelarla.",
+      "Que el banco necesita confirmar tu identidad por chat.",
+      "Que basta con compartirlo si el importe es pequeno."
+    ],
+    "correctIndex": 1,
+    "explanation": "Muchos fraudes hacen pasar un codigo de confirmacion por un codigo de cancelacion para enganar a la victima.",
+    "level": "intermediate",
+    "category": "Transferencias"
+  },
+  {
+    "id": "i09",
+    "prompt": "Un contacto habitual te envia un documento compartido y el mensaje suena fuera de contexto. Que comprobacion tiene mas valor?",
+    "options": [
+      "Mirar si el enlace usa HTTPS.",
+      "Preguntar por otro canal si realmente queria enviarte ese archivo.",
+      "Abrirlo solo desde el movil.",
+      "Descargarlo y analizarlo despues."
+    ],
+    "correctIndex": 1,
+    "explanation": "Cuando un contacto actua de forma rara, la mejor defensa es confirmar por otra via antes de abrir enlaces o archivos.",
+    "level": "intermediate",
+    "category": "Contacto comprometido"
+  },
+  {
+    "id": "i10",
+    "prompt": "Una pagina de inicio de sesion muestra el logo correcto, pero la URL pertenece a otro dominio. Que deberias hacer?",
+    "options": [
+      "Continuar, porque el diseno parece autentico.",
+      "Introducir solo el correo para probar.",
+      "Cerrar la pagina y entrar desde la web oficial del servicio.",
+      "Actualizar el navegador y volver a intentarlo."
+    ],
+    "correctIndex": 2,
+    "explanation": "El aspecto visual puede copiarse facilmente. La URL y el dominio real son una verificacion mas fiable.",
+    "level": "intermediate",
+    "category": "Pagina falsa"
+  },
+  {
+    "id": "a01",
+    "prompt": "En la URL 'https://seguridad-banco.example.com.login.verifica-cuenta.net/secure', cual es el dominio real?",
+    "options": [
+      "example.com",
+      "seguridad-banco.example.com",
+      "verifica-cuenta.net",
+      "login.verifica-cuenta.net/secure"
+    ],
+    "correctIndex": 2,
+    "explanation": "El dominio real es la parte registrable mas a la derecha antes de la ruta. Lo anterior puede ser solo un subdominio enganoso.",
+    "level": "advanced",
+    "category": "Analisis de URLs"
+  },
+  {
+    "id": "a02",
+    "prompt": "Ves un enlace 'https://bit.ly/3AbCdEf' en un mensaje de premio. Cual es la principal limitacion antes de abrirlo?",
+    "options": [
+      "Que solo funciona en moviles.",
+      "Que no muestra de forma clara el destino final.",
+      "Que siempre caduca en 24 horas.",
+      "Que obliga a descargar una app."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los acortadores ocultan el destino real y dificultan validar si la pagina es legitima antes de abrirla.",
+    "level": "advanced",
+    "category": "Enlaces acortados"
+  },
+  {
+    "id": "a03",
+    "prompt": "Que significa la URL 'https://banco.com@fraude-login.net/acceso'?",
+    "options": [
+      "Que el dominio real es banco.com.",
+      "Que el simbolo @ no afecta al destino.",
+      "Que la parte anterior a @ es solo informacion y el dominio real es fraude-login.net.",
+      "Que el enlace es seguro porque usa HTTPS."
+    ],
+    "correctIndex": 2,
+    "explanation": "En una URL, el simbolo @ puede usarse para confundir. El navegador termina conectando con el host que va despues.",
+    "level": "advanced",
+    "category": "URLs engañosas"
+  },
+  {
+    "id": "a04",
+    "prompt": "Analizas 'https://noticias.example/redirect?url=http://login-banco.fake'. Que detalle tecnico es mas sospechoso?",
+    "options": [
+      "Que la ruta se llame redirect.",
+      "Que incluya un parametro que envia al usuario a otro destino distinto.",
+      "Que use minusculas en la URL.",
+      "Que el dominio principal tenga una palabra comun."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los parametros de redireccion pueden ocultar un segundo destino y hacer que un enlace aparente ser legitimo cuando no lo es.",
+    "level": "advanced",
+    "category": "Redirecciones ocultas"
+  },
+  {
+    "id": "a05",
+    "prompt": "Que senal tecnica destaca en 'http://185.203.119.14/secure-login'?",
+    "options": [
+      "Que el servidor responde por la noche.",
+      "Que usa una direccion IP en lugar de un dominio reconocible.",
+      "Que la ruta es demasiado corta.",
+      "Que contiene numeros y letras mezclados."
+    ],
+    "correctIndex": 1,
+    "explanation": "Las URLs que usan IP directa son frecuentes en campanas fraudulentas y dificultan verificar a quien pertenece realmente el sitio.",
+    "level": "advanced",
+    "category": "IP en URL"
+  },
+  {
+    "id": "a06",
+    "prompt": "Ves un dominio escrito como 'https://xn--paypa1-l2c.com'. Que deberia hacerte desconfiar?",
+    "options": [
+      "Que el dominio usa punycode para representar caracteres especiales.",
+      "Que termina en .com.",
+      "Que la URL sea corta.",
+      "Que empiece por https."
+    ],
+    "correctIndex": 0,
+    "explanation": "El punycode puede ocultar caracteres visualmente parecidos a los de una marca legitima y usarse para suplantarla.",
+    "level": "advanced",
+    "category": "Punycode"
+  },
+  {
+    "id": "a07",
+    "prompt": "En 'https://banco.seguro-clientes.com/login', que dominio controla realmente el sitio?",
+    "options": [
+      "banco.seguro-clientes.com",
+      "banco.com",
+      "seguro-clientes.com",
+      "login"
+    ],
+    "correctIndex": 2,
+    "explanation": "Aunque el subdominio empiece por 'banco', el dominio registrable real es 'seguro-clientes.com'.",
+    "level": "advanced",
+    "category": "Subdominios engañosos"
+  },
+  {
+    "id": "a08",
+    "prompt": "Que te indica una URL como 'https://cuenta-banco.com/login?continue=https://banco.es'?",
+    "options": [
+      "Que la pagina pertenece a banco.es.",
+      "Que la presencia de un dominio legitimo en un parametro no cambia el dominio real visitado.",
+      "Que el sitio es una copia exacta del banco.",
+      "Que el parametro continue siempre mejora la seguridad."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los estafadores meten dominios legitimos en parametros para generar confianza, pero el dominio visitado sigue siendo otro.",
+    "level": "advanced",
+    "category": "Parametros sospechosos"
+  },
+  {
+    "id": "a09",
+    "prompt": "Recibes un enlace que empieza por 'intent://login#Intent;scheme=https;package=com.fake.app;end'. Que senal avanzada aparece aqui?",
+    "options": [
+      "Que es una URL web normal.",
+      "Que intenta abrir un esquema o deep link en lugar de una web comun.",
+      "Que solo funciona con WiFi.",
+      "Que es mas seguro que HTTPS."
+    ],
+    "correctIndex": 1,
+    "explanation": "Los esquemas especiales y deep links pueden lanzar comportamientos no esperados y se usan como senal tecnica de riesgo.",
+    "level": "advanced",
+    "category": "Esquemas no web"
+  },
+  {
+    "id": "a10",
+    "prompt": "Que conclusion tecnica merece la URL 'https://soporte-actualiza.example/download/app.apk' si llega por un mensaje inesperado?",
+    "options": [
+      "Que es segura porque descarga una app oficial.",
+      "Que un APK descargado desde un enlace inesperado es una senal de alto riesgo.",
+      "Que basta con revisar el nombre del archivo.",
+      "Que solo es peligrosa en ordenadores."
+    ],
+    "correctIndex": 1,
+    "explanation": "Las descargas APK fuera de canales oficiales son una via habitual para distribuir apps fraudulentas o malware.",
+    "level": "advanced",
+    "category": "Descargas maliciosas"
   }
 ]

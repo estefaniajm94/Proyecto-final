@@ -21,7 +21,7 @@ El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayud
 - Plan de accion inmediato ("que hacer ahora") segun semaforo, senales y recomendaciones.
 - Entrada por compartir desde otras apps (`ACTION_SEND` para `text/plain`).
 - Coach por escenarios con checklist local.
-- Entrenamiento tipo quiz con feedback inmediato.
+- Entrenamiento tipo quiz por niveles (principiante, intermedio y avanzado) con feedback inmediato.
 - Historial privado de metadatos (sin texto original).
 - OCR local desde captura con revision manual editable antes de analizar.
 - Exportacion de reporte Markdown (compartir por intent).
@@ -148,6 +148,7 @@ Tests unitarios activos:
 - `RuleEngineTest`
 - `SeedJsonParserTest`
 - `QuizEngineTest`
+- `TrainingQuestionFiltersTest`
 - `AnalyzeInputInsightBuilderTest`
 - `AnalyzeActionPlanBuilderTest`
 

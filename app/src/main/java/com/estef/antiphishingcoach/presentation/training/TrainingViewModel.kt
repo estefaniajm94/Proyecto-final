@@ -2,8 +2,10 @@ package com.estef.antiphishingcoach.presentation.training
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.estef.antiphishingcoach.domain.model.TrainingLevel
 import com.estef.antiphishingcoach.domain.model.TrainingQuestion
 import com.estef.antiphishingcoach.domain.training.QuizEngine
+import com.estef.antiphishingcoach.domain.training.filterByLevel
 import com.estef.antiphishingcoach.domain.usecase.GetTrainingQuestionsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,22 +26,27 @@ class TrainingViewModel(
     fun ensureLoaded() {
         if (!_uiState.value.isLoading && loadedQuestions.isNotEmpty()) return
         viewModelScope.launch {
-            loadedQuestions = getTrainingQuestionsUseCase()
-            _uiState.update { state ->
-                state.copy(
-                    isLoading = false,
-                    totalQuestions = loadedQuestions.size
-                )
-            }
+            loadQuestionsIfNeeded()
+            updateQuestionAvailability()
+        }
+    }
+
+    fun selectLevel(level: TrainingLevel) {
+        _uiState.update { state ->
+            state.copy(
+                selectedLevel = level,
+                selectedLevelQuestionCount = loadedQuestions.filterByLevel(level).size
+            )
         }
     }
 
     fun startQuiz() {
         viewModelScope.launch {
-            if (loadedQuestions.isEmpty()) {
-                loadedQuestions = getTrainingQuestionsUseCase()
-            }
-            quizEngine = QuizEngine(loadedQuestions)
+            loadQuestionsIfNeeded()
+            updateQuestionAvailability()
+            val selectedLevel = _uiState.value.selectedLevel
+            val questionsForLevel = getTrainingQuestionsUseCase(selectedLevel)
+            quizEngine = QuizEngine(questionsForLevel)
             syncFromEngine()
         }
     }
@@ -59,6 +66,24 @@ class TrainingViewModel(
 
     fun restart() {
         startQuiz()
+    }
+
+    private suspend fun loadQuestionsIfNeeded() {
+        if (loadedQuestions.isNotEmpty()) return
+        loadedQuestions = getTrainingQuestionsUseCase()
+    }
+
+    private fun updateQuestionAvailability() {
+        val counts = TrainingLevel.entries.associateWith { level ->
+            loadedQuestions.filterByLevel(level).size
+        }
+        _uiState.update { state ->
+            state.copy(
+                isLoading = false,
+                availableQuestionCounts = counts,
+                selectedLevelQuestionCount = counts[state.selectedLevel] ?: 0
+            )
+        }
     }
 
     private fun syncFromEngine() {

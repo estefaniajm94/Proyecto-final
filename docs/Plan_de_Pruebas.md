@@ -14,7 +14,7 @@ Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del
 - Historial y detalle por `incidentId`.
 - Exportacion Markdown a fichero real por compartir (`FileProvider`).
 - Carga local de escenarios Coach desde `assets`.
-- Ejecucion de quiz con feedback desde `assets`.
+- Ejecucion de quiz por niveles con feedback desde `assets`.
 - Home tipo dashboard con resumen del ultimo analisis.
 - Historial con busqueda, filtros y orden.
 
@@ -53,37 +53,39 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-14 | Mensaje legal visible | Home/Analizar | Disclaimer educativo visible | OK |
 | PF-15 | Lista de escenarios Coach | Home > Coach | Se muestran escenarios de `coach_scenarios.json` | OK |
 | PF-16 | Checklist de escenario | Coach > Abrir checklist | Se muestran items y contador de marcados | OK |
-| PF-17 | Quiz con feedback | Training > Comenzar > responder | Muestra correcto/incorrecto + explicacion por pregunta | OK |
-| PF-18 | Resultado final quiz | Completar todas las preguntas | Muestra aciertos totales y porcentaje | OK |
-| PF-19 | Bloqueo local en Historial | Ajustes: activar bloqueo local. Ir a Historial | Solicita biometria/credencial antes de mostrar datos | OK |
-| PF-20 | Bloqueo local en Ajustes | Con bloqueo local activo, salir y volver a Ajustes | Solicita biometria/credencial al entrar | OK |
-| PF-21 | Cancelacion de autenticacion | Cancelar prompt en Historial o Ajustes | Se bloquea acceso y vuelve a pantalla anterior | PENDIENTE |
-| PF-22 | OCR local con captura real | Analizar > Analizar desde captura > elegir imagen legible | Se extrae texto local, se muestra dialogo editable y permite analizar | OK |
-| PF-23 | OCR con imagen borrosa | Repetir PF-22 con captura borrosa | Puede devolver texto incompleto o error claro, sin crash | PENDIENTE |
-| PF-24 | Cancelar OCR o revision | Cancelar picker o pulsar Cancelar en dialogo OCR | Se descarta texto OCR y no se analiza ni se persiste nada | OK |
-| PF-25 | Home dashboard visible | Abrir Home | Se muestran tarjetas y bloques de ultimo analisis/entrenamiento | OK |
-| PF-26 | Ultimo analisis en Home | Tener al menos 1 incidente guardado y abrir Home | Muestra fecha, score, semaforo y boton de detalle | OK |
-| PF-27 | Historial filtros y busqueda | En Historial, usar query + chips + orden | Lista reacciona en vivo sin recargar pantalla | OK |
-| PF-28 | Export a fichero `.md` real | En detalle, pulsar Exportar | Comparte `content://...` con archivo Markdown real | OK |
-| PF-29 | Export sin texto original | Revisar contenido del `.md` generado | Solo metadatos/senales/recomendaciones/disclaimer | OK |
-| PF-30 | Compartir desde otra app | Enviar `text/plain` a la app desde navegador/WhatsApp/email | Se abre `Analizar` con texto precargado y sin autoanalizar | OK |
-| PF-31 | Lectura rapida y desglose | Analizar enlace sospechoso con dominio no oficial | Muestra lectura rapida, dominio real, esquema, ruta y observaciones | OK |
-| PF-32 | Resaltado de frases sospechosas | Analizar mensaje con urgencia/premio/password | El texto mostrado resalta visualmente las frases detectadas | OK |
-| PF-33 | Plan de accion en Analizar | Analizar caso amarillo/rojo | Se muestran pasos numerados adaptados al riesgo | OK |
-| PF-34 | Plan de accion en detalle | Guardar incidente y abrir detalle | El detalle reconstruye y muestra el plan de accion | OK |
-| PF-35 | Atajo a recursos oficiales | Caso con recomendacion de verificacion oficial | Aparece boton para abrir `Recursos oficiales` | OK |
-| PF-36 | Alta de cuenta local | Abrir app sin sesion > `Crear cuenta local` > completar formulario valido | Se crea usuario en Room, entra en Home y queda sesion activa | OK |
-| PF-37 | Login local valido | Introducir correo/contrasena correctos | Entra en Home sin errores | OK |
-| PF-38 | Login local invalido | Introducir credenciales incorrectas | Muestra error y no permite acceso | OK |
-| PF-39 | Registro con correo duplicado | Crear cuenta con email ya usado | Muestra error de correo duplicado | OK |
-| PF-40 | Logout local | Ajustes > Cerrar sesion | Vuelve a Login y bloquea acceso hasta autenticar de nuevo | OK |
-| PF-41 | Contenido compartido sin sesion | Compartir `text/plain` a la app estando sin login | Se conserva el texto; tras login se abre `Analizar` con contenido precargado | OK |
+| PF-17 | Selector de nivel quiz | Training > abrir modulo | Se muestran niveles, descripcion y total de preguntas por nivel | OK |
+| PF-18 | Quiz con feedback | Training > elegir nivel > Comenzar > responder | Muestra correcto/incorrecto + explicacion por pregunta | OK |
+| PF-19 | Resultado final quiz | Completar todas las preguntas de un nivel | Muestra nivel, aciertos totales, porcentaje y mensaje final adaptado | OK |
+| PF-20 | Bloqueo local en Historial | Ajustes: activar bloqueo local. Ir a Historial | Solicita biometria/credencial antes de mostrar datos | OK |
+| PF-21 | Bloqueo local en Ajustes | Con bloqueo local activo, salir y volver a Ajustes | Solicita biometria/credencial al entrar | OK |
+| PF-22 | Cancelacion de autenticacion | Cancelar prompt en Historial o Ajustes | Se bloquea acceso y vuelve a pantalla anterior | PENDIENTE |
+| PF-23 | OCR local con captura real | Analizar > Analizar desde captura > elegir imagen legible | Se extrae texto local, se muestra dialogo editable y permite analizar | OK |
+| PF-24 | OCR con imagen borrosa | Repetir PF-23 con captura borrosa | Puede devolver texto incompleto o error claro, sin crash | PENDIENTE |
+| PF-25 | Cancelar OCR o revision | Cancelar picker o pulsar Cancelar en dialogo OCR | Se descarta texto OCR y no se analiza ni se persiste nada | OK |
+| PF-26 | Home dashboard visible | Abrir Home | Se muestran tarjetas y bloques de ultimo analisis/entrenamiento | OK |
+| PF-27 | Ultimo analisis en Home | Tener al menos 1 incidente guardado y abrir Home | Muestra fecha, score, semaforo y boton de detalle | OK |
+| PF-28 | Historial filtros y busqueda | En Historial, usar query + chips + orden | Lista reacciona en vivo sin recargar pantalla | OK |
+| PF-29 | Export a fichero `.md` real | En detalle, pulsar Exportar | Comparte `content://...` con archivo Markdown real | OK |
+| PF-30 | Export sin texto original | Revisar contenido del `.md` generado | Solo metadatos/senales/recomendaciones/disclaimer | OK |
+| PF-31 | Compartir desde otra app | Enviar `text/plain` a la app desde navegador/WhatsApp/email | Se abre `Analizar` con texto precargado y sin autoanalizar | OK |
+| PF-32 | Lectura rapida y desglose | Analizar enlace sospechoso con dominio no oficial | Muestra lectura rapida, dominio real, esquema, ruta y observaciones | OK |
+| PF-33 | Resaltado de frases sospechosas | Analizar mensaje con urgencia/premio/password | El texto mostrado resalta visualmente las frases detectadas | OK |
+| PF-34 | Plan de accion en Analizar | Analizar caso amarillo/rojo | Se muestran pasos numerados adaptados al riesgo | OK |
+| PF-35 | Plan de accion en detalle | Guardar incidente y abrir detalle | El detalle reconstruye y muestra el plan de accion | OK |
+| PF-36 | Atajo a recursos oficiales | Caso con recomendacion de verificacion oficial | Aparece boton para abrir `Recursos oficiales` | OK |
+| PF-37 | Alta de cuenta local | Abrir app sin sesion > `Crear cuenta local` > completar formulario valido | Se crea usuario en Room, entra en Home y queda sesion activa | OK |
+| PF-38 | Login local valido | Introducir correo/contrasena correctos | Entra en Home sin errores | OK |
+| PF-39 | Login local invalido | Introducir credenciales incorrectas | Muestra error y no permite acceso | OK |
+| PF-40 | Registro con correo duplicado | Crear cuenta con email ya usado | Muestra error de correo duplicado | OK |
+| PF-41 | Logout local | Ajustes > Cerrar sesion | Vuelve a Login y bloquea acceso hasta autenticar de nuevo | OK |
+| PF-42 | Contenido compartido sin sesion | Compartir `text/plain` a la app estando sin login | Se conserva el texto; tras login se abre `Analizar` con contenido precargado | OK |
 
 ## 5. Matriz tecnica automatizada
 Cobertura actual:
 - `RuleEngineTest` (10 casos).
-- `SeedJsonParserTest` (4 casos).
+- `SeedJsonParserTest` (5 casos).
 - `QuizEngineTest` (5 casos).
+- `TrainingQuestionFiltersTest` (1 caso de filtrado por nivel).
 - `AnalyzeViewModelOcrTest` (2 casos de estado OCR).
 - `HistoryViewModelTest` (4 casos de filtro/orden/estado vacio).
 - `ReportExporterTest` (2 casos de markdown y escritura de fichero).
@@ -103,17 +105,17 @@ Nota:
 - PF-36..PF-41 en `OK`.
 
 ## 7. Criterios de aceptacion Coach + Training
-- PF-15..PF-18 en `OK`.
+- PF-15..PF-19 en `OK`.
 - Sin acceso a red para cargar contenido educativo base.
 - Quiz finaliza con resultado consistente (`score <= total`).
 
 ## 8. Criterios de aceptacion OCR local
-- PF-22 y PF-24 en `OK`.
+- PF-23 y PF-25 en `OK`.
 - La revision manual editable aparece antes de analizar texto OCR.
 - No se persiste imagen ni texto OCR.
 
 ## 9. Criterios de aceptacion seguridad local
-- PF-19 y PF-20 en `OK`.
+- PF-20 y PF-21 en `OK`.
 - Si el prompt falla o se cancela, no se muestran datos protegidos.
 - La sesion local debe cerrarse correctamente con `Logout`.
 

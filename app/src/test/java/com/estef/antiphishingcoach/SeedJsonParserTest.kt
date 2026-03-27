@@ -43,7 +43,7 @@ class SeedJsonParserTest {
     fun `parsea preguntas training validas`() {
         val json = """
             [
-              {"id":"q1","prompt":"P1","options":["A","B"],"correctIndex":1,"explanation":"E1"},
+              {"id":"q1","prompt":"P1","options":["A","B"],"correctIndex":1,"explanation":"E1","level":"beginner","category":"Smishing"},
               {"id":"q2","prompt":"P2","options":["A","B","C"],"correctIndex":0,"explanation":"E2"}
             ]
         """.trimIndent()
@@ -51,7 +51,26 @@ class SeedJsonParserTest {
         val result = parser.parseTrainingQuestions(json)
 
         assertEquals(2, result.size)
+        assertEquals("beginner", result.first().level)
+        assertEquals("Smishing", result.first().category)
         assertEquals("q2", result[1].id)
+        assertEquals(null, result[1].level)
+    }
+
+    @Test
+    fun `mantiene compatibilidad con preguntas sin nivel ni categoria`() {
+        val json = """
+            [
+              {"id":"legacy","prompt":"Pregunta anterior","options":["A","B"],"correctIndex":0,"explanation":"Exp"}
+            ]
+        """.trimIndent()
+
+        val result = parser.parseTrainingQuestions(json)
+
+        assertEquals(1, result.size)
+        assertEquals("legacy", result.first().id)
+        assertEquals(null, result.first().level)
+        assertEquals(null, result.first().category)
     }
 
     @Test

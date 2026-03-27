@@ -36,6 +36,10 @@ class QuizResultFragment : BaseFragment<FragmentQuizResultBinding>(
                     val total = state.totalQuestions
                     val score = state.score
                     val ratio = if (total == 0) 0 else (score * 100) / total
+                    binding.tvResultLevel.text = getString(
+                        R.string.training_result_level,
+                        getString(state.selectedLevel.labelResId())
+                    )
                     binding.tvResultScore.text = getString(
                         R.string.training_result_score,
                         score,
@@ -45,6 +49,8 @@ class QuizResultFragment : BaseFragment<FragmentQuizResultBinding>(
                         R.string.training_result_ratio,
                         ratio
                     )
+                    binding.tvResultMessage.text =
+                        getString(state.selectedLevel.resultMessageResId())
                 }
             }
         }

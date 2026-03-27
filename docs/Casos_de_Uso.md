@@ -98,16 +98,20 @@ flowchart LR
 1. Archivo `assets/training_questions.json` valido.
 2. Sesion local activa.
 - Flujo principal:
-1. El sistema carga preguntas y opciones.
-2. Muestra pregunta actual.
-3. El usuario selecciona respuesta y recibe feedback.
-4. Repite hasta finalizar.
-5. El sistema muestra resultado final (aciertos/porcentaje).
+1. El sistema carga preguntas locales con nivel y categoria.
+2. El usuario selecciona un nivel (`Principiante`, `Intermedio` o `Avanzado`).
+3. El sistema filtra y prepara solo las preguntas de ese nivel.
+4. Muestra pregunta actual.
+5. El usuario selecciona respuesta y recibe feedback con explicacion.
+6. Repite hasta finalizar.
+7. El sistema muestra resultado final (nivel, aciertos, porcentaje y mensaje adaptado).
 - Flujos alternativos:
 1. A1 - Usuario intenta continuar sin responder:
    El sistema solicita seleccionar opcion.
 2. A2 - Seed invalida:
    Se muestra error/estado vacio.
+3. A3 - Nivel sin preguntas disponibles:
+   El sistema mantiene deshabilitado el boton de inicio.
 - Postcondiciones:
 1. Resultado final calculado sin persistir datos personales.
 

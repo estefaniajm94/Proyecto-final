@@ -48,9 +48,21 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/tvQuestionMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_info_pill"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingRight="12dp"
+                    android:paddingBottom="6dp"
+                    android:textColor="@color/brand_on_surface" />
+
+                <TextView
                     android:id="@+id/tvQuestionPrompt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -75,5 +87,5 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

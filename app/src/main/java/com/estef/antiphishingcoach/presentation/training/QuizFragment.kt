@@ -58,6 +58,11 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
             state.currentPosition,
             state.totalQuestions
         )
+        tvQuestionMeta.text = getString(
+            R.string.training_quiz_meta,
+            getString(state.selectedLevel.labelResId()),
+            question.category
+        )
         tvQuestionPrompt.text = question.prompt
 
         if (renderedQuestionId != question.id) {
@@ -71,6 +76,10 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
                 rgOptions.addView(radioButton)
             }
             tvFeedback.text = ""
+        }
+
+        for (index in 0 until rgOptions.childCount) {
+            rgOptions.getChildAt(index).isEnabled = !state.answerChecked
         }
 
         if (state.answerChecked) {
