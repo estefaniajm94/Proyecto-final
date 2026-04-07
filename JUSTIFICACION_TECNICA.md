@@ -54,21 +54,25 @@ Los casos de uso reciben repositorios por constructor.
 
 ## 3. Decisiones de persistencia y datos
 
-### Room con esquema en 3 tablas relacionadas
+### Room con esquema en 4 tablas (3 relacionadas + users)
 
 - **incidents**: metadatos del analisis (sin texto original).
 - **analysis_results**: resultado agregado (score, semaforo, dominio sanitizado).
 - **detected_signals**: senales individuales detectadas por regla.
+- **users**: cuenta local del dispositivo para registro, login y avatar.
 
 Las relaciones usan `ForeignKey` con `onDelete = CASCADE`:
 al borrar un incidente, se eliminan automaticamente sus resultados y senales.
 
 ### fallbackToDestructiveMigration
 
-Se mantiene activo porque el proyecto esta en version 1 del esquema.
-No hay migraciones que gestionar todavia. Si el proyecto evoluciona
-y se cambia el esquema, habria que reemplazar esto por migraciones explicitas.
-Para el alcance del TFG, es una decision deliberada de simplicidad.
+Se mantiene activo aunque el esquema actual ya esta en version `3`.
+En el estado actual si existe una migracion explicita `2 -> 3`,
+que anade `avatarId` a la tabla `users`.
+`fallbackToDestructiveMigration()` queda como red de seguridad para cambios
+futuros no cubiertos por migraciones. Para el alcance del TFG sigue siendo
+una decision deliberada de simplicidad, pero en un proyecto con continuidad
+de datos reales habria que completar todas las migraciones necesarias.
 
 ### exportSchema = true
 
