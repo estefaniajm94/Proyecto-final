@@ -43,14 +43,22 @@ gantt
     Preparacion defensa y video           :active,  e3, after e2, 4d
 ```
 
-## Evidencia de pruebas ejecutadas (2026-03-26)
+## Evidencia de pruebas ejecutadas (cierre tecnico 2026-04-07)
 - Build debug:
 1. `.\gradlew.bat :app:assembleDebug` -> `BUILD SUCCESSFUL`
 - Unit tests:
-1. `.\gradlew.bat :app:testDebugUnitTest` -> `BUILD SUCCESSFUL`
-- Instalacion emulador:
-1. `.\gradlew.bat :app:installDebug` -> `Installed on 1 device`
+1. `.\gradlew.bat :app:testDebugUnitTest` -> `BUILD SUCCESSFUL` (`125/125`)
+- Lint:
+1. `.\gradlew.bat :app:lintDebug` -> `BUILD SUCCESSFUL` (`0 errores`)
+- Instalacion emulador/dispositivo:
+1. `.\gradlew.bat :app:installDebug` -> `FAIL` por entorno (`No connected devices!`)
 - Verificaciones funcionales recientes:
 1. share intent a `Analizar`
 2. resaltado de frases sospechosas y plan de accion
 3. login local, registro y cierre de sesion
+4. OCR local con revision editable previa
+5. dashboard Home e historial con filtros/orden
+- Pendientes manuales por entorno:
+1. PF-12 `Borrar datos`
+2. PF-22 `Cancelacion de autenticacion`
+3. PF-24 `OCR con imagen borrosa`

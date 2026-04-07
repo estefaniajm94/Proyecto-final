@@ -105,9 +105,10 @@ Validacion realizada en este workspace el `2026-04-07`:
 - `:app:assembleDebug` -> OK
 - `:app:testDebugUnitTest` -> OK
 - `:app:lintDebug` -> OK
-- `:app:installDebug` -> bloqueado por ausencia de dispositivo conectado
+- `:app:installDebug` -> `FAIL` por entorno (`No connected devices!`)
 
 ## 12. Nota sobre datos locales existentes
-El esquema Room actual esta en version `2` e incorpora la tabla `users`.
-Como la base usa `fallbackToDestructiveMigration()`, al cambiar desde una version previa
-pueden perderse datos locales antiguos del emulador/dispositivo durante la migracion.
+El esquema Room actual esta en version `3`.
+Respecto a la version `2`, se anadio `avatarId` en `users` mediante la migracion explicita `2 -> 3`.
+La base mantiene ademas `fallbackToDestructiveMigration()`, por lo que cambios futuros no cubiertos por migraciones
+podrian provocar perdida de datos locales antiguos del emulador/dispositivo.
