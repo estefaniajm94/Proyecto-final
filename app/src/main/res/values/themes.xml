@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Theme.AntiPhishingCoach" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/brand_primary</item>
         <item name="colorOnPrimary">@color/brand_on_primary</item>
@@ -7,7 +7,7 @@
         <item name="android:colorBackground">@color/brand_background</item>
         <item name="colorSurface">@color/brand_surface</item>
         <item name="colorOnSurface">@color/brand_on_surface</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@drawable/bg_screen_base</item>
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
         <item name="chipStyle">@style/Widget.App.Chip</item>

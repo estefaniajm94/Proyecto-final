@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_home_toolbar"
         app:navigationIconTint="@color/brand_toolbar_icon"
-        app:title="Anti-phishing &amp; ciberfraude coach"
+        app:title="@string/app_name"
         app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Body1"
         app:titleTextColor="@android:color/white" />
 
@@ -93,7 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/spacing_12"
                             style="@style/TextAppearance.App.HeroTitle"
-                            android:text="Analizar" />
+                            android:text="@string/home_primary_analyze_title" />
                     </LinearLayout>
 
                     <TextView
@@ -102,7 +102,7 @@
                         android:layout_marginTop="@dimen/spacing_4"
                         android:gravity="center"
                         style="@style/TextAppearance.App.HeroBody"
-                        android:text="Analiza SMS, email, chat o enlaces con heuristicas explicables." />
+                        android:text="@string/home_primary_analyze_desc" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPrimaryAnalyze"
@@ -111,7 +111,7 @@
                         android:layout_marginTop="@dimen/spacing_12"
                         android:textColor="@color/brand_primary_dark"
                         app:backgroundTint="@android:color/white"
-                        android:text="ANALIZAR AHORA" />
+                        android:text="@string/analyze_button_run" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -122,7 +122,7 @@
                 android:gravity="center"
                 style="@style/TextAppearance.App.SectionTitle"
                 android:textColor="@android:color/white"
-                android:text="Accesos rapidos" />
+                android:text="@string/home_quick_actions_title" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -183,7 +183,7 @@
                 android:layout_marginTop="@dimen/spacing_24"
                 android:gravity="center"
                 style="@style/TextAppearance.App.SectionTitle"
-                android:text="Actividad" />
+                android:text="@string/home_activity_title" />
 
             <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.App.Card"
@@ -207,7 +207,7 @@
                             android:layout_height="wrap_content"
                             style="@style/TextAppearance.App.SectionTitle"
                             android:gravity="center"
-                            android:text="Ultimo analisis" />
+                            android:text="@string/home_latest_analysis_title" />
 
                         <ProgressBar
                             android:id="@+id/progressLatestIncident"
@@ -239,7 +239,7 @@
                                 android:layout_marginTop="@dimen/spacing_8"
                                 android:gravity="center"
                                 style="@style/TextAppearance.App.CardBody"
-                                android:text="Aun no hay analisis guardados" />
+                                android:text="@string/history_empty" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnAnalyzeFromLatestEmpty"
@@ -247,7 +247,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_12"
-                                android:text="Ir a Analizar" />
+                                android:text="@string/history_go_analyze" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -272,7 +272,7 @@
                                 android:layout_marginTop="@dimen/spacing_8"
                                 android:gravity="center"
                                 style="@style/TextAppearance.App.CardTitle"
-                                android:text="Analisis sin titulo" />
+                                android:text="@string/history_item_title_fallback" />
 
                             <TextView
                                 android:id="@+id/tvLatestDate"
@@ -280,8 +280,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_4"
                                 android:gravity="center"
-                                style="@style/TextAppearance.App.CardBody"
-                                android:text="Fecha" />
+                                style="@style/TextAppearance.App.CardBody" />
 
                             <TextView
                                 android:id="@+id/tvLatestDomain"
@@ -298,7 +297,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_12"
-                                android:text="VER DETALLE" />
+                                android:text="@string/home_latest_detail_cta" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -322,7 +321,7 @@
                         android:layout_height="wrap_content"
                         style="@style/TextAppearance.App.SectionTitle"
                         android:gravity="center"
-                        android:text="Ultimo entrenamiento" />
+                        android:text="@string/home_latest_training_title" />
 
                     <LinearLayout
                         android:id="@+id/layoutLatestTrainingEmpty"
@@ -353,7 +352,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_12"
-                            android:text="EMPEZAR QUIZ" />
+                            android:text="@string/home_latest_training_cta" />
                     </LinearLayout>
 
                 </LinearLayout>

@@ -1,4 +1,4 @@
-﻿# Anexo II - Manual de Usuario
+# Anexo II - Manual de Usuario
 
 ## 1. Objetivo de la aplicacion
 Ayudar a identificar posibles fraudes digitales mediante analisis local explicable, entrenamiento y recomendaciones practicas.
@@ -53,7 +53,7 @@ Alternativa rapida:
 4. Revisar el contenido y ejecutar el analisis.
 
 Resultado mostrado:
-- score (0-100),
+- score (`0-100`),
 - semaforo (`VERDE`, `AMARILLO`, `ROJO`),
 - tipo de fuente,
 - dominio sanitizado,
@@ -97,15 +97,19 @@ Salida esperada:
 7. Al finalizar, consultar nivel jugado, aciertos, porcentaje y mensaje final adaptado.
 8. Usar `Reiniciar quiz` para repetir el nivel o volver a elegir otro.
 
+Nota:
+- El resultado del quiz se muestra al terminar, pero no se persiste entre sesiones.
+
 ## 9. Historial y detalle
 En modo normal:
-- se listan analisis guardados por fecha.
-- se puede abrir detalle de cada incidente.
+- se listan analisis guardados por fecha;
+- se puede buscar por titulo o dominio;
+- se puede filtrar por semaforo y ordenar por fecha o riesgo.
 
 En detalle:
-- ver score/semaforo/senales/recomendaciones.
-- ver plan de accion reconstruido a partir de senales y recomendaciones persistidas.
-- abrir `Recursos oficiales` cuando el riesgo aconseja verificacion externa.
+- ver score/semaforo/senales/recomendaciones;
+- ver plan de accion reconstruido a partir de senales y recomendaciones persistidas;
+- abrir `Recursos oficiales` cuando el riesgo aconseja verificacion externa;
 - en detalle de analisis, exportar reporte Markdown por compartir.
 
 ## 10. Ajustes de privacidad y cuenta local
@@ -118,6 +122,7 @@ En detalle:
 
 ### Borrar datos locales
 - Elimina historial y resultados almacenados.
+- Su verificacion completa requiere una prueba manual en dispositivo o emulador.
 
 ## 11. Recursos oficiales
 La pantalla `Recursos oficiales` ofrece accesos informativos a:

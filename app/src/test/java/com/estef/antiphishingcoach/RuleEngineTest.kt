@@ -18,7 +18,7 @@ class RuleEngineTest {
         val result = engine.analyze("Ultimo aviso hoy, evita bloqueo")
 
         assertTrue(result.signals.any { it.signalCode == "URGENCY_THREAT" })
-        assertTrue(result.score >= 16)
+        assertTrue(result.score >= 14)
     }
 
     @Test

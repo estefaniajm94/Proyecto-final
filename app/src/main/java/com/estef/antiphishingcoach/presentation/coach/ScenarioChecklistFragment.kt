@@ -109,7 +109,7 @@ class ScenarioChecklistFragment : BaseFragment<FragmentScenarioChecklistBinding>
         container.removeAllViews()
         items.forEach { item ->
             val textView = TextView(requireContext()).apply {
-                text = "\u2022 $item"
+                text = getString(R.string.coach_bullet_line, item)
                 setTextAppearance(com.google.android.material.R.style.TextAppearance_MaterialComponents_Body2)
             }
             container.addView(textView)

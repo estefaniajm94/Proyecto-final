@@ -75,7 +75,7 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
                 getString(R.string.training_feedback_incorrect)
             }
             val explanation = getString(R.string.training_feedback_explanation, state.lastExplanation.orEmpty())
-            tvFeedback.text = "$label\n$explanation"
+            tvFeedback.text = getString(R.string.training_feedback_full, label, explanation)
             btnQuizAction.text = if (state.currentPosition == state.totalQuestions) {
                 getString(R.string.training_show_result)
             } else {

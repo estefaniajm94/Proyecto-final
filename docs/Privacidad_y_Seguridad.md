@@ -1,4 +1,4 @@
-﻿# Privacidad y Seguridad (MVP A)
+# Privacidad y Seguridad (MVP A)
 
 ## 1. Principios aplicados
 - Procesamiento local (offline-first).
@@ -49,13 +49,20 @@ Adicionalmente, para autenticacion local se almacenan:
 - Ajustes sensibles almacenados con cifrado local.
 - La sesion activa tambien se guarda en `EncryptedSharedPreferences`.
 
-## 7. Login y cuenta local
+## 7. Copias de seguridad del sistema
+- `android:allowBackup="false"` se mantiene desactivado.
+- Se declaran `backup_rules.xml` y `data_extraction_rules.xml` para dejar explicita
+  la politica de no extraer ni transferir datos locales de la app en copias del sistema.
+- Esta decision es coherente con el enfoque de privacidad local y con la naturaleza
+  sensible del historial de incidentes.
+
+## 8. Login y cuenta local
 - El registro e inicio de sesion funcionan solo en local.
 - No existe backend, recuperacion de contrasena ni envio de credenciales a red.
 - La contrasena no se almacena en texto plano; se guarda su hash.
 - El cierre de sesion elimina el identificador de sesion del dispositivo.
 
-## 8. Exportacion de reportes Markdown
+## 9. Exportacion de reportes Markdown
 - El reporte se genera como archivo `.md` local en cache (`cache/reports`).
 - El compartido se realiza con `FileProvider` (`content://`) y permiso temporal de lectura.
 - El contenido exportado incluye solo:
@@ -64,3 +71,13 @@ Adicionalmente, para autenticacion local se almacenan:
   - recomendaciones por codigo,
   - disclaimer educativo.
 - El reporte no incluye texto original analizado ni texto OCR.
+
+## 10. Estado de verificacion del cierre
+Validado en el cierre tecnico del `2026-04-07`:
+- compilacion `debug` correcta,
+- `125/125` tests unitarios en verde,
+- `lintDebug` sin errores.
+
+La instalacion en dispositivo y ciertos flujos manuales (OCR borroso, cancelacion
+de biometria, borrado local completo) requieren un emulador o dispositivo conectado
+para su verificacion final de campo.

@@ -40,17 +40,24 @@ class TrainingStartFragment : BaseFragment<FragmentTrainingStartBinding>(
             binding.tvSelectedLevelDescription.text =
                 getString(state.selectedLevel.descriptionResId())
             binding.tvSelectedLevelCount.text =
-                getString(R.string.training_level_question_count, state.selectedLevelQuestionCount)
-            binding.tvLevelBeginnerCount.text = getString(
-                R.string.training_level_question_count_short,
+                resources.getQuantityString(
+                    R.plurals.training_level_question_count,
+                    state.selectedLevelQuestionCount,
+                    state.selectedLevelQuestionCount
+                )
+            binding.tvLevelBeginnerCount.text = resources.getQuantityString(
+                R.plurals.training_level_question_count_short,
+                state.availableQuestionCounts[TrainingLevel.BEGINNER] ?: 0,
                 state.availableQuestionCounts[TrainingLevel.BEGINNER] ?: 0
             )
-            binding.tvLevelIntermediateCount.text = getString(
-                R.string.training_level_question_count_short,
+            binding.tvLevelIntermediateCount.text = resources.getQuantityString(
+                R.plurals.training_level_question_count_short,
+                state.availableQuestionCounts[TrainingLevel.INTERMEDIATE] ?: 0,
                 state.availableQuestionCounts[TrainingLevel.INTERMEDIATE] ?: 0
             )
-            binding.tvLevelAdvancedCount.text = getString(
-                R.string.training_level_question_count_short,
+            binding.tvLevelAdvancedCount.text = resources.getQuantityString(
+                R.plurals.training_level_question_count_short,
+                state.availableQuestionCounts[TrainingLevel.ADVANCED] ?: 0,
                 state.availableQuestionCounts[TrainingLevel.ADVANCED] ?: 0
             )
             binding.btnStartQuiz.isEnabled = !state.isLoading && state.selectedLevelQuestionCount > 0

@@ -246,7 +246,84 @@ se externalizaron a recursos.
 
 ---
 
-## 8. Decisiones descartadas y motivo
+## 8. Cierre tecnico de la iteracion final (7 abril 2026)
+
+### Correccion de tests rotos por deriva entre produccion y dobles de test
+
+Durante el cierre final habia 4 tests fallando:
+- 3 en `HistoryViewModelTest`
+- 1 en `RuleEngineTest`
+
+La causa de Historial no estaba en la logica de filtrado ni orden, sino en
+`TestStringResolver`: el doble seguia devolviendo un formato antiguo
+(`Score | origen | semaforo`) mientras la UI real ya solo mostraba
+`Origen: %1$s`. Al alinear el doble con `strings.xml`, los tests volvieron a
+medir el comportamiento real.
+
+En `RuleEngineTest` el fallo no venia de una regresion funcional, sino de una
+calibracion previa de pesos: la regla `URGENCY_THREAT` pesa `14`, mientras el
+test seguia esperando `>= 16`. Se actualizo la expectativa para reflejar la
+configuracion vigente del motor heuristico.
+
+### Recolocacion del collector de Historial para cumplir ciclo de vida
+
+`HistoryFragment` iniciaba el `collectOnStarted` del `uiState` desde un flujo
+que partia de `onResume`, despues de validar biometria. Aunque el codigo estaba
+protegido contra duplicados, `lint` lo marcaba correctamente como un mal punto
+de inicio para `repeatOnLifecycle`.
+
+La solucion fue mover la inicializacion de lista, controles y collector a
+`onBoundView` y dejar en `onResume` solo la compuerta de acceso biometrico.
+Resultado:
+- desaparece el error `RepeatOnLifecycleWrongUsage`,
+- el collector queda atado al ciclo de vida correcto,
+- el bloqueo local sigue funcionando igual.
+
+### Endurecimiento de calidad de UI y recursos
+
+En el cierre se resolvieron varios problemas de calidad que no rompian el APK
+pero si el gate de `lint`:
+- migracion de `android:tint` a `app:tint` en toolbars,
+- externalizacion de textos hardcodeados a `strings.xml`,
+- anadido de `hint` en combos accesibles,
+- eliminacion de recursos `mock` no usados,
+- ajuste de `AvatarOptionAdapter` para evitar `notifyDataSetChanged()`
+  innecesario,
+- composicion i18n-safe de textos dinamicos (`QuizFragment`,
+  `ResourcesAdapter`, checklist de Coach).
+
+### Ajustes finales de privacidad y export
+
+Se anadieron:
+- `backup_rules.xml`
+- `data_extraction_rules.xml`
+
+Con ello la app deja explicita su politica de no respaldo automatico en copias
+del sistema, coherente con el enfoque de privacidad local.
+
+Tambien se corrigio `ReportExporter` para no fijar `Locale.getDefault()` en un
+campo estatico, evitando un warning de `lint` y un comportamiento no deseado si
+la configuracion regional cambia durante la vida de la app.
+
+### Estado verificado del cierre
+
+Validacion ejecutada en este workspace el `2026-04-07`:
+- `:app:assembleDebug` -> OK
+- `:app:testDebugUnitTest` -> OK (`125/125`)
+- `:app:lintDebug` -> OK (`0 errores`, `31 warnings`)
+
+Los `31 warnings` restantes no bloquean entrega y se concentran en:
+- dependencias y `targetSdk` no actualizados a la ultima version publicada,
+- recomendacion de mover avatares bitmap a `drawable-nodpi` o densidades,
+- optimizaciones menores de layout (`UseCompoundDrawables`, `UselessParent`),
+- optimizacion opcional del vector `ic_settings_gear_24`.
+
+`installDebug` no pudo validarse en esta sesion por ausencia de dispositivo
+conectado; el fallo observado fue `No connected devices!`, no un error de build.
+
+---
+
+## 9. Decisiones descartadas y motivo
 
 | Propuesta | Motivo de descarte |
 |-----------|-------------------|

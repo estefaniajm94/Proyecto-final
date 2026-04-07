@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.databinding.ItemOfficialResourceBinding
 
 class ResourcesAdapter(
@@ -37,7 +38,7 @@ class ResourcesAdapter(
                 btnDial.visibility = android.view.View.GONE
             } else {
                 btnDial.visibility = android.view.View.VISIBLE
-                btnDial.text = "Llamar $phone"
+                btnDial.text = root.context.getString(R.string.resources_call_button, phone)
                 btnDial.setOnClickListener { onDialPhone(phone) }
             }
 

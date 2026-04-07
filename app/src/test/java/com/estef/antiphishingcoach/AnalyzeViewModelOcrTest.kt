@@ -98,6 +98,85 @@ class AnalyzeViewModelOcrTest {
         )
     }
 
+    @Test
+    fun `ocr sin texto detectado publica error claro sin crash`() = runTest {
+        val viewModel = AnalyzeViewModel(
+            analyzeAndPersistAction = { _ ->
+                AnalyzeExecutionResult(
+                    output = baseAnalysisOutput(score = 0),
+                    persistedIncidentId = null,
+                    usedExtremePrivacy = false
+                )
+            },
+            extractTextFromImageAction = { "   " },
+            observeExtremePrivacyFlow = flowOf(false),
+            stringResolver = TestStringResolver()
+        )
+
+        viewModel.onImageSelected(mockk(relaxed = true))
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value.flowState
+        assertTrue(state is AnalyzeFlowState.Error)
+        assertEquals(
+            "No se detecto texto en la imagen seleccionada.",
+            (state as AnalyzeFlowState.Error).message
+        )
+    }
+
+    @Test
+    fun `seleccion de imagen cancelada vuelve a Idle con mensaje`() = runTest {
+        val viewModel = AnalyzeViewModel(
+            analyzeAndPersistAction = { _ ->
+                AnalyzeExecutionResult(
+                    output = baseAnalysisOutput(score = 0),
+                    persistedIncidentId = null,
+                    usedExtremePrivacy = false
+                )
+            },
+            extractTextFromImageAction = { "Texto OCR detectado" },
+            observeExtremePrivacyFlow = flowOf(false),
+            stringResolver = TestStringResolver()
+        )
+
+        viewModel.onImageSelected(null)
+        advanceUntilIdle()
+
+        assertEquals(AnalyzeFlowState.Idle, viewModel.uiState.value.flowState)
+        assertEquals(
+            "Seleccion de imagen cancelada.",
+            viewModel.uiState.value.statusMessage
+        )
+    }
+
+    @Test
+    fun `cancelar revision OCR descarta el flujo y no analiza`() = runTest {
+        var analyzeCalls = 0
+        val viewModel = AnalyzeViewModel(
+            analyzeAndPersistAction = { _ ->
+                analyzeCalls++
+                AnalyzeExecutionResult(
+                    output = baseAnalysisOutput(score = 0),
+                    persistedIncidentId = null,
+                    usedExtremePrivacy = false
+                )
+            },
+            extractTextFromImageAction = { "Texto OCR detectado" },
+            observeExtremePrivacyFlow = flowOf(false),
+            stringResolver = TestStringResolver()
+        )
+
+        viewModel.onOcrReviewCancelled()
+        advanceUntilIdle()
+
+        assertEquals(0, analyzeCalls)
+        assertEquals(AnalyzeFlowState.Idle, viewModel.uiState.value.flowState)
+        assertEquals(
+            "Revision OCR cancelada.",
+            viewModel.uiState.value.statusMessage
+        )
+    }
+
     private fun baseAnalysisOutput(score: Int): AnalysisOutput {
         return AnalysisOutput(
             score = score,

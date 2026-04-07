@@ -31,8 +31,8 @@ class ReportExporter {
     }
 
     fun buildMarkdown(incident: IncidentRecord): String {
-        val generatedAt = dateFormat.format(Date(System.currentTimeMillis()))
-        val incidentDate = dateFormat.format(Date(incident.createdAt))
+        val generatedAt = formatDate(System.currentTimeMillis())
+        val incidentDate = formatDate(incident.createdAt)
         val recommendations = RecommendationCatalog.fromCodes(incident.recommendationCodes)
         return buildString {
             appendLine("# Reporte anti-phishing y ciberfraude")
@@ -92,7 +92,7 @@ class ReportExporter {
             .take(maxTags)
     }
 
-    private companion object {
-        private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    private fun formatDate(timeInMillis: Long): String {
+        return SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(timeInMillis))
     }
 }

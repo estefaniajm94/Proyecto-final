@@ -5,6 +5,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -112,8 +113,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             AvatarCatalog.resolve(state.currentUserAvatarId).drawableRes
         )
         toolbarHome.menu.findItem(R.id.action_home_avatar)?.let { item ->
-            item.icon = avatarDrawable
-            item.iconTintList = null
+            val untintedAvatar = avatarDrawable?.mutate()
+            if (untintedAvatar != null) {
+                DrawableCompat.setTintList(untintedAvatar, null)
+            }
+            item.icon = untintedAvatar
         }
         tvHomeGreeting.text = if (state.currentUserName.isNullOrBlank()) {
             getString(R.string.home_avatar_header_default)

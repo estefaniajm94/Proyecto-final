@@ -1,4 +1,4 @@
-﻿# Anexo I - Manual de Instalacion
+# Anexo I - Manual de Instalacion
 
 ## 1. Alcance
 Este anexo describe como preparar y ejecutar el proyecto Android del TFG en entorno local.
@@ -23,16 +23,17 @@ Si aparece error de SDK, crear/editar `local.properties` en la raiz:
 sdk.dir=C\:\\Users\\Estef\\AppData\\Local\\Android\\Sdk
 ```
 
-## 5. Compilacion y tests
+## 5. Compilacion y validacion tecnica
 En terminal PowerShell en la raiz del repo:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
 .\gradlew.bat :app:testDebugUnitTest
+.\gradlew.bat :app:lintDebug
 ```
 
 Resultado esperado:
-- `BUILD SUCCESSFUL` en ambos comandos.
+- `BUILD SUCCESSFUL` en los tres comandos.
 
 ## 6. Instalacion en emulador/dispositivo
 1. Iniciar emulador Android (ejemplo: `Medium_Phone_API_36.1`) o conectar dispositivo.
@@ -44,6 +45,10 @@ Resultado esperado:
 
 Resultado esperado:
 - `Installed on 1 device`.
+
+Si no hay emulador/dispositivo conectado:
+- Gradle devolvera `No connected devices!`.
+- No es un fallo del proyecto, sino del entorno de ejecucion.
 
 ## 7. Ejecucion de la app
 La app se instala con nombre:
@@ -67,6 +72,10 @@ En la primera apertura:
 - Emulador `offline`:
 1. Reiniciar emulador.
 2. Comprobar `adb devices`.
+- `adb` no disponible en terminal:
+1. Lanzar el emulador desde Android Studio.
+2. Verificar que el SDK Platform-Tools este instalado.
+3. Anadir `platform-tools` al `PATH` si se quiere usar `adb` desde consola.
 - Build lento en primera ejecucion:
 1. Es normal por descarga inicial de dependencias.
 
@@ -91,7 +100,14 @@ Funcion:
 4. Activar privacidad extrema y repetir analisis (no debe guardarse).
 5. Compartir un texto de prueba desde otra app o usar el script de portapapeles en emulador.
 
-## 11. Nota sobre datos locales existentes
+## 11. Estado del cierre tecnico
+Validacion realizada en este workspace el `2026-04-07`:
+- `:app:assembleDebug` -> OK
+- `:app:testDebugUnitTest` -> OK
+- `:app:lintDebug` -> OK
+- `:app:installDebug` -> bloqueado por ausencia de dispositivo conectado
+
+## 12. Nota sobre datos locales existentes
 El esquema Room actual esta en version `2` e incorpora la tabla `users`.
 Como la base usa `fallbackToDestructiveMigration()`, al cambiar desde una version previa
 pueden perderse datos locales antiguos del emulador/dispositivo durante la migracion.

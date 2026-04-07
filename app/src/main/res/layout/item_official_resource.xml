@@ -38,14 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Llamar" />
+                android:text="@string/resources_call_button_base" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnOpenUrl"
                 style="@style/Widget.App.Button.Outline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Abrir web" />
+                android:text="@string/resources_open_web_button" />
         </LinearLayout>
     </LinearLayout>
 

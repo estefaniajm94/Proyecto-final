@@ -1,6 +1,12 @@
-﻿# Anti-phishing & ciberfraude coach (MVP A)
+# Anti-phishing & ciberfraude coach (MVP A)
 
 Aplicacion Android educativa para ayudar a detectar senales de phishing/ciberfraude con reglas heuristicas explicables, sin IA generativa y con enfoque offline-first.
+
+Estado de cierre tecnico verificado el `2026-04-07`:
+- `:app:assembleDebug` OK
+- `:app:testDebugUnitTest` OK (`125/125`)
+- `:app:lintDebug` OK (`0 errores`)
+- `:app:installDebug` requiere emulador o dispositivo conectado
 
 ## 1. Problema
 El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayuda rapida para:
@@ -13,7 +19,7 @@ El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayud
 
 ## 2. Solucion implementada (MVP A)
 - Flujo de autenticacion local con registro, login y sesion persistida en el dispositivo.
-- Analizador de texto/enlaces con score 0-100 y semaforo.
+- Analizador de texto/enlaces con score `0-100` y semaforo.
 - Explicacion de senales detectadas y recomendaciones concretas.
 - Lectura rapida del riesgo con foco en enlace o mensaje.
 - Desglose local del enlace: dominio real, esquema, ruta, parametros y observaciones.
@@ -63,6 +69,7 @@ Medidas aplicadas:
 - `Borrar datos`: elimina datos locales de historial.
 - Ajustes sensibles y sesion local en almacenamiento cifrado.
 - Bloqueo local opcional (biometria/credencial) enforced al entrar en Historial y Ajustes.
+- Copias de seguridad del sistema explicitamente deshabilitadas para no extraer datos locales sensibles.
 
 Disclaimer visible en la app:
 `Herramienta educativa. No garantiza deteccion perfecta. No sustituye asesoramiento profesional.`
@@ -127,6 +134,7 @@ Comandos:
 ```powershell
 .\gradlew.bat :app:assembleDebug
 .\gradlew.bat :app:testDebugUnitTest
+.\gradlew.bat :app:lintDebug
 .\gradlew.bat :app:installDebug
 ```
 
@@ -144,13 +152,29 @@ Permite enviar el texto actual del portapapeles de Windows al campo enfocado del
 Matriz funcional y tecnica:
 - `docs/Plan_de_Pruebas.md`
 
-Tests unitarios activos:
+Validacion automatizada verificada en el cierre:
+- `125` tests unitarios en verde.
+- `lintDebug` en verde (`0` errores).
+- `installDebug` probado: requiere dispositivo conectado.
+
+Suites unitarias activas:
 - `RuleEngineTest`
 - `SeedJsonParserTest`
 - `QuizEngineTest`
 - `TrainingQuestionFiltersTest`
 - `AnalyzeInputInsightBuilderTest`
 - `AnalyzeActionPlanBuilderTest`
+- `AnalyzeViewModelOcrTest`
+- `ClearLocalDataUseCaseTest`
+- `HistoryViewModelTest`
+- `ReportExporterTest`
+- `SettingsViewModelTest`
+- `TrafficLightUiTest`
+- `UrlNormalizerTest`
+- `UrlHeuristicsExtendedTest`
+- `PhishingSmishingSemanticTest`
+- `IdnHomoglyphRulesTest`
+- `AvatarCatalogTest`
 
 ## 11. Documentacion de memoria
 - `docs/Modelo_ER.md`
@@ -164,8 +188,9 @@ Tests unitarios activos:
 - `docs/Privacidad_y_Seguridad.md`
 - `docs/devlog/`
 
-## 12. Capturas (placeholder)
-Se recomienda anadir capturas en `docs/images/`:
+## 12. Capturas para memoria
+La carpeta `docs/images/` no contiene aun capturas versionadas en este workspace.
+Para la memoria/entrega final se recomienda adjuntar al menos:
 - login_local.png
 - register_local.png
 - home.png
@@ -183,9 +208,13 @@ Se recomienda anadir capturas en `docs/images/`:
 - No integra backend ni deteccion remota.
 - No incluye timeline de incidentes ni PDF avanzado.
 - Reglas heuristicas locales, no cobertura exhaustiva de todos los fraudes.
+- El progreso del entrenamiento no se persiste entre sesiones.
+- No hay `androidTest` instrumentados en esta iteracion final.
 
 ## 14. Trabajo futuro
 - Mejorar cobertura de reglas y calibracion por perfiles.
 - Anadir tests unitarios especificos para autenticacion local.
+- Incorporar pruebas instrumentadas en emulador para OCR, biometria y borrado local.
+- Persistir progreso del quiz y resumen de entrenamiento en Home.
 - Exportacion avanzada adicional (por ejemplo PDF).
 - Valorar sincronizacion o multiusuario solo si el alcance del producto lo justificara.

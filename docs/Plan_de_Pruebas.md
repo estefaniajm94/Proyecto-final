@@ -1,4 +1,4 @@
-﻿# Plan de Pruebas (MVP A)
+# Plan de Pruebas (MVP A)
 
 ## 1. Objetivo
 Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del flujo:
@@ -29,8 +29,15 @@ Validar que el MVP A cumple funcionalidad, privacidad y consistencia tecnica del
 ```powershell
 .\gradlew.bat :app:assembleDebug
 .\gradlew.bat :app:testDebugUnitTest
+.\gradlew.bat :app:lintDebug
 .\gradlew.bat :app:installDebug
 ```
+
+Estado verificado en el cierre tecnico del `2026-04-07`:
+- `assembleDebug`: `OK`
+- `testDebugUnitTest`: `OK` (`125/125`)
+- `lintDebug`: `OK` (`0 errores`)
+- `installDebug`: `FAIL` por entorno (`No connected devices!`)
 
 ## 4. Matriz funcional (OK/FAIL)
 Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, marcar `FAIL` y anotar evidencia.
@@ -48,7 +55,7 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-09 | Historial lista real | Ir a Historial tras varios analisis | Lista con fecha, score, semaforo y sourceApp | OK |
 | PF-10 | Detalle por SafeArgs | Abrir item de historial | Muestra datos completos del incidente seleccionado | OK |
 | PF-11 | Exportar Markdown | En detalle de analisis pulsar Exportar | Abre chooser Android con reporte Markdown | OK |
-| PF-12 | Borrar datos | Ajustes > Borrar datos | Historial queda vacio | PENDIENTE |
+| PF-12 | Borrar datos | Ajustes > Borrar datos | Historial queda vacio | PENDIENTE (sin dispositivo conectado en cierre 2026-04-07) |
 | PF-13 | No texto original persistido | Revisar modelo y datos almacenados | Solo metadatos (sin contenido original) | OK |
 | PF-14 | Mensaje legal visible | Home/Analizar | Disclaimer educativo visible | OK |
 | PF-15 | Lista de guias rapidas | Home > Coach | Se muestran escenarios con titulo, resumen y tipo de amenaza desde `coach_scenarios.json` | OK |
@@ -58,9 +65,9 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 | PF-19 | Resultado final quiz | Completar todas las preguntas de un nivel | Muestra nivel, aciertos totales, porcentaje y mensaje final adaptado | OK |
 | PF-20 | Bloqueo local en Historial | Ajustes: activar bloqueo local. Ir a Historial | Solicita biometria/credencial antes de mostrar datos | OK |
 | PF-21 | Bloqueo local en Ajustes | Con bloqueo local activo, salir y volver a Ajustes | Solicita biometria/credencial al entrar | OK |
-| PF-22 | Cancelacion de autenticacion | Cancelar prompt en Historial o Ajustes | Se bloquea acceso y vuelve a pantalla anterior | PENDIENTE |
+| PF-22 | Cancelacion de autenticacion | Cancelar prompt en Historial o Ajustes | Se bloquea acceso y vuelve a pantalla anterior | PENDIENTE (sin dispositivo conectado en cierre 2026-04-07) |
 | PF-23 | OCR local con captura real | Analizar > Analizar desde captura > elegir imagen legible | Se extrae texto local, se muestra dialogo editable y permite analizar | OK |
-| PF-24 | OCR con imagen borrosa | Repetir PF-23 con captura borrosa | Puede devolver texto incompleto o error claro, sin crash | PENDIENTE |
+| PF-24 | OCR con imagen borrosa | Repetir PF-23 con captura borrosa | Puede devolver texto incompleto o error claro, sin crash | PENDIENTE (sin dispositivo conectado en cierre 2026-04-07) |
 | PF-25 | Cancelar OCR o revision | Cancelar picker o pulsar Cancelar en dialogo OCR | Se descarta texto OCR y no se analiza ni se persiste nada | OK |
 | PF-26 | Home dashboard visible | Abrir Home | Se muestran tarjetas y bloques de ultimo analisis/entrenamiento | OK |
 | PF-27 | Ultimo analisis en Home | Tener al menos 1 incidente guardado y abrir Home | Muestra fecha, score, semaforo y boton de detalle | OK |
@@ -82,22 +89,36 @@ Usar `OK` cuando el resultado real coincide con el esperado. En caso contrario, 
 
 ## 5. Matriz tecnica automatizada
 Cobertura actual:
-- `RuleEngineTest` (10 casos).
-- `SeedJsonParserTest` (5 casos).
+- `RuleEngineTest` (28 casos).
+- `SeedJsonParserTest` (6 casos).
 - `QuizEngineTest` (5 casos).
 - `TrainingQuestionFiltersTest` (1 caso de filtrado por nivel).
-- `AnalyzeViewModelOcrTest` (2 casos de estado OCR).
+- `AnalyzeViewModelOcrTest` (5 casos de estado OCR, sin texto y cancelaciones).
+- `ClearLocalDataUseCaseTest` (1 caso de delegacion a repositorio).
 - `HistoryViewModelTest` (4 casos de filtro/orden/estado vacio).
 - `ReportExporterTest` (2 casos de markdown y escritura de fichero).
+- `SettingsViewModelTest` (5 casos de borrado local y estados de acceso protegido).
 - `AnalyzeInputInsightBuilderTest` (2 casos de desglose y frases sospechosas).
 - `AnalyzeActionPlanBuilderTest` (2 casos de plan de accion).
+- `TrafficLightUiTest` (3 casos).
+- `UrlNormalizerTest` (5 casos).
+- `UrlHeuristicsExtendedTest` (13 casos).
+- `PhishingSmishingSemanticTest` (33 casos).
+- `IdnHomoglyphRulesTest` (8 casos).
+- `AvatarCatalogTest` (2 casos).
+
+Estado automatizado actual:
+- `125` tests unitarios ejecutados.
+- `0` fallos.
+- `0` ignorados.
 
 Nota:
-- El flujo de autenticacion local tiene validacion funcional manual en esta iteracion.
+- El prompt biometrico real y la precision OCR sobre imagen borrosa siguen con validacion funcional manual por dependencia de dispositivo/ML Kit.
 - No se han anadido aun tests unitarios especificos para `AuthRepository` o `Login/RegisterViewModel`.
 
 ## 6. Criterios de aceptacion del bloque Analizar
-- `assembleDebug`, `testDebugUnitTest` e `installDebug` finalizan en exito.
+- `assembleDebug`, `testDebugUnitTest` y `lintDebug` finalizan en exito.
+- `installDebug` requiere dispositivo/emulador conectado.
 - PF-01..PF-05 y PF-07, PF-09..PF-11 en `OK`.
 - Sin permisos invasivos (no lectura SMS, no accesibilidad).
 - Persistencia limitada a metadatos definidos.
@@ -132,3 +153,14 @@ Usar esta plantilla en cada fallo:
 - Causa raiz:
 - Accion correctiva:
 - Estado final:
+
+## 11. Incidencias resueltas en el cierre final
+
+- `HistoryViewModelTest` fallaba por deriva entre `TestStringResolver` y `strings.xml`; se alineo el doble de test con el recurso real.
+- `RuleEngineTest` fallaba por expectativa antigua de score (`>=16`) tras una calibracion previa de `URGENCY_THREAT` a peso `14`; se actualizo el test.
+- `lintDebug` fallaba por:
+  - `repeatOnLifecycle` iniciado desde un flujo disparado en `onResume` de Historial,
+  - uso de `android:tint` en toolbars,
+  - llamada API 26 para tint del icono de avatar en `HomeFragment`,
+  - textos hardcodeados y problemas i18n/accesibilidad.
+- Todas esas incidencias quedaron corregidas antes del cierre tecnico del `2026-04-07`.

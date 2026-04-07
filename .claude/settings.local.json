@@ -10,7 +10,15 @@
       "Bash(xargs cat:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(ADB=\"/c/Users/Estef/AppData/Local/Android/Sdk/platform-tools/adb.exe\")",
+      "Bash(\"$ADB\" devices:*)",
+      "Bash(./gradlew assembleDebug)",
+      "Bash(\"$ADB\" -s emulator-5554 install -r \"c:/Users/Estef/Desktop/ProyectoFinal/app/build/outputs/apk/debug/app-debug.apk\")",
+      "Bash(\"$ADB\" -s emulator-5554 shell am start -n \"com.estef.antiphishingcoach/.MainActivity\")",
+      "Bash(\"$ADB\" -s emulator-5554 shell monkey -p com.estef.antiphishingcoach -c android.intent.category.LAUNCHER 1)",
+      "Bash(\"$ADB\" -s emulator-5554 shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.LAUNCHER com.estef.antiphishingcoach)",
+      "Bash(\"$ADB\" -s emulator-5554 shell am start -n \"com.estef.antiphishingcoach/.presentation.navigation.MainActivity\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\Estef\\Desktop"

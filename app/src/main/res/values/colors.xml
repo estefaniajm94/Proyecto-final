@@ -8,10 +8,7 @@
     <color name="brand_on_surface">#25184B</color>
     <color name="brand_on_surface_soft">#8F25184B</color>
     <color name="card_outline_soft">#1F7D47E7</color>
-    <color name="home_primary_card">#8A6AF2</color>
-    <color name="icon_container_bg">#14FFFFFF</color>
     <color name="brand_primary_dark">#5B31CB</color>
-    <color name="brand_primary_light">#B15BEB</color>
     <color name="brand_secondary_soft">#FFF0CF</color>
     <color name="brand_surface_soft">#FDFBFF</color>
     <color name="brand_gradient_start">#B54FD9</color>

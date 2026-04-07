@@ -36,12 +36,20 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
     }
     private val localAuthManager = LocalAuthManager()
     private lateinit var historyAdapter: HistoryAdapter
-    private var contentStarted = false
     private var accessValidated = false
     private var authInProgress = false
 
     override fun onBoundView(savedInstanceState: Bundle?) {
         setupBackNavigation(binding.btnBack)
+        setupList()
+        setupControls()
+        collectOnStarted(viewModel.uiState) { state ->
+            binding.progressHistory.isVisible = state.isLoading
+            binding.tvHistoryEmpty.isVisible = !state.isLoading && state.items.isEmpty()
+            binding.tvHistoryEmpty.text = state.emptyMessage
+            binding.btnGoAnalyzeFromHistory.isVisible = !state.isLoading && state.items.isEmpty()
+            historyAdapter.submitList(state.items)
+        }
         setLockedStateVisible(false)
     }
 
@@ -95,11 +103,11 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
             val localLockEnabled = appContainer().isLocalLockEnabledUseCase()
             if (!localLockEnabled) {
                 accessValidated = true
-                startContentIfNeeded()
+                setLockedStateVisible(false)
                 return@launch
             }
             if (accessValidated) {
-                startContentIfNeeded()
+                setLockedStateVisible(false)
                 return@launch
             }
             if (!localAuthManager.canAuthenticate(requireActivity())) {
@@ -121,7 +129,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
                     authInProgress = false
                     accessValidated = true
                     if (!isAdded) return
-                    startContentIfNeeded()
+                    setLockedStateVisible(false)
                 }
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -137,21 +145,6 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
                 subtitle = getString(R.string.history_unlock_subtitle)
             )
         )
-    }
-
-    private fun startContentIfNeeded() {
-        setLockedStateVisible(false)
-        if (contentStarted) return
-        contentStarted = true
-        setupList()
-        setupControls()
-        collectOnStarted(viewModel.uiState) { state ->
-            binding.progressHistory.isVisible = state.isLoading
-            binding.tvHistoryEmpty.isVisible = !state.isLoading && state.items.isEmpty()
-            binding.tvHistoryEmpty.text = state.emptyMessage
-            binding.btnGoAnalyzeFromHistory.isVisible = !state.isLoading && state.items.isEmpty()
-            historyAdapter.submitList(state.items)
-        }
     }
 
     private fun setLockedStateVisible(isLocked: Boolean) = with(binding) {

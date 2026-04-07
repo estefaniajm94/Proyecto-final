@@ -3,6 +3,7 @@ package com.estef.antiphishingcoach.presentation.avatar
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.core.avatar.AvatarOption
@@ -17,14 +18,33 @@ class AvatarOptionAdapter(
     private var selectedAvatarId: String? = null
 
     fun submitOptions(items: List<AvatarOption>, selectedId: String) {
+        val oldItems = options
         options = items
         selectedAvatarId = selectedId
-        notifyDataSetChanged()
+        DiffUtil.calculateDiff(
+            object : DiffUtil.Callback() {
+                override fun getOldListSize(): Int = oldItems.size
+
+                override fun getNewListSize(): Int = items.size
+
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    return oldItems[oldItemPosition].id == items[newItemPosition].id
+                }
+
+                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    return oldItems[oldItemPosition] == items[newItemPosition]
+                }
+            }
+        ).dispatchUpdatesTo(this)
     }
 
     fun updateSelectedAvatar(avatarId: String) {
+        if (selectedAvatarId == avatarId) return
+        val previousIndex = options.indexOfFirst { it.id == selectedAvatarId }
+        val newIndex = options.indexOfFirst { it.id == avatarId }
         selectedAvatarId = avatarId
-        notifyDataSetChanged()
+        if (previousIndex != -1) notifyItemChanged(previousIndex)
+        if (newIndex != -1) notifyItemChanged(newIndex)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvatarOptionViewHolder {
@@ -59,8 +79,7 @@ class AvatarOptionAdapter(
 
             root.setOnClickListener {
                 if (selectedAvatarId != item.id) {
-                    selectedAvatarId = item.id
-                    notifyDataSetChanged()
+                    updateSelectedAvatar(item.id)
                 }
                 onAvatarSelected(item.id)
             }

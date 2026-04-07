@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Anti-phishing Coach</string>
-    <string name="auth_gate_loading">Preparando acceso seguro...</string>
-    <string name="home_title">Panel principal</string>
-    <string name="btn_analyze">Analizar texto/enlace</string>
+    <string name="auth_gate_loading">Preparando acceso seguro&#8230;</string>
     <string name="screen_title_analyze">Analizar texto/enlace</string>
     <string name="btn_coach">Guia rapida por fraude</string>
     <string name="screen_title_coach">Guia rapida por situacion</string>
-    <string name="btn_training">Entrenamiento</string>
     <string name="screen_title_training">Entrenamiento</string>
-    <string name="btn_history">Historial</string>
     <string name="btn_settings">Ajustes</string>
     <string name="screen_title_settings">Ajustes</string>
-    <string name="btn_resources">Recursos oficiales</string>
     <string name="screen_title_resources">Recursos oficiales</string>
     <string name="navigation_back">Volver</string>
     <string name="risk_level_low">Riesgo bajo</string>
@@ -46,20 +41,12 @@
     <string name="auth_error_password_mismatch">Las contraseñas no coinciden.</string>
     <string name="auth_error_generic">No se pudo completar la autenticación local.</string>
     <string name="settings_avatar_title">Imagen de perfil</string>
-    <string name="settings_avatar_hint">Puedes cambiar tu avatar en cualquier momento desde este dispositivo.</string>
     <string name="settings_avatar_updated">Imagen de perfil actualizada.</string>
     <string name="settings_avatar_update_error">No se pudo actualizar la imagen de perfil.</string>
-    <string name="settings_account_title">Cuenta local</string>
-    <string name="settings_account_name">Usuario: %1$s</string>
-    <string name="settings_account_email">Correo: %1$s</string>
     <string name="settings_logout">Cerrar sesión</string>
     <string name="settings_logout_done">Sesión cerrada.</string>
     <string name="disclaimer_main">Herramienta educativa. No garantiza detección perfecta. No sustituye asesoramiento profesional.</string>
     <string name="incident_id_label">IncidentId: %1$d</string>
-    <string name="btn_open_detail_mock">Abrir detalle (mock)</string>
-    <string name="btn_start_quiz">Iniciar quiz</string>
-    <string name="btn_finish_quiz">Finalizar quiz (mock)</string>
-    <string name="btn_open_checklist">Abrir checklist</string>
     <string name="settings_extreme_privacy">Privacidad extrema (no guardar historial)</string>
     <string name="settings_local_lock">Bloqueo local en Historial y Ajustes</string>
     <string name="settings_clear_data">Borrar datos locales</string>
@@ -85,8 +72,6 @@
     <string name="history_detail_title">Detalle de historial</string>
     <string name="analysis_detail_title">Detalle del análisis</string>
     <string name="detail_not_found">No se encontró el análisis solicitado.</string>
-    <string name="detail_score">Score: %1$d</string>
-    <string name="detail_light">Semáforo: %1$s</string>
     <string name="detail_source">Origen: %1$s</string>
     <string name="detail_source_type">Tipo de fuente: %1$s</string>
     <string name="detail_domain">Dominio sanitizado: %1$s</string>
@@ -114,11 +99,11 @@
     <string name="analyze_signal_line">- %1$s: %2$s (peso %3$d)</string>
     <string name="analyze_recommendation_line">- %1$s: %2$s</string>
     <string name="analyze_error_input_required">Introduce texto o enlace para analizar.</string>
-    <string name="analyze_status_analyzing">Analizando entrada...</string>
+    <string name="analyze_status_analyzing">Analizando entrada&#8230;</string>
     <string name="analyze_error_analysis_failed">No se pudo completar el análisis. Inténtalo de nuevo.</string>
     <string name="analyze_status_shared_input_loaded">Contenido compartido cargado. Revisa el texto y pulsa Analizar ahora.</string>
     <string name="analyze_status_image_selection_cancelled">Selección de imagen cancelada.</string>
-    <string name="analyze_status_ocr_processing">Procesando OCR local en el dispositivo...</string>
+    <string name="analyze_status_ocr_processing">Procesando OCR local en el dispositivo&#8230;</string>
     <string name="analyze_error_no_text_detected">No se detectó texto en la imagen seleccionada.</string>
     <string name="analyze_status_ocr_ready">Texto detectado listo para revisión.</string>
     <string name="analyze_error_ocr_failed">No se pudo extraer texto de la imagen.</string>
@@ -157,14 +142,14 @@
     <string name="detail_signal_line">- %1$s: %2$s (peso %3$d)</string>
     <string name="detail_recommendation_line">- %1$s: %2$s</string>
     <string name="coach_empty">No hay guias disponibles.</string>
-    <string name="coach_loading">Cargando guias rapidas...</string>
+    <string name="coach_loading">Cargando guias rapidas&#8230;</string>
     <string name="coach_intro">Elige el caso que mas se parezca a tu situacion y revisa que hacer ahora, que evitar y cuando pedir ayuda.</string>
     <string name="coach_open_checklist">Ver guia</string>
     <string name="coach_checklist_title">Como actuar ahora</string>
     <string name="coach_checklist_progress">Acciones revisadas: %1$d de %2$d</string>
     <string name="coach_checklist_empty">No hay pasos disponibles para este caso.</string>
     <string name="coach_scenario_not_found">No se encontro esta guia.</string>
-    <string name="coach_list_meta">%1$s | %2$d señales | %3$d acciones</string>
+    <string name="coach_list_meta" tools:ignore="PluralsCandidate">%1$s | %2$d señales | %3$d acciones</string>
     <string name="coach_section_signs">Que esta ocurriendo</string>
     <string name="coach_section_actions">Que hacer ahora</string>
     <string name="coach_section_avoid">Que no hacer</string>
@@ -175,7 +160,7 @@
     <string name="coach_status_in_progress">Vas bien. Revisa los pasos pendientes y completa las acciones urgentes cuanto antes.</string>
     <string name="coach_status_completed">Ya has repasado las acciones clave. Si has dado datos, pagado o instalado algo, actua ahora por el canal oficial.</string>
     <string name="coach_open_resources">Ver recursos oficiales</string>
-    <string name="training_loading">Cargando preguntas...</string>
+    <string name="training_loading">Cargando preguntas&#8230;</string>
     <string name="training_level_selector_title">Quiz por niveles</string>
     <string name="training_level_selector_subtitle">Elige el nivel que quieres practicar y trabaja solo con preguntas de esa dificultad.</string>
     <string name="training_choose_level">Elige nivel</string>
@@ -186,8 +171,6 @@
     <string name="training_level_intermediate_description">Detectar suplantaciones, presión, enlaces y fraudes habituales.</string>
     <string name="training_level_advanced_description">Analizar URLs, dominios engañosos y señales técnicas.</string>
     <string name="training_total_questions">Total preguntas: %1$d</string>
-    <string name="training_level_question_count">%1$d preguntas en este nivel</string>
-    <string name="training_level_question_count_short">%1$d preguntas</string>
     <string name="training_start_button">Comenzar entrenamiento</string>
     <string name="training_question_counter">Pregunta %1$d de %2$d</string>
     <string name="training_quiz_meta">%1$s | %2$s</string>
@@ -197,6 +180,7 @@
     <string name="training_feedback_correct">Correcto.</string>
     <string name="training_feedback_incorrect">Incorrecto.</string>
     <string name="training_feedback_explanation">Explicación: %1$s</string>
+    <string name="training_feedback_full">%1$s\n%2$s</string>
     <string name="training_select_option">Selecciona una opción.</string>
     <string name="training_result_title">Resultado del quiz</string>
     <string name="training_result_level">Nivel: %1$s</string>
@@ -240,6 +224,14 @@
     <string name="home_quick_history_desc">Análisis privados guardados</string>
     <string name="home_quick_resources_title">Recursos</string>
     <string name="home_quick_resources_desc">Fuentes y contactos oficiales</string>
+    <string name="home_primary_analyze_title">Analizar</string>
+    <string name="home_primary_analyze_desc">Analiza SMS, email, chat o enlaces con heurísticas explicables.</string>
+    <string name="home_quick_actions_title">Accesos rápidos</string>
+    <string name="home_activity_title">Actividad</string>
+    <string name="home_latest_analysis_title">Último análisis</string>
+    <string name="home_latest_detail_cta">Ver detalle</string>
+    <string name="home_latest_training_title">Último entrenamiento</string>
+    <string name="home_latest_training_cta">Empezar quiz</string>
 
     <!-- Home: estado -->
     <string name="home_latest_date">Fecha: %1$s</string>
@@ -247,11 +239,25 @@
     <string name="home_training_no_progress">Sin progreso de entrenamiento registrado.</string>
     <string name="home_avatar_header_default">¡Tu panel seguro!</string>
     <string name="home_avatar_header_named">¡Hola, %1$s!</string>
-    <string name="home_avatar_header_hint">Tu cuenta local y tu avatar se sincronizan en este dispositivo.</string>
     <string name="home_avatar_content_description">Abrir perfil local</string>
+    <string name="analyze_source_type_title">Tipo de fuente</string>
+    <string name="resources_call_button_base">Llamar</string>
+    <string name="resources_call_button">Llamar %1$s</string>
+    <string name="resources_open_web_button">Abrir web</string>
+    <string name="coach_bullet_line">• %1$s</string>
 
     <string-array name="history_sort_options">
         <item>@string/history_sort_most_recent</item>
         <item>@string/history_sort_highest_risk</item>
     </string-array>
+
+    <plurals name="training_level_question_count">
+        <item quantity="one">%1$d pregunta en este nivel</item>
+        <item quantity="other">%1$d preguntas en este nivel</item>
+    </plurals>
+
+    <plurals name="training_level_question_count_short">
+        <item quantity="one">%1$d pregunta</item>
+        <item quantity="other">%1$d preguntas</item>
+    </plurals>
 </resources>
