@@ -2,8 +2,12 @@ package com.estef.antiphishingcoach
 
 import com.estef.antiphishingcoach.domain.model.AuthActionResult
 import com.estef.antiphishingcoach.domain.model.AuthUser
+import com.estef.antiphishingcoach.domain.model.TrainingLevel
+import com.estef.antiphishingcoach.domain.model.TrainingProgressSummary
+import com.estef.antiphishingcoach.domain.model.TrainingQuestion
 import com.estef.antiphishingcoach.domain.repository.AuthRepository
 import com.estef.antiphishingcoach.domain.repository.SettingsRepository
+import com.estef.antiphishingcoach.domain.repository.TrainingRepository
 import com.estef.antiphishingcoach.domain.usecase.ClearLocalDataUseCase
 import com.estef.antiphishingcoach.domain.usecase.LogoutCurrentUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveCurrentUserUseCase
@@ -45,6 +49,7 @@ class SettingsViewModelTest {
     private val localLockFlow = MutableStateFlow(false)
 
     private var clearLocalDataCalls = 0
+    private var clearTrainingProgressCalls = 0
     private var logoutCalls = 0
 
     private val settingsRepository = object : SettingsRepository {
@@ -86,6 +91,15 @@ class SettingsViewModelTest {
     }
 
     private val incidentRepository = FakeIncidentRepository()
+    private val trainingRepository = object : TrainingRepository {
+        override suspend fun getQuestions(level: TrainingLevel?): List<TrainingQuestion> = emptyList()
+        override fun observeLatestProgress(): Flow<TrainingProgressSummary?> = flowOf(null)
+        override suspend fun saveLatestProgress(summary: TrainingProgressSummary) = Unit
+
+        override suspend fun clearLatestProgress() {
+            clearTrainingProgressCalls++
+        }
+    }
 
     @Before
     fun setUp() {
@@ -106,6 +120,7 @@ class SettingsViewModelTest {
         advanceUntilIdle()
 
         assertEquals(1, clearLocalDataCalls)
+        assertEquals(1, clearTrainingProgressCalls)
         assertEquals("Datos locales eliminados.", viewModel.uiState.value.statusMessage)
     }
 
@@ -174,7 +189,7 @@ class SettingsViewModelTest {
             observeLocalLockUseCase = ObserveLocalLockUseCase(settingsRepository),
             toggleExtremePrivacyUseCase = ToggleExtremePrivacyUseCase(settingsRepository),
             toggleLocalLockUseCase = ToggleLocalLockUseCase(settingsRepository),
-            clearLocalDataUseCase = ClearLocalDataUseCase(incidentRepository),
+            clearLocalDataUseCase = ClearLocalDataUseCase(incidentRepository, trainingRepository),
             updateCurrentUserAvatarUseCase = UpdateCurrentUserAvatarUseCase(authRepository),
             logoutCurrentUserUseCase = LogoutCurrentUserUseCase(authRepository),
             stringResolver = TestStringResolver()

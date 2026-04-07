@@ -17,7 +17,13 @@ class QuizFragment : BaseFragment<FragmentQuizBinding>(
     FragmentQuizBinding::bind
 ) {
     private val viewModel: TrainingViewModel by activityViewModels {
-        viewModelFactory { TrainingViewModel(appContainer().getTrainingQuestionsUseCase) }
+        val c = appContainer()
+        viewModelFactory {
+            TrainingViewModel(
+                getTrainingQuestionsUseCase = c.getTrainingQuestionsUseCase,
+                saveLatestTrainingProgressUseCase = c.saveLatestTrainingProgressUseCase
+            )
+        }
     }
     private var renderedQuestionId: String? = null
     private var navigatedToResult: Boolean = false

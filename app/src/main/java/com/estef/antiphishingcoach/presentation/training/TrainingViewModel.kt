@@ -3,10 +3,12 @@ package com.estef.antiphishingcoach.presentation.training
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.estef.antiphishingcoach.domain.model.TrainingLevel
+import com.estef.antiphishingcoach.domain.model.TrainingProgressSummary
 import com.estef.antiphishingcoach.domain.model.TrainingQuestion
 import com.estef.antiphishingcoach.domain.training.QuizEngine
 import com.estef.antiphishingcoach.domain.training.filterByLevel
 import com.estef.antiphishingcoach.domain.usecase.GetTrainingQuestionsUseCase
+import com.estef.antiphishingcoach.domain.usecase.SaveLatestTrainingProgressUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TrainingViewModel(
-    private val getTrainingQuestionsUseCase: GetTrainingQuestionsUseCase
+    private val getTrainingQuestionsUseCase: GetTrainingQuestionsUseCase,
+    private val saveLatestTrainingProgressUseCase: SaveLatestTrainingProgressUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TrainingUiState())
@@ -22,6 +25,7 @@ class TrainingViewModel(
 
     private var loadedQuestions: List<TrainingQuestion> = emptyList()
     private var quizEngine: QuizEngine? = null
+    private var hasPersistedCurrentResult = false
 
     fun ensureLoaded() {
         if (!_uiState.value.isLoading && loadedQuestions.isNotEmpty()) return
@@ -47,6 +51,7 @@ class TrainingViewModel(
             val selectedLevel = _uiState.value.selectedLevel
             val questionsForLevel = getTrainingQuestionsUseCase(selectedLevel)
             quizEngine = QuizEngine(questionsForLevel)
+            hasPersistedCurrentResult = false
             syncFromEngine()
         }
     }
@@ -102,6 +107,19 @@ class TrainingViewModel(
                 lastExplanation = if (engine.hasAnsweredCurrent()) engine.currentQuestion()?.explanation else null,
                 completed = completed
             )
+        }
+        if (completed && !hasPersistedCurrentResult && engine.totalQuestions() > 0) {
+            hasPersistedCurrentResult = true
+            viewModelScope.launch {
+                saveLatestTrainingProgressUseCase(
+                    TrainingProgressSummary(
+                        level = _uiState.value.selectedLevel,
+                        score = engine.score(),
+                        totalQuestions = engine.totalQuestions(),
+                        completedAt = System.currentTimeMillis()
+                    )
+                )
+            }
         }
     }
 }

@@ -31,9 +31,11 @@ import com.estef.antiphishingcoach.domain.usecase.ObserveHistoryUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveCurrentUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveIncidentDetailUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLatestIncidentSummaryUseCase
+import com.estef.antiphishingcoach.domain.usecase.ObserveLatestTrainingProgressUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.RegisterLocalUserUseCase
+import com.estef.antiphishingcoach.domain.usecase.SaveLatestTrainingProgressUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleExtremePrivacyUseCase
 import com.estef.antiphishingcoach.domain.usecase.ToggleLocalLockUseCase
 import com.estef.antiphishingcoach.domain.usecase.UpdateCurrentUserAvatarUseCase
@@ -74,7 +76,10 @@ class AppContainer(context: Context) {
     }
 
     val trainingRepository: TrainingRepository by lazy {
-        TrainingRepositoryImpl(seedAssetLoader)
+        TrainingRepositoryImpl(
+            seedLoader = seedAssetLoader,
+            secureSettingsDataSource = secureSettingsDataSource
+        )
     }
 
     val ocrRepository: OcrRepository by lazy {
@@ -128,7 +133,10 @@ class AppContainer(context: Context) {
     }
 
     val clearLocalDataUseCase: ClearLocalDataUseCase by lazy {
-        ClearLocalDataUseCase(incidentRepository)
+        ClearLocalDataUseCase(
+            incidentRepository = incidentRepository,
+            trainingRepository = trainingRepository
+        )
     }
 
     val registerLocalUserUseCase: RegisterLocalUserUseCase by lazy {
@@ -157,6 +165,14 @@ class AppContainer(context: Context) {
 
     val getTrainingQuestionsUseCase: GetTrainingQuestionsUseCase by lazy {
         GetTrainingQuestionsUseCase(trainingRepository)
+    }
+
+    val observeLatestTrainingProgressUseCase: ObserveLatestTrainingProgressUseCase by lazy {
+        ObserveLatestTrainingProgressUseCase(trainingRepository)
+    }
+
+    val saveLatestTrainingProgressUseCase: SaveLatestTrainingProgressUseCase by lazy {
+        SaveLatestTrainingProgressUseCase(trainingRepository)
     }
 
     val extractTextFromImageUseCase: ExtractTextFromImageUseCase by lazy {

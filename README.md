@@ -208,7 +208,7 @@ Para la memoria/entrega final se recomienda adjuntar al menos:
 - No integra backend ni deteccion remota.
 - No incluye timeline de incidentes ni PDF avanzado.
 - Reglas heuristicas locales, no cobertura exhaustiva de todos los fraudes.
-- El progreso del entrenamiento no se persiste entre sesiones.
+- El ultimo entrenamiento completado se resume en Home y se persiste localmente.
 - No hay `androidTest` instrumentados en esta iteracion final.
 
 ## 14. Trabajo futuro

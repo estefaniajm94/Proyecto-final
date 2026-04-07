@@ -31,6 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             HomeViewModel(
                 observeCurrentUserUseCase = c.observeCurrentUserUseCase,
                 observeLatestIncidentSummaryUseCase = c.observeLatestIncidentSummaryUseCase,
+                observeLatestTrainingProgressUseCase = c.observeLatestTrainingProgressUseCase,
                 stringResolver = AndroidStringResolver(requireContext().applicationContext)
             )
         }

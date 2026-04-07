@@ -98,7 +98,7 @@ Salida esperada:
 8. Usar `Reiniciar quiz` para repetir el nivel o volver a elegir otro.
 
 Nota:
-- El resultado del quiz se muestra al terminar, pero no se persiste entre sesiones.
+- El resultado del ultimo quiz completado se resume tambien en Home y se conserva localmente.
 
 ## 9. Historial y detalle
 En modo normal:

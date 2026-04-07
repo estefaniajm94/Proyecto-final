@@ -237,6 +237,7 @@
     <string name="home_latest_date">Fecha: %1$s</string>
     <string name="home_latest_domain">Dominio: %1$s</string>
     <string name="home_training_no_progress">Sin progreso de entrenamiento registrado.</string>
+    <string name="home_latest_training_summary">Nivel: %1$s\n%2$s\n%3$s</string>
     <string name="home_avatar_header_default">¡Tu panel seguro!</string>
     <string name="home_avatar_header_named">¡Hola, %1$s!</string>
     <string name="home_avatar_content_description">Abrir perfil local</string>

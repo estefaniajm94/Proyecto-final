@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.estef.antiphishingcoach.R
 import com.estef.antiphishingcoach.domain.model.IncidentSummary
+import com.estef.antiphishingcoach.domain.model.TrainingProgressSummary
 import com.estef.antiphishingcoach.domain.usecase.ObserveCurrentUserUseCase
 import com.estef.antiphishingcoach.domain.usecase.ObserveLatestIncidentSummaryUseCase
+import com.estef.antiphishingcoach.domain.usecase.ObserveLatestTrainingProgressUseCase
 import com.estef.antiphishingcoach.presentation.common.StringResolver
+import com.estef.antiphishingcoach.presentation.training.labelResId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +22,7 @@ import java.util.Locale
 class HomeViewModel(
     observeCurrentUserUseCase: ObserveCurrentUserUseCase,
     observeLatestIncidentSummaryUseCase: ObserveLatestIncidentSummaryUseCase,
+    observeLatestTrainingProgressUseCase: ObserveLatestTrainingProgressUseCase,
     private val stringResolver: StringResolver
 ) : ViewModel() {
 
@@ -52,6 +56,16 @@ class HomeViewModel(
                 }
             }
         }
+        viewModelScope.launch {
+            observeLatestTrainingProgressUseCase().collect { latest ->
+                _uiState.update { state ->
+                    state.copy(
+                        latestTrainingSummary = latest?.toUiSummary()
+                            ?: stringResolver.get(R.string.home_training_no_progress)
+                    )
+                }
+            }
+        }
     }
 
     private fun IncidentSummary.toUi(): LatestIncidentUi {
@@ -64,6 +78,15 @@ class HomeViewModel(
             sanitizedDomainLine = sanitizedDomain?.let { domain ->
                 stringResolver.get(R.string.home_latest_domain, domain)
             }
+        )
+    }
+
+    private fun TrainingProgressSummary.toUiSummary(): String {
+        return stringResolver.get(
+            R.string.home_latest_training_summary,
+            stringResolver.get(level.labelResId()),
+            stringResolver.get(R.string.training_result_score, score, totalQuestions),
+            stringResolver.get(R.string.home_latest_date, dateFormat.format(Date(completedAt)))
         )
     }
 }

@@ -15,7 +15,13 @@ class QuizResultFragment : BaseFragment<FragmentQuizResultBinding>(
     FragmentQuizResultBinding::bind
 ) {
     private val viewModel: TrainingViewModel by activityViewModels {
-        viewModelFactory { TrainingViewModel(appContainer().getTrainingQuestionsUseCase) }
+        val c = appContainer()
+        viewModelFactory {
+            TrainingViewModel(
+                getTrainingQuestionsUseCase = c.getTrainingQuestionsUseCase,
+                saveLatestTrainingProgressUseCase = c.saveLatestTrainingProgressUseCase
+            )
+        }
     }
 
     override fun onBoundView(savedInstanceState: Bundle?) {

@@ -1,11 +1,14 @@
 package com.estef.antiphishingcoach.domain.usecase
 
 import com.estef.antiphishingcoach.domain.repository.IncidentRepository
+import com.estef.antiphishingcoach.domain.repository.TrainingRepository
 
 class ClearLocalDataUseCase(
-    private val repository: IncidentRepository
+    private val incidentRepository: IncidentRepository,
+    private val trainingRepository: TrainingRepository
 ) {
     suspend operator fun invoke() {
-        repository.clearAll()
+        incidentRepository.clearAll()
+        trainingRepository.clearLatestProgress()
     }
 }
