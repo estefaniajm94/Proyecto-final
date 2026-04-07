@@ -8,6 +8,11 @@ Estado de cierre tecnico verificado el `2026-04-07`:
 - `:app:lintDebug` OK (`0 errores`)
 - `:app:installDebug` requiere emulador o dispositivo conectado
 
+## Repositorio
+- `app/`: codigo fuente Android, recursos y tests unitarios.
+- `docs/`: documentacion funcional, tecnica y material de memoria. Ver `docs/README.md`.
+- `scripts/`: utilidades locales de apoyo para desarrollo. Ver `scripts/README.md`.
+
 ## 1. Problema
 El usuario recibe mensajes sospechosos por SMS, email o chat y necesita una ayuda rapida para:
 
@@ -177,6 +182,8 @@ Suites unitarias activas:
 - `AvatarCatalogTest`
 
 ## 11. Documentacion de memoria
+- `docs/README.md`
+- `docs/Justificacion_Tecnica.md`
 - `docs/Modelo_ER.md`
 - `docs/Casos_de_Uso.md`
 - `docs/Diagrama_Clases.md`
@@ -186,7 +193,7 @@ Suites unitarias activas:
 - `docs/Anexo_I_Manual_Instalacion.md`
 - `docs/Anexo_II_Manual_Usuario.md`
 - `docs/Privacidad_y_Seguridad.md`
-- `docs/devlog/`
+- `docs/devlog/README.md`
 
 ## 12. Capturas para memoria
 La carpeta `docs/images/` no contiene aun capturas versionadas en este workspace.

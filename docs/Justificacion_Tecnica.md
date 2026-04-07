@@ -1,4 +1,4 @@
-# Justificacion tecnica — AntiPhishingCoach
+# Justificacion tecnica - AntiPhishingCoach
 
 Documento de referencia para la memoria del TFG.
 Recoge las decisiones tecnicas reales del proyecto, por que se tomaron
