@@ -20,6 +20,10 @@ import com.estef.antiphishingcoach.presentation.common.collectOnStarted
 import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 import kotlinx.coroutines.launch
 
+/**
+ * Pantalla de historial privado. Mantiene la lista ligada al ciclo de vida de la vista
+ * y usa la autenticación local solo como compuerta de acceso visual.
+ */
 class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
     R.layout.fragment_history,
     FragmentHistoryBinding::bind
@@ -43,6 +47,8 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
         setupBackNavigation(binding.btnBack)
         setupList()
         setupControls()
+        // El collector se registra aquí para que repeatOnLifecycle quede asociado
+        // al ciclo de vida correcto de la vista, no al regreso desde onResume.
         collectOnStarted(viewModel.uiState) { state ->
             binding.progressHistory.isVisible = state.isLoading
             binding.tvHistoryEmpty.isVisible = !state.isLoading && state.items.isEmpty()
@@ -55,6 +61,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(
 
     override fun onResume() {
         super.onResume()
+        // La biometría se revalida al volver a primer plano sin duplicar collectors.
         enforceProtectedAccess()
     }
 

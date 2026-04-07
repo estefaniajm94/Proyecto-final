@@ -13,7 +13,7 @@ import java.util.LinkedHashSet
  * 1. Normaliza el texto (minúsculas + plegado de tildes + colapso de espacios).
  * 2. Extrae y parsea URLs.
  * 3. Aplica todas las reglas independientes → lista de señales individuales.
- * 4. Aplica detección de co-ocurrencia → señales de combinación bonus.
+ * 4. Aplica detección de co-ocurrencia → señales de combinación reforzada.
  * 5. Suma pesos (incluido el moderador negativo si procede) y clasifica.
  */
 class RuleEngine(
@@ -31,7 +31,7 @@ class RuleEngine(
         // Paso 3: reglas individuales
         val individualSignals = configuredRules.mapNotNull { rule -> rule.evaluate(context) }
 
-        // Paso 4: señales de co-ocurrencia (bonus por combinación)
+        // Paso 4: señales de co-ocurrencia (refuerzo por combinación)
         val combinationSignals = buildCombinationSignals(individualSignals, context)
 
         val signals = individualSignals + combinationSignals
@@ -89,7 +89,7 @@ class RuleEngine(
         val result = mutableListOf<DetectedSignal>()
 
         // ── Toma de cuenta bancaria ────────────────────────────────────────────
-        // Banking/impersonation + verification request + negative consequence
+        // Contexto bancario o suplantación + verificación solicitada + consecuencia negativa
         if ((codes.contains("BANKING_FINANCE_CONTEXT") || codes.contains("IMPERSONATION_KEYWORDS")) &&
             (codes.contains("ACCOUNT_VERIFICATION_REQUEST") || codes.contains("SENSITIVE_DATA_REQUEST")) &&
             codes.contains("NEGATIVE_CONSEQUENCE")
@@ -103,7 +103,7 @@ class RuleEngine(
         }
 
         // ── Entrega con micro-pago ─────────────────────────────────────────────
-        // Logistics + micro-payment
+        // Logística + solicitud de micro-pago
         if (codes.contains("LOGISTICS_DELIVERY_CONTEXT") && codes.contains("MICRO_PAYMENT_REQUEST")) {
             result += DetectedSignal(
                 signalCode = "COMBINED_DELIVERY_FEE_PATTERN",
@@ -114,7 +114,7 @@ class RuleEngine(
         }
 
         // ── Organismo público + amenaza ────────────────────────────────────────
-        // Public authority + (urgency or temporal pressure or negative consequence)
+        // Organismo público + urgencia, presión temporal o consecuencia negativa
         if (codes.contains("PUBLIC_AUTHORITY_CONTEXT") &&
             (codes.contains("URGENCY_THREAT") || codes.contains("TEMPORAL_PRESSURE") ||
                 codes.contains("NEGATIVE_CONSEQUENCE"))
@@ -128,7 +128,7 @@ class RuleEngine(
         }
 
         // ── Verificación urgente de cuenta ────────────────────────────────────
-        // Account verification + (urgency or temporal pressure) + (banking or impersonation)
+        // Verificación de cuenta + urgencia o presión temporal + banca o suplantación
         if (codes.contains("ACCOUNT_VERIFICATION_REQUEST") &&
             (codes.contains("URGENCY_THREAT") || codes.contains("TEMPORAL_PRESSURE")) &&
             (codes.contains("BANKING_FINANCE_CONTEXT") || codes.contains("IMPERSONATION_KEYWORDS"))
@@ -142,7 +142,7 @@ class RuleEngine(
         }
 
         // ── Spoofing de marca con enlace ──────────────────────────────────────
-        // Brand spoofing (visual or deceptive subdomain) + any URL
+        // Suplantación visual de marca o subdominio engañoso + cualquier URL
         if ((codes.contains("HOMOGLYPH_BRAND_SPOOFING") || codes.contains("URL_DECEPTIVE_SUBDOMAIN")) && hasUrl) {
             result += DetectedSignal(
                 signalCode = "COMBINED_BRAND_SPOOFING_WITH_LINK",
@@ -250,7 +250,7 @@ class RuleEngine(
                 "COMBINED_HOMOGLYPH_WITH_CRITICAL_ACTION" ->
                     codes.addAll(listOf("REC_VERIFY_DOMAIN", "REC_CALL_OFFICIAL_NUMBER"))
 
-                // TRUSTED_DOMAIN_BONUS: no genera recomendación propia
+                // TRUSTED_DOMAIN_BONUS: actúa solo como moderador y no genera recomendación propia
             }
         }
 

@@ -217,7 +217,7 @@ class RuleEngineTest {
             "Correos: su paquete fue retenido. Abone 1,99€ urgente en https://correos.es/pago"
         )
 
-        // El moderador reduce algo el score, pero las señales semánticas mantienen el riesgo
+        // El moderador reduce algo la puntuación, pero las señales semánticas mantienen el riesgo
         assertTrue(
             "Score debe ser >= 35 pese al dominio confiable",
             result.trafficLight == TrafficLight.YELLOW || result.trafficLight == TrafficLight.RED

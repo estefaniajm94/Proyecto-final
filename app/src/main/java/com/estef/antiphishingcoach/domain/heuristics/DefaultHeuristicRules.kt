@@ -629,16 +629,16 @@ object DefaultHeuristicRules {
 
     /**
      * Reduce la sospecha básica cuando la URL pertenece a un dominio oficial del catálogo
-     * Y no se detectan señales técnicas de alto riesgo (hard-override).
+     * y no se detectan señales técnicas de alto riesgo (anulación dura).
      *
      * El peso es -10: modera pero no anula señales semánticas o técnicas fuertes.
-     * La condición de hard-override se evalúa aquí directamente sobre la URL,
+     * La condición de anulación dura se evalúa aquí directamente sobre la URL,
      * sin necesitar conocer las otras señales (principio de regla independiente).
      */
     private fun trustedDomainModeratorRule(): HeuristicRule = HeuristicRule { ctx ->
         if (ctx.urls.isEmpty()) return@HeuristicRule null
 
-        // Comprobar si alguna URL tiene una condición de hard-override en la propia URL
+        // Comprobar si alguna URL tiene una condición de anulación dura en la propia URL
         val hasHardOverrideUrl = ctx.urls.any { p ->
             p.scheme == "intent" ||
                 p.scheme == "javascript" ||

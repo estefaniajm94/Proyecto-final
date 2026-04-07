@@ -11,7 +11,7 @@ import org.junit.Test
  * Tests de cobertura semántica del motor heurístico.
  *
  * Valida los 8 casos esperados del enunciado + casos adicionales de regresión.
- * Ningún test comprueba un score concreto: comprueba señales y nivel de riesgo mínimo.
+ * Ningún test comprueba una puntuación concreta: comprueba señales y nivel de riesgo mínimo.
  */
 class PhishingSmishingSemanticTest {
 
@@ -120,7 +120,7 @@ class PhishingSmishingSemanticTest {
 
     @Test
     fun `caso E - homoglifo de bbva en dominio URL dispara senal de spoofing`() {
-        // "bbv\u0430" con 'а' cirílico en el host
+        // "bbv\u0430" con 'а' cirílico en el host del dominio
         val result = engine.analyze("Verifica en https://bbv\u0430.com/login")
         assertHasAny(result, "HOMOGLYPH_BRAND_SPOOFING", "URL_PUNYCODE_OR_NONASCII", "URL_MIXED_SCRIPTS")
         assertTrue("Score debe aumentar", result.score > 0)
@@ -149,7 +149,7 @@ class PhishingSmishingSemanticTest {
         )
         // El dominio confiable activa TRUSTED_DOMAIN_BONUS con peso negativo
         assertHasSignal(resultConDominio, "TRUSTED_DOMAIN_BONUS")
-        // Score con dominio oficial debe ser <= score sin dominio + margen
+        // La puntuación con dominio oficial debe ser <= que la puntuación sin dominio + margen
         assertTrue(
             "El dominio oficial no debe elevar el score respecto al caso sin URL",
             resultConDominio.score <= resultSinDominio.score + 15
@@ -179,7 +179,7 @@ class PhishingSmishingSemanticTest {
         val result = engine.analyze(
             "Verifica tu cuenta: https://evil@amazon.es/login"
         )
-        // El @ es hard-override: TRUSTED_DOMAIN_BONUS NO debe aparecer
+        // El @ actúa como anulación dura: TRUSTED_DOMAIN_BONUS NO debe aparecer
         assertNoSignal(result, "TRUSTED_DOMAIN_BONUS")
         assertHasSignal(result, "URL_AT_SYMBOL")
     }
@@ -194,7 +194,7 @@ class PhishingSmishingSemanticTest {
         assertHasSignal(result, "TRUSTED_DOMAIN_BONUS")
         assertHasSignal(result, "MICRO_PAYMENT_REQUEST")
         assertHasSignal(result, "LOGISTICS_DELIVERY_CONTEXT")
-        // Score final debe seguir siendo amarillo o rojo
+        // La puntuación final debe seguir siendo amarilla o roja
         assertMinYellow(result)
     }
 
@@ -331,7 +331,7 @@ class PhishingSmishingSemanticTest {
     }
 
     // ══════════════════════════════════════════════════════════════════════════
-    // HELPERS
+    // UTILIDADES DE APOYO
     // ══════════════════════════════════════════════════════════════════════════
 
     private fun assertHasSignal(result: AnalysisOutput, signalCode: String) {

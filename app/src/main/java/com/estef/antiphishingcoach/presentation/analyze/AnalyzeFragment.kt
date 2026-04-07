@@ -29,6 +29,10 @@ import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 import com.estef.antiphishingcoach.presentation.navigation.SharedContentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+/**
+ * Pantalla principal de análisis. Orquesta entrada manual, contenido compartido y
+ * flujo OCR con revisión previa antes de enviar el texto al analizador.
+ */
 class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
     R.layout.fragment_analyze,
     FragmentAnalyzeBinding::bind
@@ -61,6 +65,8 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         collectOnStarted(viewModel.uiState) { state -> render(state) }
         collectOnStarted(sharedContentViewModel.pendingSharedInput) { sharedInput ->
             if (sharedInput == null) return@collectOnStarted
+            // El contenido compartido se consume una sola vez para que no reaparezca
+            // al recrear la vista tras una rotación o una nueva navegación.
             binding.etInput.setText(sharedInput.inputText)
             if (binding.etTitle.text.isNullOrBlank()) {
                 binding.etTitle.setText(sharedInput.title.orEmpty())
@@ -192,6 +198,8 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
             AnalyzeFlowState.ResultReady -> lastRenderedOcrText = null
 
             is AnalyzeFlowState.OcrReady -> {
+                // Evita reabrir el diálogo en cada emisión del mismo estado mientras
+                // el texto OCR no haya cambiado realmente.
                 if (lastRenderedOcrText != flowState.text || ocrReviewDialog?.isShowing != true) {
                     lastRenderedOcrText = flowState.text
                     showOcrReviewDialog(flowState.text)
@@ -254,6 +262,8 @@ class AnalyzeFragment : BaseFragment<FragmentAnalyzeBinding>(
         val highlightColor = ContextCompat.getColor(requireContext(), R.color.traffic_red)
 
         suspiciousPhrases.forEach { insight ->
+            // Se resaltan todas las ocurrencias para que el usuario vea qué partes del
+            // mensaje empujan el riesgo al alza, no solo la primera coincidencia.
             Regex(Regex.escape(insight.phrase), RegexOption.IGNORE_CASE)
                 .findAll(input)
                 .forEach { match ->

@@ -16,6 +16,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
+/**
+ * Repositorio de autenticación local: persiste usuarios en Room y la sesión activa
+ * en almacenamiento cifrado para no depender de backend.
+ */
 class AuthRepositoryImpl(
     private val userDao: UserDao,
     private val secureSettingsDataSource: SecureSettingsDataSource
@@ -107,6 +111,7 @@ class AuthRepositoryImpl(
     private fun String.normalizeEmail(): String = trim().lowercase()
 
     private fun hashPassword(password: String): String {
+        // Para este MVP basta un hash local consistente; no se usa texto plano.
         val bytes = MessageDigest.getInstance("SHA-256")
             .digest(password.toByteArray(Charsets.UTF_8))
         return bytes.joinToString(separator = "") { byte ->

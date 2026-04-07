@@ -9,6 +9,10 @@ data class AnalyzeActionPlan(
     val showOfficialResources: Boolean
 )
 
+/**
+ * Construye un plan de acción inmediato a partir del nivel de riesgo, las señales
+ * detectadas y las recomendaciones calculadas por el dominio.
+ */
 object AnalyzeActionPlanBuilder {
 
     fun build(
@@ -18,6 +22,7 @@ object AnalyzeActionPlanBuilder {
     ): AnalyzeActionPlan {
         val signalCodes = signals.map { it.signalCode }.toSet()
         val recommendationCodes = recommendations.map { it.code }.toSet()
+        // linkedSetOf conserva el orden de lectura y evita repetir pasos equivalentes.
         val steps = linkedSetOf<String>()
 
         when (trafficLight) {

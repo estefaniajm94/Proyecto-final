@@ -19,6 +19,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * ViewModel del detalle de incidente: adapta el registro persistido para la UI y
+ * expone la exportación del informe Markdown desde el mismo estado cargado.
+ */
 class IncidentDetailViewModel(
     incidentId: Long,
     observeIncidentDetailUseCase: ObserveIncidentDetailUseCase,
@@ -47,6 +51,8 @@ class IncidentDetailViewModel(
                     }
                 } else {
                     val recommendations = RecommendationCatalog.fromCodes(incident.recommendationCodes)
+                    // El detalle reutiliza el mismo plan de acción que la pantalla de análisis
+                    // para mantener criterios consistentes entre análisis en vivo e historial.
                     val trafficLight = runCatching { TrafficLight.valueOf(incident.trafficLight) }
                         .getOrDefault(TrafficLight.GREEN)
                     _uiState.update { state ->

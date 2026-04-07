@@ -50,6 +50,8 @@ class AnalyzeViewModel(
     init {
         viewModelScope.launch {
             observeExtremePrivacyFlow.collect { enabled ->
+                // El estado de privacidad se refleja en tiempo real aunque todavía no haya
+                // un análisis en curso, para que la pantalla comunique el modo actual.
                 _uiState.update { state -> state.copy(extremePrivacyEnabled = enabled) }
             }
         }
@@ -177,6 +179,8 @@ class AnalyzeViewModel(
 
     private fun publishAnalysisResult(result: AnalyzeExecutionResult, analyzedInput: String) {
         val recommendations = RecommendationCatalog.fromCodes(result.output.recommendationCodes)
+        // Enriquecemos la salida del dominio con ayudas visuales pensadas para la UI:
+        // frases sospechosas, desglose de URLs y un plan de acción breve.
         val insights = AnalyzeInputInsightBuilder.inspect(analyzedInput)
         val actionPlan = AnalyzeActionPlanBuilder.build(
             trafficLight = result.output.trafficLight,

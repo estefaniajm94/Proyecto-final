@@ -22,7 +22,7 @@ class IdnHomoglyphRulesTest {
 
     @Test
     fun `host con caracteres cirilicos dispara regla idn y posible mixed scripts`() {
-        // Domain: rapural.com visualmente parecido, con letras cirilicas y una latina.
+        // Dominio: rapural.com visualmente parecido, con letras cirilicas y una latina.
         val result = engine.analyze("https://\u0440\u0430\u0443\u0440\u0430l.com/login")
         val hasIdnSignal = result.signals.any { it.signalCode == "URL_PUNYCODE_OR_NONASCII" }
         val hasMixedSignal = result.signals.any { it.signalCode == "URL_MIXED_SCRIPTS" }

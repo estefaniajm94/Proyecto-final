@@ -23,6 +23,8 @@ class IncidentRepositoryImpl(
 
     override suspend fun saveIncident(record: IncidentRecord): Long {
         return database.withTransaction {
+            // Se persiste todo de forma atómica para no dejar incidentes huérfanos
+            // si falla la escritura del resultado agregado o de sus señales.
             val incidentId = incidentDao.insert(
                 IncidentEntity(
                     createdAt = record.createdAt,

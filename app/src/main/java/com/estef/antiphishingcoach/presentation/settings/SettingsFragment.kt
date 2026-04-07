@@ -19,6 +19,10 @@ import com.estef.antiphishingcoach.presentation.common.viewModelFactory
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
+/**
+ * Pantalla de ajustes sensibles de la app. Reúne privacidad extrema, bloqueo local,
+ * borrado de datos, avatar y cierre de sesión bajo la misma compuerta biométrica.
+ */
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     R.layout.fragment_settings,
     FragmentSettingsBinding::bind
@@ -78,6 +82,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 
     override fun onResume() {
         super.onResume()
+        // Se comprueba al recuperar foco para que Ajustes no quede abierto si el usuario
+        // vuelve desde segundo plano con el bloqueo local activado.
         enforceProtectedAccess()
     }
 

@@ -18,7 +18,7 @@ fun Fragment.showShortMessage(message: String) {
 }
 
 /**
- * Collects [flow] in the STARTED lifecycle state, cancelling automatically on stop.
+ * Recoge [flow] mientras la vista está en estado STARTED y cancela la colección al detenerse.
  */
 fun <T> Fragment.collectOnStarted(flow: Flow<T>, collector: (T) -> Unit) {
     viewLifecycleOwner.lifecycleScope.launch {
@@ -29,8 +29,8 @@ fun <T> Fragment.collectOnStarted(flow: Flow<T>, collector: (T) -> Unit) {
 }
 
 /**
- * Generic ViewModelProvider.Factory that delegates creation to [creator].
- * Replaces the per-ViewModel factory boilerplate.
+ * Factoría genérica de ViewModel que delega la creación en [creator].
+ * Evita repetir una clase Factory específica por cada ViewModel.
  */
 fun viewModelFactory(creator: () -> ViewModel): ViewModelProvider.Factory {
     return object : ViewModelProvider.Factory {
@@ -40,8 +40,8 @@ fun viewModelFactory(creator: () -> ViewModel): ViewModelProvider.Factory {
 }
 
 /**
- * Navigates out of the auth graph after a successful login or registration.
- * Goes to Analyze if there is a pending shared input, otherwise to Home.
+ * Sale del grafo de autenticación tras un login o registro correcto.
+ * Navega a Analizar si hay contenido compartido pendiente; si no, vuelve a Home.
  */
 fun Fragment.navigateAfterAuth(hasPendingSharedInput: Boolean) {
     val dest = if (hasPendingSharedInput) R.id.analyzeFragment else R.id.homeFragment

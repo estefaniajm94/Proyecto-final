@@ -7,6 +7,10 @@ import com.estef.antiphishingcoach.domain.model.DetectedSignal
 import com.estef.antiphishingcoach.domain.model.IncidentRecord
 import com.estef.antiphishingcoach.domain.model.IncidentSummary
 
+/**
+ * Convierte la agregación de Room en el modelo de dominio completo usado por historial
+ * y detalle, manteniendo separada la forma de persistencia de la lógica de negocio.
+ */
 internal fun IncidentWithAnalysisAndSignals.toDomain(): IncidentRecord {
     val localResult: AnalysisResultWithSignals? = result
     return IncidentRecord(
@@ -33,6 +37,9 @@ internal fun DetectedSignalEntity.toDomain(): DetectedSignal {
     )
 }
 
+/**
+ * Resume un incidente para Home sin cargar listas de señales ni recomendaciones.
+ */
 internal fun IncidentWithAnalysisAndSignals.toSummary(): IncidentSummary {
     return IncidentSummary(
         incidentId = incident.id,

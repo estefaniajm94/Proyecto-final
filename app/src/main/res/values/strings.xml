@@ -204,7 +204,7 @@
     <string name="avatar_05_label">Avatar ambar</string>
     <string name="avatar_06_label">Avatar rojizo</string>
 
-    <!-- Settings -->
+    <!-- Ajustes -->
     <string name="settings_extreme_privacy_on">Privacidad extrema activada.</string>
     <string name="settings_extreme_privacy_off">Privacidad extrema desactivada.</string>
     <string name="settings_local_lock_on">Bloqueo local activado para Historial y Ajustes.</string>
@@ -215,7 +215,7 @@
     <string name="settings_unlock_title">Desbloquear ajustes</string>
     <string name="settings_unlock_subtitle">Verifica tu identidad para continuar</string>
 
-    <!-- Home: tarjetas rápidas -->
+    <!-- Inicio: tarjetas rápidas -->
     <string name="home_quick_coach_title">Guia rapida</string>
     <string name="home_quick_coach_desc">Que hacer segun el fraude</string>
     <string name="home_quick_training_title">Entrenamiento</string>
@@ -233,7 +233,7 @@
     <string name="home_latest_training_title">Último entrenamiento</string>
     <string name="home_latest_training_cta">Empezar quiz</string>
 
-    <!-- Home: estado -->
+    <!-- Inicio: estado -->
     <string name="home_latest_date">Fecha: %1$s</string>
     <string name="home_latest_domain">Dominio: %1$s</string>
     <string name="home_training_no_progress">Sin progreso de entrenamiento registrado.</string>
